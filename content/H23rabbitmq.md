@@ -35,7 +35,7 @@ Summary: 记录一下学习rabbitmq心路~
 # yum install rabbitmq-server-3.7.8-1.el7.noarch
 ``` 
 
-这里注意rabbitmq-server 和 erlang 的兼容性
+这里注意rabbitmq-server 和 erlang的兼容性，到这里基本安装完了。
 
 
-
+#### 配置
