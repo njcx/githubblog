@@ -19,7 +19,7 @@ broker是一个消息传输的中间件，其中Broker的中文意思是 经纪�
 
 通常程序发送的消息，发完就完了，可能都不知道对方时候接受了。为此，celery实现了一个backend，用于存储这些消息以及celery执行的一些消息和结果。Backend是在Celery的配置中的一个配置项 CELERY_RESULT_BACKEND ，作用是保存结果和状态，如果你需要跟踪任务的状态，那么需要设置这一项，可以是Database backend，也可以是Cache backend，具体可以参考这里：CELERY_RESULT_BACKEND 。至于 backend，就是数据库。backend我使用的是redis
 
-
+![CELERY](../images/celery.png)
 
 #### 安装
 
