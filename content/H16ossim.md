@@ -31,7 +31,7 @@ CPU ： 4核心 +
 
 ![WechatIMG15.png](../images/WechatIMG15.png)
 
-![WechatIMG16.png](../images/WechatIMG16.png)
+![WechatIMG16.png](../images/WechatIMG16.jpeg)
 
 ![WechatIMG131.png](../images/WechatIMG11.png)
 
