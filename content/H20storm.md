@@ -141,9 +141,9 @@ supervisor.slots.ports:
 ```
  在 slave节点上
  
- ```bash
+```bash
  
  ./storm ui &
  ./storm supervisor &
  
- ```
+```
