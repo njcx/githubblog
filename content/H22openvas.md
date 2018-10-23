@@ -25,7 +25,9 @@ wget -q -O - http://www.atomicorp.com/installers/atomic |sh
 #### 启动
 
 openvas-setup
+
 openvas-check-setup
+
 然后访问 https://ip:9392
 
 如果有异常，关闭防火墙就OK，或者开策略
