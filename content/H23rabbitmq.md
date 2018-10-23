@@ -26,3 +26,16 @@ Summary: 记录一下学习rabbitmq心路~
 
 ```
 
+```bash
+
+# curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
+# sudo yum install erlang-20.3.8.9-1.el7.centos.x86_64 (可以不用，由下面自行处理依赖，以免出现兼容性问题)
+
+# curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
+# yum install rabbitmq-server-3.7.8-1.el7.noarch
+``` 
+
+这里注意rabbitmq-server 和 erlang 的兼容性
+
+
+
