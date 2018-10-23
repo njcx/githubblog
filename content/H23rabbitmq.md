@@ -39,3 +39,20 @@ Summary: 记录一下学习rabbitmq心路~
 
 
 #### 配置
+
+/etc/rabbitmq/rabbitmq.config
+
+```bash
+[{rabbit, [{loopback_users, []}]}].
+```
+
+```bash
+
+rabbitmq-plugins enable rabbitmq_management 
+
+service rabbitmq-server start
+
+```
+启动
+
+访问 http://IP:15672/，账号 ：guest ： guest
