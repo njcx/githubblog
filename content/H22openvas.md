@@ -20,5 +20,10 @@ OpenVAS是一款开源的漏洞扫描攻击，主要用来检测网络或主机�
 wget -q -O - http://www.atomicorp.com/installers/atomic |sh
 
 ```
+然后，关闭selinux，修改/etc/selinux/config文件，将SELINUX=enforcing改为SELINUX=disabled
 
-#### 
+#### 启动
+
+openvas-setup
+
+openvas-check-setup
