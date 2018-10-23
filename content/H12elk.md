@@ -156,7 +156,7 @@ curl -GET 0.0.0.0:9200/_cluster/state?pretty
 
 ```
 
-#### 配置  kabna
+#### 配置  kibna
 
 
 ```bash
