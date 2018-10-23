@@ -22,7 +22,9 @@ https://dlcdn.alienvault.com/AlienVault_OSSIM_64bits.iso
 #### 安装
 
 推荐内存 ：6G +
+
 CPU ： 4核心 +
+
 内存过小，会出现异常，推荐用英语安装
 
 ![WechatIMG131.png](../images/WechatIMG131.png)
