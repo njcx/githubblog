@@ -41,4 +41,50 @@ broker是一个消息传输的中间件，其中Broker的中文意思是 经纪�
 
 redis 就把 服务添加到 /etc/init.d/目录了，并且 开机自动启动了，服务名称redis_6379 ，如果更改了默认端口，服务名称就是 redis_端口号。
 
+```bash
 
+# curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
+# sudo yum install erlang-20.3.8.9-1.el7.centos.x86_64 (可以不用，由下面自行处理依赖，以免出现兼容性问题)
+
+# curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
+# yum install rabbitmq-server-3.7.8-1.el7.noarch
+
+```
+
+#### 配置
+
+/etc/rabbitmq/rabbitmq.config
+
+```bash
+[{rabbit, [{loopback_users, []}]}].
+```
+
+```bash
+
+rabbitmq-plugins enable rabbitmq_management 
+
+service rabbitmq-server start
+
+```
+启动
+
+访问 http://IP:15672/，账号 ：guest ： guest
+
+
+```bash
+
+
+# sudo rabbitmqctl add_user njcx test   
+
+#创建了一个RabbitMQ用户,用户名为njcx，密码是test
+
+# sudo rabbitmqctl add_vhost njcxtest 
+
+#  #创建了一个虚拟主机，主机名为njcxtest
+
+
+# sudo rabbitmqctl set_permissions -p njcxtest test ".*" ".*" ".*"
+
+
+# 设置权限。允许用户njcx访问虚拟主机njcxtest，因为RabbitMQ通过主机名来与节点通信
+```
