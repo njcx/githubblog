@@ -53,7 +53,7 @@ redis 就把 服务添加到 /etc/init.d/目录了，并且 开机自动启动�
 
 #### 配置
 
-/etc/rabbitmq/rabbitmq.config
+vim /etc/rabbitmq/rabbitmq.config
 
 ```bash
 [{rabbit, [{loopback_users, []}]}].
@@ -85,6 +85,6 @@ service rabbitmq-server start
 
 # sudo rabbitmqctl set_permissions -p njcxtest test ".*" ".*" ".*"
 
-
 # 设置权限。允许用户njcx访问虚拟主机njcxtest，因为RabbitMQ通过主机名来与节点通信
+
 ```
