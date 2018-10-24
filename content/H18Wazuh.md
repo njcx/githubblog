@@ -1,4 +1,4 @@
-Title: Wazuh 学习记录
+Title: wazuh(ossec)学习记录
 Date: 2017-05-28 17:20
 Modified: 2017-05-28 17:20
 Category: 安全
