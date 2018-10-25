@@ -139,3 +139,12 @@ date.timezone = Asia/Shanghai
 
 ```
 
+```bash
+
+systemctl restart zabbix-server zabbix-agent mariadb  httpd
+systemctl enable zabbix-server zabbix-agent mariadb  httpd
+
+```
+
+
+访问 http://192.168.1.110/zabbix/ 就OK，配置一下，默认用户密码 Admin/zabbix
