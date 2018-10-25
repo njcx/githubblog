@@ -74,16 +74,16 @@ service rabbitmq-server start
 ```bash
 
 
-# sudo rabbitmqctl add_user njcx test   
+# rabbitmqctl add_user njcx test   
 
 #创建了一个RabbitMQ用户,用户名为njcx，密码是test
 
-# sudo rabbitmqctl add_vhost njcxtest 
+# rabbitmqctl add_vhost njcxtest 
 
 #  #创建了一个虚拟主机，主机名为njcxtest
 
 
-# sudo rabbitmqctl set_permissions -p njcxtest test ".*" ".*" ".*"
+# rabbitmqctl set_permissions -p njcxtest test ".*" ".*" ".*"
 
 # 设置权限。允许用户njcx访问虚拟主机njcxtest，因为RabbitMQ通过主机名来与节点通信
 
