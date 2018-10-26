@@ -161,5 +161,4 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
     </property>
 </configuration>
 
-
 ```
