@@ -18,10 +18,7 @@ master 节点
 - kube-scheduler 调度组件，负责node的调度
 
 slave节点
-
-kubelet
-
-- Node节点中核心组件，负责执行Master下发的任务 
+- kubelet Node节点中核心组件，负责执行Master下发的任务 
 - kube-proxy 代理，负责kubelet与apiserver网络。相当于负载均衡，将请求转到后端pod中
 
 ![k8s](../images/k8s.png)
