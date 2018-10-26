@@ -109,3 +109,5 @@ master:
     tmpfs                    177M     0  177M   0% /run/user/0
     
 ```
+
+如上，只是简单的测试，还有比较有趣的 grains，pillar
