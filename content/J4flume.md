@@ -13,6 +13,8 @@ Summary: 记录一下flume实践笔记 ~
 
 #### 安装
 
+系统：centos7.3 ，flume-1.8.0， hadoop 2.7.7
+
 ```bash
 wget https://mirrors.aliyun.com/apache/flume/stable/apache-flume-1.8.0-bin.tar.gz
 ```

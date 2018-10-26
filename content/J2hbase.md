@@ -1,4 +1,4 @@
-Title: Hbase 实践笔记
+Title: hbase 实践笔记
 Date: 2018-07-02 12:20
 Modified: 2018-07-02 12:20
 Category: Big data

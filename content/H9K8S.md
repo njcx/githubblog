@@ -1,12 +1,12 @@
 Title: Kubernetes 了解一下
-Date: 2018-06-07 13:20
-Modified: 2018-06-07 13:20
+Date: 2018-07-03 19:20
+Modified: 2018-07-03 19:20
 Category: Kubernetes
 Tags: Kubernetes
 Slug: H9
 Authors: nJcx
 Summary: Kubernetes安装与使用
-Status: draft
+
 
 #### 安装
 
