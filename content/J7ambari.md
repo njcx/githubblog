@@ -33,6 +33,19 @@ export PATH=${MAVEN_HOME}/bin:${PATH}
 ```
 source /etc/profile  
 
+找到conf/settings.xml,修改Maven源
+
+```xml
+
+<mirror>  
+    <id>nexus-aliyun</id>  
+    <mirrorOf>central</mirrorOf>    
+    <name>Nexus aliyun</name>  
+    <url>http://maven.aliyun.com/nexus/content/groups/public</url>  
+</mirror>  
+
+```
+
 ```bash
 
 # wget https://mirrors.aliyun.com/apache/ambari/ambari-2.7.1/apache-ambari-2.7.1-src.tar.gz 
