@@ -1,7 +1,7 @@
 Title: apache-metron(opensoc)学习记录
 Date: 2017-05-28 16:20
 Modified: 2017-05-28 16:20
-Category: 安全
+Category: Big data
 Tags: apache-metron
 Slug: H17
 Authors: nJcx

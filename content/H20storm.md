@@ -1,7 +1,7 @@
 Title: storm 集群搭建
 Date: 2018-07-01 10:20
 Modified: 2018-07-01 10:20
-Category: 大数据
+Category: Big data
 Tags: storm
 Slug: H20
 Authors: nJcx

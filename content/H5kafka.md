@@ -1,7 +1,7 @@
 Title: kafka安装与使用
 Date: 2018-06-04 13:20
 Modified: 2018-06-04 13:20
-Category: kafka
+Category: Big data
 Tags: kafka
 Slug: H5
 Authors: nJcx

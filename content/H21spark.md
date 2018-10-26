@@ -1,7 +1,7 @@
 Title: spark 集群搭建
 Date: 2018-07-01 09:20
 Modified: 2018-07-01 09:20
-Category: 大数据
+Category: Big data
 Tags: spark
 Slug: H21
 Authors: nJcx

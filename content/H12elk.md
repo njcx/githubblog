@@ -1,7 +1,7 @@
 Title: elk 实践
 Date: 2018-06-05 09:20
 Modified: 2018-06-05 09:20
-Category: elk
+Category: Big data
 Tags: elk
 Slug: H12
 Authors: nJcx
