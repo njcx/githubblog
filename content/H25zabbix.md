@@ -1,4 +1,4 @@
-Title: Zabbix4.0实践笔记
+Title: Zabbix实践笔记
 Date: 2018-07-01 16:20
 Modified: 2018-07-01 16:20
 Category: Zabbix
@@ -12,6 +12,8 @@ Summary: 记录一下Zabbix实践笔记 ~
 
 
 #### 安装
+
+版本：zabbix-4.0
 
 ```bash
 
@@ -148,3 +150,7 @@ systemctl enable zabbix-server zabbix-agent mariadb  httpd
 
 
 访问 http://192.168.1.110/zabbix/ 就OK，配置一下，默认用户密码 Admin/zabbix
+
+
+
+
