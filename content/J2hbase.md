@@ -12,6 +12,7 @@ Summary: 记录一下hbase实践笔记 ~
 
 
 #### 安装
+系统：centos7.3-x64，hbase-1.4.8，hadoop-2.7.7
 
 ```bash
 wget https://mirrors.aliyun.com/apache/hbase/stable/hbase-1.4.8-bin.tar.gz

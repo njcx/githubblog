@@ -13,7 +13,7 @@ Summary: 记录一下Zabbix实践笔记 ~
 
 #### 安装
 
-版本：zabbix-4.0
+版本：centos7.3，zabbix-4.0
 
 ```bash
 

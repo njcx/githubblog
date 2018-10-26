@@ -13,7 +13,7 @@ Summary: 记录一下hive实践笔记 ~
 
 #### 安装
 
-系统：CentOS 7.3 
+系统：CentOS 7.3 ，apache-hive-2.3.3， hadoop-2.7.7
 
 目录： /opt 
 

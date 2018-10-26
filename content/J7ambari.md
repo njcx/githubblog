@@ -13,7 +13,7 @@ Summary: 记录一下ambari实践笔记 ~
 
 #### 安装
 
-系统：CentOS7.3
+系统：centos7.3，maven-3.5.4，ambari-2.7.1
 
 目录： /opt
 
