@@ -1,4 +1,4 @@
-Title: Zabbix实践笔记
+Title: zabbix实践笔记
 Date: 2018-07-01 16:20
 Modified: 2018-07-01 16:20
 Category: Zabbix

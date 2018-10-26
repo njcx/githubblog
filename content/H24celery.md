@@ -1,4 +1,4 @@
-Title: Celery 实践笔记
+Title: celery 实践笔记
 Date: 2018-07-01 11:20
 Modified: 2018-07-01 11:20
 Category: Celery
