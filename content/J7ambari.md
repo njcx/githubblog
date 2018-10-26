@@ -15,6 +15,24 @@ Summary: 记录一下ambari实践笔记 ~
 
 系统：CentOS7.3
 
+目录： /opt
+
+先安装maven
+
+```bash
+# wget http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+# tar -zxvf apache-maven-3.5.4-bin.tar.gz
+```
+添加环境变量
+
+```bash
+
+export MAVEN_HOME=/opt/apache-maven-3.5.4
+export PATH=${MAVEN_HOME}/bin:${PATH}
+
+```
+source /etc/profile  
+
 ```bash
 
 # wget https://mirrors.aliyun.com/apache/ambari/ambari-2.7.1/apache-ambari-2.7.1-src.tar.gz 
@@ -64,5 +82,6 @@ hostname=localhost
 ```
 ambari-agent start
 
-
-#### 配置
+访问页面
+http://<ambari-server-host>:8080
+账户：admin：admin
