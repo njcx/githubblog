@@ -76,3 +76,90 @@ scp ~/.ssh/authorized_keys root@192.168.1.108:~/.ssh/
 scp ~/.ssh/authorized_keys root@192.168.1.107:~/.ssh/
 ```
   
+ 加入hadoop环境变量配置
+ 
+ 
+```bash
+
+export HADOOP_HOME=/opt/hadoop-2.7.7/
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
+
+``` 
+/opt/hadoop-2.7.7目录下创建数据存放的文件夹，tmp、hdfs、hdfs/data、hdfs/name
+
+配置hadoop-2.7.7/etc/hadoop目录下的core-site.xml
+
+```xml
+
+ <configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>file:/opt/hadoop-2.7.7/tmp</value>
+    </property>
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131702</value>
+    </property>
+ </configuration>
+ 
+```
+配置hadoop-2.7.7/etc/hadoop目录下的hdfs-site.xml
+
+```xml
+
+ <configuration>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:/opt/hadoop-2.7.7/dfs/name</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:/opt/hadoop-2.7.7/dfs/data</value>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+    <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+    </property>
+ </configuration>
+ 
+```
+
+配置hadoop-2.7.7/etc/hadoop目录下的mapred-site.xml
+
+```xml
+
+<configuration>
+    <property>  
+        <name>mapreduce.framework.name</name>  
+        <value>yarn</value>  
+    </property>  
+</configuration>
+
+```
+配置hadoop-2.7.7/etc/hadoop目录下的yarn-site.xml
+```xml
+
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+</configuration>
+
+
+```
