@@ -13,6 +13,10 @@ Summary: 记录一下hbase实践笔记 ~
 
 #### 安装
 
+```bash
+wget https://mirrors.aliyun.com/apache/hbase/stable/hbase-1.4.8-bin.tar.gz
+
+```
 
 #### 配置
 

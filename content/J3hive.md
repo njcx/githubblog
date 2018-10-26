@@ -13,5 +13,19 @@ Summary: 记录一下hive实践笔记 ~
 
 #### 安装
 
+系统：CentOS 7.3 
+
+目录： /opt 
+
+```bash
+
+wget https://mirrors.aliyun.com/apache/hive/stable-2/apache-hive-2.3.3-bin.tar.gz | tar -zxvf 
+
+```
+
+```bash
+export HIVE_HOME={{pwd}}
+export PATH=$HIVE_HOME/bin:$PATH
+```
 
 #### 配置

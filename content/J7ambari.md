@@ -37,12 +37,14 @@ source /etc/profile
 
 ```xml
 
-<mirror>  
-    <id>nexus-aliyun</id>  
-    <mirrorOf>central</mirrorOf>    
-    <name>Nexus aliyun</name>  
-    <url>http://maven.aliyun.com/nexus/content/groups/public</url>  
-</mirror>  
+ <mirrors>
+    <mirror>
+      <id>alimaven</id>
+      <mirrorOf>central</mirrorOf>
+      <name>aliyun maven</name>
+   <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    </mirror>
+  </mirrors> 
 
 ```
 
@@ -59,6 +61,8 @@ popd
 
 
 ```
+接下来会开启啰嗦模式~，耐心休息休息
+
 ```bash
 
 mvn -B clean install rpm:rpm -DnewVersion=2.7.1.0.0 -DbuildNumber=90430db08a5f543a97d97918cf5f711f2786ad8a -DskipTests -Dpython.ver="python >= 2.6"

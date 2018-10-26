@@ -13,5 +13,8 @@ Summary: 记录一下flume实践笔记 ~
 
 #### 安装
 
+```bash
+wget https://mirrors.aliyun.com/apache/flume/stable/apache-flume-1.8.0-bin.tar.gz
+```
 
 #### 配置

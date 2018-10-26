@@ -13,5 +13,10 @@ Summary: 记录一下sqoop实践笔记 ~
 
 #### 安装
 
+```bash
+
+wget https://mirrors.aliyun.com/apache/sqoop/1.99.7/sqoop-1.99.7-bin-hadoop200.tar.gz
+
+```
 
 #### 配置
