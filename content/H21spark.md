@@ -46,4 +46,72 @@ export SPARK_HOME=/opt/spark-2.3.2-bin-hadoop2.7
 export PATH=$PATH:$SPARK_HOME/bin
 ```
 
-#### 
+#### 配置
+
+
+```bash
+
+cp spark-env.sh.template spark-env.sh
+　
+```
+
+
+vim spark-env.sh
+
+```bash
+
+export JAVA_HOME=/opt/jdk1.8.0_181
+export SCALA_HOME=/opt/scala-2.12.6
+export HADOOP_HOME=/opt/hadoop-2.7.7/
+export HADOOP_CONF_DIR=/opt/hadoop-2.7.7/etc/hadoop
+export SPARK_MASTER_IP=192.168.1.110
+export SPARK_MASTER_HOST=192.168.1.110
+export SPARK_LOCAL_IP=192.168.1.110
+export SPARK_WORKER_MEMORY=1g
+export SPARK_WORKER_CORES=2
+export SPARK_HOME=/opt/spark-2.3.2-bin-hadoop2.7
+export SPARK_DIST_CLASSPATH=$(/opt/hadoop-2.7.7/bin/hadoop classpath)
+
+```
+
+cp slaves.template slaves
+
+
+```bash
+Master
+Slave1
+Slave2
+```
+
+scp -r  spark-2.3.2-bin-hadoop2.7 root@192.168.1.108:/opt
+
+scp -r  spark-2.3.2-bin-hadoop2.7 root@192.168.1.107:/opt
+
+然后在Slave1 ，Slave2上添加 spark的环境变量
+
+```bash
+
+export SPARK_HOME=/opt/spark-2.3.2-bin-hadoop2.7
+export PATH=$PATH:$SPARK_HOME/bin
+
+```
+并且在 slave1 和 slave2 上修改spark-env.sh “export SPARK_LOCAL_IP=” 为本机ip。
+
+启动 /sbin/start-all.sh
+
+jps 验证
+
+```bash
+
+5809 Jps
+5749 Worker
+1882 DataNode
+
+```
+
+有个Worker即为成功
+
+
+
+
+
