@@ -37,13 +37,29 @@ source /etc/profile
 
 ```xml
 
- <mirrors>
-    <mirror>
-      <id>alimaven</id>
-      <mirrorOf>central</mirrorOf>
-      <name>aliyun maven</name>
-   <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-    </mirror>
+ <mirrors>    
+            <mirror>
+            <id>alimaven</id>
+            <mirrorOf>central</mirrorOf>
+            <name>aliyun maven</name>
+            <url>https://maven.aliyun.com/repository/releases/</url>
+        </mirror>
+    
+        <!-- 中央仓库1 -->
+        <mirror>
+            <id>repo1</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>https://maven.aliyun.com/repository/central/</url>
+        </mirror>
+    
+        <!-- 中央仓库2 -->
+        <mirror>
+            <id>repo2</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
+        </mirror>
   </mirrors> 
 
 ```
@@ -102,3 +118,24 @@ ambari-agent start
 访问页面
 http://<ambari-server-host>:8080
 账户：admin：admin
+
+
+方法二：
+
+master
+
+```bash
+wget -nv http://public-repo-1.hortonwor.com/ambari/centos7/2.x/updates/2.7.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+
+yum install ambari-server -y
+
+```
+
+slave1
+
+```bash
+
+yum install ambari-agent -y
+
+```
+

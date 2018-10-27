@@ -1,4 +1,4 @@
-Title: Jenkins 了解一下
+Title: jenkins 了解一下
 Date: 2018-06-07 13:20
 Modified: 2018-06-07 13:20
 Category: jenkins

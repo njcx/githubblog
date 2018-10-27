@@ -152,6 +152,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 ```
 配置hadoop-2.7.7/etc/hadoop目录下的yarn-site.xml
+
 ```xml
 
 <configuration>
@@ -162,3 +163,32 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 </configuration>
 
 ```
+
+
+然后在 hadoop-env.sh 里面添加如下，不然可能会出现 JAVA_HOME找不到现象。
+
+```bash
+export JAVA_HOME=/opt/jdk1.8.0_181
+
+```
+
+vim slaves 
+
+```bash
+Slave1
+Slave2
+
+```
+然后把hadoop文件夹scp 到slave1，slave2
+
+```bash
+scp -r hadoop-2.7.7 root@192.168.1.107:/opt
+scp -r hadoop-2.7.7 root@192.168.1.108:/opt
+```
+
+在master机器上，任意目录输入 hdfs namenode -format 格式化namenode，第一次使用需格式化一次，之后就不用再格式化，如果改一些配置文件了，可能还需要再次格式化
+
+启动 ： start-all.sh
+
+输入 jps 查看当前java的进程
+
