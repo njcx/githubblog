@@ -57,3 +57,44 @@ slave2
 # yum install -y kubernetes-node
 
 ```
+
+#### 配置
+
+```bash
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# systemctl enable etcd.service
+[root@localhost ~]# systemctl start etcd.service
+[root@localhost ~]# systemctl start kube-apiserver.service
+[root@localhost ~]# systemctl start kube-controller-manager.service
+[root@localhost ~]# systemctl start kube-scheduler.service
+[root@localhost ~]# systemctl enable kube-apiserver.service
+[root@localhost ~]# systemctl enable kube-controller-manager.service
+[root@localhost ~]# systemctl enable kube-scheduler.service
+
+```
+
+slave1
+
+```bash
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# systemctl enable docker.service
+[root@localhost ~]# systemctl start docker.service
+[root@localhost ~]# systemctl enable kubelet.service
+[root@localhost ~]# systemctl start kubelet.service
+[root@localhost ~]# systemctl enable kube-proxy.service
+[root@localhost ~]# systemctl start kube-proxy.service
+
+```
+
+slave2
+
+```bash
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# systemctl enable docker.service
+[root@localhost ~]# systemctl start docker.service
+[root@localhost ~]# systemctl enable kubelet.service
+[root@localhost ~]# systemctl start kubelet.service
+[root@localhost ~]# systemctl enable kube-proxy.service
+[root@localhost ~]# systemctl start kube-proxy.service
+
+```
