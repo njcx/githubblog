@@ -6,7 +6,7 @@ Tags: flume
 Slug: J4
 Authors: nJcx
 Summary: 记录一下flume实践笔记 ~
-
+Status: draft
 
 #### 介绍
 

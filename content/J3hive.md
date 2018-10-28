@@ -6,7 +6,7 @@ Tags: hive
 Slug: J3
 Authors: nJcx
 Summary: 记录一下hive实践笔记 ~
-
+Status: draft
 
 #### 介绍
 

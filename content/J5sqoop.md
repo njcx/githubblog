@@ -6,7 +6,7 @@ Tags: sqoop
 Slug: J5
 Authors: nJcx
 Summary: 记录一下sqoop实践笔记 ~
-
+Status: draft
 
 #### 介绍
 

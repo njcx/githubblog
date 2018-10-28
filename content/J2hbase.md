@@ -6,7 +6,7 @@ Tags: hbase
 Slug: J2
 Authors: nJcx
 Summary: 记录一下hbase实践笔记 ~
-
+Status: draft
 
 #### 介绍
 
