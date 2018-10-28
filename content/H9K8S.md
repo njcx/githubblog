@@ -24,11 +24,36 @@ slave节点
 ![k8s](../images/k8s.png)
 #### 安装
 
+master 
+
+包含kube-apiserver，kube-scheduler，kube-controller-manager
 
 ```bash
 
-# wget http://download.redis.io/releases/redis-4.0.11.tar.gz
-# tar -zxvf redis-4.0.11.tar.gz
-# cd redis-4.0.11 && make && make install 
+# yum install -y epel-release
+# yum makecache 
+# yum install -y etcd kubernetes-master kubernetes-client 
+
+```
+
+slave1
+
+包含 kubelet，kube-proxy，kubectl
+
+
+```bash
+# yum install -y epel-release
+# yum makecache 
+# yum install -y kubernetes-node
+
+```
+
+
+slave2
+
+```bash
+# yum install -y epel-release
+# yum makecache 
+# yum install -y kubernetes-node
 
 ```
