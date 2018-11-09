@@ -6,6 +6,7 @@ Tags: C语言
 Slug: J8
 Authors: nJcx
 Summary: C语言学习后，转化成教程，方便大家阅读
+Status: draft
 
 ##### 介绍
 

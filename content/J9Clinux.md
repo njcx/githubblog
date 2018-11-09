@@ -6,6 +6,8 @@ Tags: Linux C
 Slug: J9
 Authors: nJcx
 Summary: Linux C编程学习后，转化成教程，方便大家阅读
+Status: draft
+
 
 ##### 介绍
 
