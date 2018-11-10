@@ -156,6 +156,11 @@ deb http://mirrors.zju.edu.cn/kali kali-rolling main contrib non-free 
 deb-src http://mirrors.zju.edu.cn/kali kali-rolling main contrib non-free 
 ```
 
+mysql 源
+
+```bash
+rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+```
 
 #### 软件包 
 
@@ -168,6 +173,14 @@ yum install -y pcre pcre-devel zlip zlib-devel openssl openssl-devel
 
 yum install python-devel python-pip python-virtualenv
 
+
+yum install mongodb-server mariadb-server 
+
+yum install redis 
+
+yum install python36 python36-devel
+ 
+ 
 ```
 
 
