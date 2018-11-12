@@ -130,7 +130,11 @@ Samba 服务。
 
 27017端口： mongodb 数据库
 
+9200端口： ElasticSearch 数据库
 
+5601端口： Kibana
+
+5044端口： Logstash
 
 大数据常见端口汇总：
 Hadoop：    
@@ -164,9 +168,7 @@ CDH：
 HUE：
     8888： Hue WebUI 端口
 
-ElasticSearch： 9200
-Kibana ：5601
-Logstash ：5044
+
 
 
 以下为搜索到的可用端口详细对应表
