@@ -132,7 +132,6 @@ Samba 服务。
 
 
 
-
 大数据常见端口汇总：
 Hadoop：    
     50070：HDFS WEB UI端口
