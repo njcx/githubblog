@@ -5,14 +5,14 @@ Category: 杂项
 Tags: 端口
 Slug: J10
 Authors: nJcx
-Summary: 常见服务端口对照表(转载)
+Summary: 常见服务端口对照表
 
 
 
 ```bash
 计算机常用端口
 
-HTTP:80：www服务。
+HTTP:80：HTTP。
 
 DHCP：服务器端的端口号是67
 
@@ -114,7 +114,60 @@ Samba 服务。
 
 1755 端口：1755 端口默认情况下用于“Microsoft Media Server”（微软媒体服务器，简称MMS）。
 
-3389端口：远程桌面
+1433 端口： SQL Server 数据库
+
+1521 端口： Oracle 数据库
+
+3306端口 ： MySQL 数据库
+
+3389端口： 远程桌面 rdp
+
+6379端口： Redis 端口
+
+9092 端口： DB2
+
+11211端口： memcached 端口
+
+27017端口： mongodb 数据库
+
+
+
+
+大数据常见端口汇总：
+Hadoop：    
+    50070：HDFS WEB UI端口
+    8020 ： 高可用的HDFS RPC端口
+    9000 ： 非高可用的HDFS RPC端口
+    8088 ： Yarn 的WEB UI 接口
+    8485 ： JournalNode 的RPC端口
+    8019 ： ZKFC端口
+Zookeeper:
+    2181 ： 客户端连接zookeeper的端口
+    2888 ： zookeeper集群内通讯使用，Leader监听此端口
+    3888 ： zookeeper端口 用于选举leader
+Hbase:
+    60010：Hbase的master的WEB UI端口
+    60030：Hbase的regionServer的WEB UI 管理端口    
+Hive:
+    9083  :  metastore服务默认监听端口
+    10000：Hive 的JDBC端口
+Spark：
+    7077 ： spark 的master与worker进行通讯的端口  standalone集群提交Application的端口
+    8080 ： master的WEB UI端口  资源调度
+    8081 ： worker的WEB UI 端口  资源调度
+    4040 ： Driver的WEB UI 端口  任务调度
+    18080：Spark History Server的WEB UI 端口
+Kafka：
+    9092： Kafka集群节点之间通信的RPC端口
+CDH：
+    7180： Cloudera Manager WebUI端口
+    7182： Cloudera Manager Server 与 Agent 通讯端口
+HUE：
+    8888： Hue WebUI 端口
+
+ElasticSearch： 9200
+Kibana ：5601
+Logstash ：5044
 
 
 以下为搜索到的可用端口详细对应表
