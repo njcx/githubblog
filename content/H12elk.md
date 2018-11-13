@@ -176,5 +176,18 @@ logging.dest: /opt/kibana-6.1.2-linux-x86_64/log/kibana.log
 - Timelion //时间序列
 
 
+```bash
 
+wget https://artifacts.elastic.co/downloads/logstash/logstash-6.2.0.rpm
+
+wget --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;" http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.tar.gz
+
+
+export JAVA_HOME=/opt/jdk1.8.0_191
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+
+
+```
 
