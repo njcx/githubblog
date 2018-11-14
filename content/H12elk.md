@@ -13,6 +13,7 @@ Summary: 记录一下elk的使用过程
 下载 elk 组件备用
 
 ```bash
+
 https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.2.0-linux-x86_64.tar.gz
 https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-6.2.0-linux-x86_64.tar.gz
 https://artifacts.elastic.co/downloads/beats/packetbeat/packetbeat-6.2.0-linux-x86_64.tar.gz
@@ -21,6 +22,8 @@ https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-6.2.0-linux-x86
 https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.0.tar.gz
 https://artifacts.elastic.co/downloads/kibana/kibana-6.2.0-linux-x86_64.tar.gz
 https://artifacts.elastic.co/downloads/logstash/logstash-6.2.0.tar.gz
+https://artifacts.elastic.co/downloads/kibana-plugins/x-pack-6.2.0.zip/x-pack-6.2.0.zip
+
 ```
 - Packetbeat： 网络数据（收集网络流量数据）
 - Metricbeat： 指标 （收集系统、进程和文件系统级别的 CPU 和内存使用情况等数据）
@@ -174,6 +177,13 @@ logging.dest: /opt/kibana-6.1.2-linux-x86_64/log/kibana.log
 - visualization  // 统计图
 - Dashboard  // 看板
 - Timelion //时间序列
+
+bin/kibana-plugin install  file:///opt/x-pack-6.2.0.zip
+
+bin/elasticsearch-plugin install file:///opt/x-pack-6.2.0.zip
+
+/usr/share/logstash/logstash-plugin install x-pack file:///opt/x-pack-6.2.0.zip
+
 
 
 ```bash
