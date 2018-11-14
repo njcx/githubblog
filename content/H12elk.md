@@ -168,6 +168,8 @@ server.port: 8080
 server.host: "172.16.131.134"
 elasticsearch.url: "http://localhost:9200"
 logging.dest: /opt/kibana-6.1.2-linux-x86_64/log/kibana.log
+elasticsearch.username: "kibana"
+elasticsearch.password: "kibanapassword"
 
 ```
 
@@ -182,8 +184,48 @@ bin/kibana-plugin install  file:///opt/x-pack-6.2.0.zip
 
 bin/elasticsearch-plugin install file:///opt/x-pack-6.2.0.zip
 
-/usr/share/logstash/logstash-plugin install x-pack file:///opt/x-pack-6.2.0.zip
+/usr/share/logstash/bin/logstash-plugin install x-pack file:///opt/x-pack-6.2.0.zip
 
+
+xpack.monitoring.elasticsearch.url: "http://ip:9200"
+
+
+
+##### 配置logstash
+
+
+
+```bash
+
+xpack.monitoring.elasticsearch.url: "http://ip:9200"
+xpack.monitoring.elasticsearch.username: logstash_system
+xpack.monitoring.elasticsearch.password: pwd
+
+```
+
+
+# x-pack
+
+
+```bash
+
+curl -u elastic:pwd  -XPUT 'http://127.0.0.1:9200/_xpack/license' -H "Content-Type: application/json" -d @license.json
+
+```
+license.json
+
+```bash
+{"license":{"uid":"f19eabab-77ae-4ccd-b90c-f20e5605e625",
+"type":"platinum",
+"issue_date_in_millis":1542153600000,
+"expiry_date_in_millis":2524579200999,
+"max_nodes":100,
+"issued_to":"nj cx (baidu)",
+"issuer":"WebForm",
+"signature":"AAAAAwAAAA1neEkkwW17TBDufpgpAAABmC9ZN0hjZDBGYnVyRXpCOW5Bb3FjZDAxOWpSbTVoMVZwUzRxVk1PSmkxaktJRVl5MUYvUWh3bHZVUTllbXNPbzBUemtnbWpBbmlWRmRZb25KNFlBR2x0TXc2K2p1Y1VtMG1UQU9TRGZVSGRwaEJGUjE3bXd3LzRqZ05iLzRteWFNekdxRGpIYlFwYkJiNUs0U1hTVlJKNVlXekMrSlVUdFIvV0FNeWdOYnlESDc3MWhlY3hSQmdKSjJ2ZTcvYlBFOHhPQlV3ZHdDQ0tHcG5uOElCaDJ4K1hob29xSG85N0kvTWV3THhlQk9NL01VMFRjNDZpZEVXeUtUMXIyMlIveFpJUkk2WUdveEZaME9XWitGUi9WNTZVQW1FMG1DenhZU0ZmeXlZakVEMjZFT2NvOWxpZGlqVmlHNC8rWVVUYzMwRGVySHpIdURzKzFiRDl4TmM1TUp2VTBOUlJZUlAyV0ZVL2kvVk10L0NsbXNFYVZwT3NSU082dFNNa2prQ0ZsclZ4NTltbU1CVE5lR09Bck93V2J1Y3c9PQAAAQAERQE/JDSC3INTJO4W5B1Hs7Ug+A9crNoVzQJOgjIdzP/U+A8XRc7Fb1APo+aCD+a6x4Sl+7/2p4HjjdF5G/n5GJYTMpOZ0CBOnq3VghGlmZsyWktqR8kiVPmt1J3a0TS2J8Np0s1ZCBsGhUXoy7CG1vTErUOjeJg2AgR3McXCm/WTzLjEVM/GZ1/u0qzEsxEUXGbRAFDLfQ9q9v6sIxUSybV42zLJKSTZJb/AJluGy0vQpLmRnEccKfKpzWGCYRaJg00K+LI6xs1RA8NJuXaahcwVBF+Osxi+/CWPdgXnlkJTcjKr6WzVjC7VNYOdVXu4sp3NefiinRWmfPGFYOQH",
+"start_date_in_millis":1542153600000}}
+
+```
 
 
 ```bash
