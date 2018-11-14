@@ -102,7 +102,7 @@ sysctl -p
 
 ```bash
 [root@localhost local]# cd /opt 
-[root@localhost local]# chown -R elk:elk elasticsearch-6.1.2
+[root@localhost local]# chown -R elk:elk elasticsearch-6.2.0
 ```
 
 
@@ -188,6 +188,7 @@ export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=${JAVA_HOME}/bin:$PATH
 
+ln -s /opt/jdk1.8.0_191/bin/java /usr/bin/java
 
 ```
 
