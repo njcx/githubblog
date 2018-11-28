@@ -6,7 +6,7 @@ Tags: shell
 Slug: H4
 Authors: nJcx
 Summary: bash编程学习后，转化成教程，方便大家阅读
-
+Status: draft
 ##### 介绍
 
 Shell 是一个用C语言编写的程序，它是用户使用Linux的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。通过编写shell脚本，来控制系统的运行。

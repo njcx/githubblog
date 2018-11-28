@@ -6,7 +6,7 @@ Tags: lua
 Slug: H2
 Authors: nJcx
 Summary: lua学习后，转化成教程，方便大家阅读
-
+Status: draft
 ##### 介绍
 
 Lua 是一脚本语言，巴西人所开发。由标准C开发，方便嵌入应用程序中。几乎可以在所有操作系统和平台上都可以编译，运行。
