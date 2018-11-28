@@ -360,5 +360,12 @@ Added.
 ** Press ENTER to return to the main menu.
 
 ```
+通过 netstat -anlp | grep ossec ，可以查看agent（48658端口）与server （1514）通过udp通讯
+
+```bash
+
+192.168.1.101:48658    192.168.1.100:1514
+
+```
 
 
