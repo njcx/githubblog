@@ -55,8 +55,8 @@ agent 目录结构
 
 ```bash
 
-── active-response
-│   └── bin
+── active-response   //联动模块目录
+│   └── bin 
 │       ├── disable-account.sh
 │       ├── firewalld-drop.sh
 │       ├── firewall-drop.sh
@@ -84,7 +84,7 @@ agent 目录结构
 │   ├── ssh_nopass.exp
 │   ├── ssh_pixconfig_diff
 │   └── su.exp
-├── bin
+├── bin  //可执行文件目录
 │   ├── agent-auth
 │   ├── manage_agents
 │   ├── ossec-agentd
@@ -95,23 +95,21 @@ agent 目录结构
 │   ├── ossec-luac
 │   ├── ossec-syscheckd
 │   └── util.sh
-├── etc
+├── etc    //配置目录
 │   ├── client.keys
 │   ├── internal_options.conf
 │   ├── local_internal_options.conf
 │   ├── localtime
 │   ├── ossec.conf
 │   ├── ossec-init.conf
-│   └── shared
+│   └── shared   //cis安全基线目录
 │       ├── acsc_office2016_rcl.txt
 │       ├── cis_apache2224_rcl.txt
-│       ├── cis_debianlinux7-8_L1_rcl.txt
 │       ├── cis_debianlinux7-8_L2_rcl.txt
-│       ├── cis_debian_linux_rcl.txt
 │       └── win_malware_rcl.txt
-├── logs
+├── logs   //日志目录
 │   └── ossec.log
-├── lua
+├── lua      //lua插件
 │   ├── compiled
 │   └── native
 ├── queue
@@ -130,7 +128,7 @@ server 的目录结构
 
 ```bash
 
-├── active-response  // 联动模块
+├── active-response    // 联动模块
 │   └── bin
 │       ├── disable-account.sh
 │       ├── firewalld-drop.sh
@@ -159,7 +157,7 @@ server 的目录结构
 │   ├── ssh_nopass.exp
 │   ├── ssh_pixconfig_diff
 │   └── su.exp
-├── bin  // 可执行文件目录
+├── bin    // 可执行文件目录
 │   ├── agent_control
 │   ├── clear_stats
 │   ├── list_agents
@@ -195,14 +193,11 @@ server 的目录结构
 │   ├── localtime
 │   ├── ossec.conf
 │   ├── ossec-init.conf
-│   └── shared
+│   └── shared   // cis安全基线目录
 │       ├── acsc_office2016_rcl.txt
 │       ├── cis_mysql5-6_community_rcl.txt
 │       ├── cis_mysql5-6_enterprise_rcl.txt
 │       ├── rootkit_files.txt
-│       ├── rootkit_trojans.txt
-│       ├── system_audit_rcl.txt
-│       ├── system_audit_ssh.txt
 │       └── win_malware_rcl.txt
 ├── logs   // 日志目录
 │   ├── active-responses.log
@@ -210,7 +205,7 @@ server 的目录结构
 │   ├── archives
 │   ├── firewall
 │   └── ossec.log
-├── lua
+├── lua   //lua插件
 │   ├── compiled
 │   └── native
 ├── queue
@@ -225,14 +220,10 @@ server 的目录结构
 │   └── syscheck
 ├── rules    // 规则存放目录
 │   ├── apache_rules.xml
-│   ├── linux_usbdetect_rules.xml
-│   ├── local_rules.xml
 │   ├── mysql_rules.xml
-│   ├── named_rules.xml
 │   ├── nginx_rules.xml
 │   ├── ossec_rules.xml
 │   ├── php_rules.xml
-│   ├── wordpress_rules.xml
 │   └── zeus_rules.xml
 ├── stats
 ├── tmp
