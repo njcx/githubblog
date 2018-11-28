@@ -1,6 +1,6 @@
 Title: MongoDB学习笔记(A)
-Date: 2017-04-03 10:20
-Modified: 2017-04-03 10:20
+Date: 2018-06-02 23:20
+Modified: 2018-06-02 23:20
 Category: 数据库
 Tags: MongoDB
 Slug: C5
@@ -10,13 +10,13 @@ Summary: 记录一下自己学到的东西
 ####介绍
 Mongodb的3大元素:数据库(db),集合(collection),文档(document),"数据库"还是对应关系数据库中的"数据库",其中"集合"就是对应关系数据库中的"表"，"文档"对应"记录"。
 
-| RDBMS	| MongoDB |
+| RDBMS	|  MongoDB |
 | --------   | -----:   | :----: |
-| Database	| Database |
+| Database	|  Database |
 |Table	| Collection |
-| Tuple/Row	| Document|
-|column	| Field |
-| Table Join	| Embedded Documents | 
+| Tuple/Row	|  Document|
+|column	|    Field |
+| Table Join	|    Embedded Documents | 
 | Primary Key	| Primary Key (Default key _id provided by mongodb itself)|
 
 数据库服务器和客户端

@@ -1,8 +1,8 @@
 Title: redis安装与配置
 Date: 2018-06-05 13:20
 Modified: 2018-06-05 13:20
-Category: redis
-Tags: redis
+Category: 数据库
+Tags: Redis
 Slug: H6
 Authors: nJcx
 Summary: redis相关
