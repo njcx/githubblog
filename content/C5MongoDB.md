@@ -11,7 +11,7 @@ Summary: 记录一下自己学到的东西
 Mongodb的3大元素:数据库(db),集合(collection),文档(document),"数据库"还是对应关系数据库中的"数据库",其中"集合"就是对应关系数据库中的"表"，"文档"对应"记录"。
 
 | RDBMS	|  MongoDB |
-| --------   | -----:   | :----: |
+| :----: | :----: | 
 | Database	|  Database |
 |Table	| Collection |
 | Tuple/Row	|  Document|
@@ -22,7 +22,7 @@ Mongodb的3大元素:数据库(db),集合(collection),文档(document),"数据�
 数据库服务器和客户端
 
 | mysql | oracle | mongodb |
-| --------   | -----:   | :----: |
+| :----: | :----: | :----: |
 | Mysqld | Oracle	| mongod |
 | mysql | sqlplus	| mongo |
 

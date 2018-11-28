@@ -8,7 +8,7 @@ Authors: nJcx
 Summary: Redis学习笔记
 
 ####介绍
-Redis是很火的一个Key-Value数据库,它以优异的性能得到了广泛的应用.Redis是一个内存数据库，但在磁盘数据库上是持久的，它有5种数据类型，字符串，哈希，列表，集合，可排序集合，它所有的操作都是原子类型的,可以应对复杂的生产环境,可用于多种用例，如：缓存，消息队列，应用程序中短期数据。
+Redis是很火的一个Key-Value数据库,它以优异的性能得到了广泛的应用.Redis是一个内存数据库，但在磁盘数据库上是持久的，它有5种数据类型，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)，它所有的操作都是原子类型的,可以应对复杂的生产环境,可用于多种用例，如：缓存，消息队列，应用程序中短期数据。
 ####安装
 Redis 可以编译安装,也可以apt-get /yum安装,一般编译安装的版本比较新一些
 
@@ -191,7 +191,32 @@ Redis的命令主要围绕着:配置,以及相关数据类型的操作的.
 
 ```
 
+- Redis 有序集合(sorted set)
 
+```bash
+
+127.0.0.1:6379> ZADD key score1 member1 [score2 member2]       //向有序集合添加一个或多个成员，或者更新已存在成员的分数
+127.0.0.1:6379> ZCARD key                                      // 获取有序集合的成员数
+127.0.0.1:6379> ZCOUNT key min max                             //计算在有序集合中指定区间分数的成员数
+127.0.0.1:6379> ZINCRBY key increment member                   //有序集合中对指定成员的分数加上增量 increment
+127.0.0.1:6379> ZINTERSTORE destination numkeys key [key ...]  //计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中
+127.0.0.1:6379> ZLEXCOUNT key min max                          //在有序集合中计算指定字典区间内成员数量
+127.0.0.1:6379> ZRANGE key start stop [WITHSCORES]             //通过索引区间返回有序集合成指定区间内的成员
+127.0.0.1:6379> ZRANGEBYLEX key min max [LIMIT offset count]  //通过字典区间返回有序集合的成员
+127.0.0.1:6379> ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]  //通过分数返回有序集合指定区间内的成员
+127.0.0.1:6379> ZRANK key member                               // 返回有序集合中指定成员的索引
+127.0.0.1:6379> 	ZREM key member [member ...]                  //移除有序集合中的一个或多个成员
+127.0.0.1:6379> ZREMRANGEBYLEX key min max                     //移除有序集合中给定的字典区间的所有成员
+127.0.0.1:6379> ZREMRANGEBYRANK key start stop                 //移除有序集合中给定的排名区间的所有成员
+127.0.0.1:6379> 	ZREMRANGEBYSCORE key min max                  //移除有序集合中给定的分数区间的所有成员
+127.0.0.1:6379> 	ZREVRANGE key start stop [WITHSCORES]         //返回有序集中指定区间内的成员，通过索引，分数从高到底
+127.0.0.1:6379> ZREVRANGEBYSCORE key max min [WITHSCORES]     //返回有序集中指定分数区间内的成员，分数从高到低排序
+127.0.0.1:6379> ZREVRANK key member                           // 返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序
+127.0.0.1:6379> ZSCORE key member                               //返回有序集中，成员的分数值
+127.0.0.1:6379> 	ZUNIONSTORE destination numkeys key [key ...]   //计算给定的一个或多个有序集的并集，并存储在新的 key 中
+127.0.0.1:6379> 	ZSCAN key cursor [MATCH pattern] [COUNT count]   //迭代有序集合中的元素（包括元素成员和元素分值）
+
+```
 
 
 
