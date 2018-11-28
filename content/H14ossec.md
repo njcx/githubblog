@@ -7,16 +7,18 @@ Slug: H14
 Authors: nJcx
 Summary: 记录一下学习ossec 心路~
 
-#### 问题
+#### 介绍
 
 
-下载地址
+
+#### 安装
+
 
 ip : 192.168.1.100  server
 
 ip ： 192.168.1.101  agent 
 
-安装server ，安装目录/opt/ossec
+在192.168.1.101上安装server ，安装目录/opt/ossec
 
 ```bash
 
@@ -41,7 +43,7 @@ ip ： 192.168.1.101  agent
 
 ```
 
-填写语言，然后选择agent类型，填写安装目录，等等，即可编译安装完成
+填写语言，然后选择agent类型，填写安装目录，server地址，等等，即可编译安装完成
 
 ```bash
 #/opt/ossec/bin/ossec-control start  //启动agent
@@ -49,7 +51,7 @@ ip ： 192.168.1.101  agent
 ```
 
 
-#### 
+#### 目录结构
 
 agent 目录结构
 
