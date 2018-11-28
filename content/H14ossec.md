@@ -8,8 +8,7 @@ Authors: nJcx
 Summary: 记录一下学习ossec 心路~
 
 #### 介绍
-
-
+OSSEC是一款开源的hids，可以运行于Windows, Linux, OpenBSD/FreeBSD, 以及 MacOS等操作系统中。包括日志分析，全面检测，root-kit检测，审计，实时报警以及联动响应等功能。
 
 #### 安装
 
@@ -73,7 +72,7 @@ agent 目录结构
 │       ├── pf.sh
 │       ├── restart-ossec.sh
 │       └── route-null.sh
-├── agentless
+├── agentless  //无代理监控
 │   ├── main.exp
 │   ├── register_host.sh
 │   ├── ssh_asa-fwsmconfig_diff
@@ -146,7 +145,7 @@ server 的目录结构
 │       ├── pf.sh
 │       ├── restart-ossec.sh
 │       └── route-null.sh
-├── agentless
+├── agentless //无代理监控
 │   ├── main.exp
 │   ├── register_host.sh
 │   ├── ssh_asa-fwsmconfig_diff
