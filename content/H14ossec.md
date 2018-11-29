@@ -236,7 +236,7 @@ server 的目录结构
 ```
 
 
-#### 简单使用
+#### 添加agent
 
 先启动 server端
 
@@ -379,6 +379,20 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 ```bash
 
 192.168.1.101:48658    192.168.1.100:1514
+
+```
+
+#### 简单使用
+
+
+#### 添加规则
+
+#### 常用命令
+
+
+```bash
+
+# /opt/ossec/bin/agent_control -R 001   //server重启agent程序（仅仅是程序，不是机器，001是agent的编号) 
 
 ```
 
