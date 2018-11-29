@@ -6,6 +6,7 @@ Tags: Flask
 Slug: J12
 Authors: nJcx
 Summary: Flask 学习记录
+Status: draft
 
 #### 介绍
 Flask是一个使用 Python 编写的轻量级 Web 应用框架。其 WSGI 工具箱采用Werkzeug ，模板引擎则使用 Jinja2 。Flask使用 BSD 授权。Flask也被称为“microframework” ，因为它使用简单的核心，用 extension 增加其他功能。Flask没有默认使用的数据库、窗体验证工具。然而，Flask保留了扩增的弹性，可以用Flask-extension加入这些功能：ORM、窗体验证工具、文件上传、各种开放式身份验证技术。最新版本为1.0.2
