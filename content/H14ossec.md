@@ -256,7 +256,7 @@ Started ossec-monitord...
 ```
 
 
-添加agent
+server添加agent
 
 这里，先输入A添加，再输入E，导出KEY备用
 
@@ -360,6 +360,18 @@ Added.
 ** Press ENTER to return to the main menu.
 
 ```
+当然，我们也可以用server 的 ossec-authd 工具添加key
+
+```bash
+
+server #/opt/ossec/bin/ossec-authd -p 1515
+
+agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
+
+```
+这样也可以实现添加agent
+
+
 通过 netstat -anlp | grep ossec ，可以查看agent（48658端口）与server （1514）通过udp通讯
 
 ```bash
