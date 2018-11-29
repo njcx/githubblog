@@ -27,6 +27,9 @@ yum install -y libpcap-devel libnet-devel pcre-devel gcc-c++ automake autoconf l
 到这里基本安装完成
 #### 使用
 
+/opt/suricata/bin/suricata -i ens33 -c /opt/suricata/etc/suricata/suricata.yaml -s /opt/suricata/share/suricata/rules/http-events.rules -l ./ -D
+
+这里通过 -i 指定网卡， -c 指定配置文件， -s 指定规则， 通过-l 指定log 输出的目录，通过 -D 把进程放到后面运行，
 
 
 
