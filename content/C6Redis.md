@@ -260,23 +260,22 @@ HyperLogLog 是做基数统计的算法
 样例
 
 ```bash
-
-redis 127.0.0.1:6379> MULTI
+127.0.0.1:6379> MULTI
 OK
 
-redis 127.0.0.1:6379> SET book-name "Mastering C++ in 21 days"
+127.0.0.1:6379> SET book-name "Mastering C++ in 21 days"
 QUEUED
 
-redis 127.0.0.1:6379> GET book-name
+127.0.0.1:6379> GET book-name
 QUEUED
 
-redis 127.0.0.1:6379> SADD tag "C++" "Programming" "Mastering Series"
+127.0.0.1:6379> SADD tag "C++" "Programming" "Mastering Series"
 QUEUED
 
-redis 127.0.0.1:6379> SMEMBERS tag
+127.0.0.1:6379> SMEMBERS tag
 QUEUED
 
-redis 127.0.0.1:6379> EXEC
+127.0.0.1:6379> EXEC
 1) OK
 2) "Mastering C++ in 21 days"
 3) (integer) 3
@@ -284,4 +283,17 @@ redis 127.0.0.1:6379> EXEC
    2) "C++"
    3) "Programming"
    
+```
+
+
+- Redis脚本
+
+```bash
+
+127.0.0.1:6379>  EVAL script numkeys key [key ...] arg [arg ...]    //执行 Lua 脚本。
+127.0.0.1:6379> 	EVALSHA sha1 numkeys key [key ...] arg [arg ...]   //执行 Lua 脚本。
+127.0.0.1:6379> 	SCRIPT EXISTS script [script ...] 查看指定的脚本是否已经被保存在缓存当中。
+127.0.0.1:6379> 	SCRIPT FLUSH 从脚本缓存中移除所有脚本。
+127.0.0.1:6379> 	SCRIPT KILL 杀死当前正在运行的 Lua 脚本。
+127.0.0.1:6379> 	SCRIPT LOAD script    将脚本 script 添加到脚本缓存中，但并不立即执行这个脚本。
 ```
