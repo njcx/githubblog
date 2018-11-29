@@ -231,3 +231,57 @@ HyperLogLog 是做基数统计的算法
 
 ```
 
+- Redis 发布订阅
+
+```bash
+
+
+127.0.0.1:6379> PSUBSCRIBE pattern [pattern ...]               //订阅一个或多个符合给定模式的频道。
+127.0.0.1:6379> PUBSUB subcommand [argument [argument ...]]    //查看订阅与发布系统状态。
+127.0.0.1:6379> PUBLISH channel message                         //将信息发送到指定的频道。
+127.0.0.1:6379> PUNSUBSCRIBE [pattern [pattern ...]]            //退订所有给定模式的频道。
+127.0.0.1:6379> SUBSCRIBE channel [channel ...]                //订阅给定的一个或多个频道的信息。
+127.0.0.1:6379> UNSUBSCRIBE [channel [channel ...]]            //指退订给定的频道。
+
+```
+
+
+- Redis 事务
+
+```bash
+
+127.0.0.1:6379>  DISCARD                //取消事务，放弃执行事务块内的所有命令。
+127.0.0.1:6379>  EXEC                   //执行所有事务块内的命令。
+127.0.0.1:6379>  MULTI                  //标记一个事务块的开始。
+127.0.0.1:6379>  UNWATCH                //取消 WATCH 命令对所有 key 的监视。
+127.0.0.1:6379>  WATCH key [key ...]    // 监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断
+
+```
+样例
+
+```bash
+
+redis 127.0.0.1:6379> MULTI
+OK
+
+redis 127.0.0.1:6379> SET book-name "Mastering C++ in 21 days"
+QUEUED
+
+redis 127.0.0.1:6379> GET book-name
+QUEUED
+
+redis 127.0.0.1:6379> SADD tag "C++" "Programming" "Mastering Series"
+QUEUED
+
+redis 127.0.0.1:6379> SMEMBERS tag
+QUEUED
+
+redis 127.0.0.1:6379> EXEC
+1) OK
+2) "Mastering C++ in 21 days"
+3) (integer) 3
+4) 1) "Mastering Series"
+   2) "C++"
+   3) "Programming"
+   
+```
