@@ -13,9 +13,9 @@ OSSEC是一款开源的hids，可以运行于Windows, Linux, OpenBSD/FreeBSD, �
 #### 安装
 
 
-ip : 192.168.1.100  server
+ip : 192.168.1.100   // server
 
-ip ： 192.168.1.101  agent 
+ip ： 192.168.1.101  // agent 
 
 涉及端口 ： 514，1514，48658  //注意防火墙
 
@@ -382,16 +382,23 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 
 ```
 
-#### 简单使用
+#### 使用说明
 
 - Log monitoring/analysis   进程和log监控
 
+进程和log的监控，agent默认就是启用的，也就是说agent只要启动了，就会向server发采集到的内容,由server的规则判断是否异常，agent的配置项决定怎么发送，server端的规则判断是否异常
+
+
 - Syscheck    系统完整性检测
+
+待补充
 
 - Rootcheck    rootkit 检测
 
-#### 添加规则
+待补充
 
+#### 添加规则
+待补充
 #### 告警输出
 
 以下配置都在 server端的 /opt/ossec/etc/ossec.conf 改动添加
@@ -413,7 +420,7 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 
 ```
 
-- E-mail
+- 告警E-mail发送
 
 先配置smtp 服务器
 
@@ -425,7 +432,7 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
         <email_from>ossec@example.com</email_from>
   </global>
 ```
-再配置 收件人，发送原因
+再配置收件人，触发条件
 
 ```bash
 <email_alerts>
@@ -512,8 +519,6 @@ mysql> quit
 ```bash
 /opt/ossec/bin/ossec-control restart
 ```
-
-
 
 
 #### 常用命令
