@@ -384,8 +384,137 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 
 #### 简单使用
 
+- Log monitoring/analysis   进程和log监控
+
+- Syscheck    系统完整性检测
+
+- Rootcheck    rootkit 检测
 
 #### 添加规则
+
+#### 告警输出
+
+以下配置都在 server端的 /opt/ossec/etc/ossec.conf 改动添加
+
+- syslog 
+
+```bash
+<syslog_output>
+  <server>10.10.10.127</server>
+  <port>515</port>
+  <level>6</level>
+</syslog_output>
+```
+
+```bash
+#/opt/ossec/bin/ossec-control enable client-syslog
+
+#/opt/ossec/bin/ossec-control restart
+
+```
+
+- E-mail
+
+先配置smtp 服务器
+
+```bash
+    <global>
+        <email_notification>yes</email_notification>
+        <email_to>me@example.com</email_to>
+        <smtp_server>mx.example.com..</smtp_server>
+        <email_from>ossec@example.com</email_from>
+  </global>
+```
+再配置 收件人，发送原因
+
+```bash
+<email_alerts>
+    <email_to>bb@y.z</email_to>
+    <rule_id>123, 124</rule_id>
+    <do_not_delay />
+    <do_not_group />
+</email_alerts>
+```
+
+然后重启服务端
+
+```bash
+#/opt/ossec/bin/ossec-control restart
+
+```
+
+- json
+
+
+输出到json
+
+```bash
+
+<ossec_config>
+  <global>
+    <jsonout_output>yes</jsonout_output>
+    ...
+  </global>
+  ...
+</ossec_config>
+
+```
+然后重启服务端
+
+```bash
+#/opt/ossec/bin/ossec-control restart
+
+```
+
+- 输出到MySQL数据库
+
+```bash
+
+/opt/ossec/bin/ossec-control enable database
+
+```
+
+```bash
+
+<ossec_config>
+    <database_output>
+        <hostname>192.168.2.30</hostname>
+        <username>ossecuser</username>
+        <password>ossecpass</password>
+        <database>ossec</database>
+        <type>mysql</type>
+    </database_output>
+</ossec_config>
+
+```
+其中表结构在 ossec-hids-3.1.0/src/os_dbd 下面
+
+```bash
+# mysql -u root -p
+
+mysql> create database ossec;
+
+mysql> grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossecuser@<ossec ip>;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set password for ossecuser@<ossec ip>=PASSWORD('ossecpass');
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> quit
+
+# mysql -u root -p ossec < mysql.schema
+
+```
+重启服务端
+```bash
+/opt/ossec/bin/ossec-control restart
+```
+
+
+
 
 #### 常用命令
 
