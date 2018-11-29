@@ -34,6 +34,8 @@ Flask-Mail==0.9.1
 
 #### 使用
 
+老规矩，Hello World!
+
 ```python
 
 from flask import Flask
