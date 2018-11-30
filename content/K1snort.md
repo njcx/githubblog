@@ -19,11 +19,25 @@ Status: draft
 
 # yum install luagit luagit-devel flex bison libdnet-devel libdnet libpcap libpcap-devel gcc gcc-c++ pcre-devel zlib-devel -y
 
+如果这里找不到luagit，那就编译一个吧
+git clone http://luajit.org/git/luajit-2.0.git
+cd luajit-2.0 && make && make install 
+
 # cd daq-2.0.6 && ./configure  && make && make install
 
 # cd snort-2.9.12 && ./configure --enable-sourcefire --prefix=/opt/snort && make && make install
 
+# cp -r etc /opt/snort/
+# cp -r preproc_rules/ /opt/snort/etc/
+# mkdir -p /opt/snort/log
+# mkdir -p /opt/snort/etc/rules
+# touch /opt/snort/etc/rules/black_list.rules
+# touch /opt/snort/etc/rules/white_list.rules
+# touch /opt/snort/etc/rules/local.rules 
+
 # cd /opt/snort && curl -Ls https://www.snort.org/downloads/community/community-rules.tar.gz | tar zx
+
+# cd /opt/snort/community-rules && cp * /opt/snort/etc/rules/ 
 
 ```
 

@@ -32,5 +32,11 @@ yum install -y libpcap-devel libnet-devel pcre-devel gcc-c++ automake autoconf l
 这里通过 -i 指定网卡， -c 指定配置文件， -s 指定规则， 通过-l 指定log 输出的目录，通过 -D 把进程放到后面运行，
 
 
+#### 配置
 
+
+#### 添加规则
+
+
+#### 告警输出
 
