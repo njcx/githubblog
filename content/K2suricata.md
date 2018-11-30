@@ -34,9 +34,9 @@ yum install -y libpcap-devel libnet-devel pcre-devel gcc-c++ automake autoconf l
 
 #### 配置
 
-
+待补充
 #### 添加规则
-
+待补充
 
 #### 告警输出
-
+待补充
