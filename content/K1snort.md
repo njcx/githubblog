@@ -146,10 +146,9 @@ Snort exiting
 
 #### 使用
 
-
 /opt/snort/bin/snort -c /opt/snort/etc/snort.conf -i ens33 -l /opt/snort/log -D
 
-就可以在 /opt/snort/log 下面看到警告了
+这里通过 -i 指定网卡， -c 指定配置文件，  通过-l 指定log 输出的目录，通过 -D 把进程放到后面运行，就可以在 /opt/snort/log 下面看到警告了
 
 
 
