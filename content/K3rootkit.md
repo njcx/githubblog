@@ -1,4 +1,4 @@
-Title: rootkit的检测工具使用介绍(chkrootkit和rootkit hunter)
+Title: rootkit的检测工具使用介绍
 Date: 2017-05-27 14:20
 Modified: 2017-05-27 14:20
 Category: 安全
@@ -8,7 +8,7 @@ Authors: nJcx
 Summary: rootkit的检测工具使用介绍
 
 #### 介绍
-
+chkrootkit和rootkit hunter
 #### chkrootkit安装
 ```bash
 yum install gcc gcc-c++ net-snmp-utils net-tools make glibc-static -y
@@ -51,5 +51,5 @@ curl -LS  https://nchc.dl.sourceforge.net/project/rkhunter/rkhunter/1.4.6/rkhunt
  
  /usr/local/bin/rkhunter -c  --sk --rwo
  
- ```
+```
 
