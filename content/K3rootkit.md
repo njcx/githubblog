@@ -47,9 +47,15 @@ curl -LS  https://nchc.dl.sourceforge.net/project/rkhunter/rkhunter/1.4.6/rkhunt
 
 ```bash
 
- /usr/local/bin/rkhunter --propupd
+/usr/local/bin/rkhunter --propupd
+
+# 更新整个文件属性数据库
  
- /usr/local/bin/rkhunter -c  --sk --rwo
+/usr/local/bin/rkhunter -c  --sk --rwo
  
+#  -c                                  --check 
+#  --rwo, --report-warnings-only       --Show only warning messages
+#  --sk,                               --skip-keypress
+
 ```
 
