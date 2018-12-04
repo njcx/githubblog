@@ -146,7 +146,7 @@ end
 这里提一下pairs能够遍历表中全部的key，而ipairs则不能返回nil,遇到nil则退出。
 
 
-- repeat
+repeat
 
 ```lua
 --[ 变量定义 --]
@@ -231,5 +231,61 @@ function max(num1, num2)
 end
 -- 调用函数
 print("两值比较最大值为 ",max(10,4))
+
+```
+
+可变参数
+
+Lua 函数可以接受可变数目的参数，在函数参数列表中使用三点 ... 表示函数有可变的参数。
+
+```lua
+
+function add(...)  
+local s = 0  
+  for i, v in ipairs{...} do   --> {...} 表示一个由所有变长参数构成的数组  
+    s = s + v  
+  end  
+  return s  
+end  
+print(add(3,4,5,6,7))  --->25
+
+```
+
+```lua
+
+function average(...)
+   result = 0
+   local arg={...}    --> arg 为一个表，局部变量
+   for i,v in ipairs(arg) do
+      result = result + v
+   end
+   print("总共传入 " .. #arg .. " 个数")
+   return result/#arg
+end
+
+print("平均值为",average(10,5,3,4,5,6))
+
+```
+
+也可以用 select("#",...)  获取长度，
+select('#', …) 返回可变参数的长度,
+select(n, …) 用于访问 n 到 select('#',…) 的参数
+
+```lua
+function foo(...)  
+    for i = 1, select('#', ...) do  -->获取参数总数
+        local arg = select(i, ...); -->读取参数
+        print("arg", arg);  
+    end  
+end 
+```
+
+```lua
+
+function fwrite(fmt, ...)  ---> 固定的参数fmt
+    return io.write(string.format(fmt, ...))     
+end
+
+fwrite("tudou\n")       --->fmt = "tudou", 没有变长参数。 
 
 ```
