@@ -53,6 +53,15 @@ luarocks install lua-cjson
 print("Hello World！")
 ```
 
+两个减号是单行注释:
+
+-- 单行注释
+
+--[[多行注释
+
+多行注释--]]
+ 
+ 
 #### 数据结构
 
 - nil  表示一个无效值， 在条件表达式中相当于false
@@ -134,3 +143,17 @@ end
 
 ```
 这里提一下pairs能够遍历表中全部的key，而ipairs则不能返回nil,遇到nil则退出。
+
+
+- repeat
+
+```lua
+--[ 变量定义 --]
+a = 10
+--[ 执行循环 --]
+repeat
+   print("a的值为:", a)
+   a = a + 1
+until( a > 15 )
+
+```
