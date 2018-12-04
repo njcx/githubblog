@@ -280,6 +280,8 @@ function foo(...)
 end 
 ```
 
+lua 也可以固定函数参数
+
 ```lua
 
 function fwrite(fmt, ...)  ---> 固定的参数fmt
