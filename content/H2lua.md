@@ -6,7 +6,7 @@ Tags: lua
 Slug: H2
 Authors: nJcx
 Summary: lua学习后，转化成教程，方便大家阅读
-Status: draft
+
 ##### 介绍
 
 Lua 是一脚本语言，巴西人所开发。由标准C开发，方便嵌入应用程序中。几乎可以在所有操作系统和平台上都可以编译，运行。
@@ -56,6 +56,7 @@ print("Hello World！")
 两个减号是单行注释:
 
 -- 单行注释
+--[ 单行注释 --]
 
 --[[多行注释
 
@@ -155,5 +156,80 @@ repeat
    print("a的值为:", a)
    a = a + 1
 until( a > 15 )
+
+```
+
+repeat 没有do end
+
+- 流程控制
+
+if  （then  do）
+
+```lua
+
+--[ 定义变量 --]
+a = 10;
+
+--[ 使用 if 语句 --]
+if( a < 20 )
+then
+   --[ if 条件为 true 时打印以下信息 --]
+   print("a 小于 20" );
+end
+print("a 的值为:", a);
+```
+
+if else
+
+```lua
+if(布尔表达式)
+then
+   --[ 布尔表达式为 true 时执行该语句块 --]
+else
+   --[ 布尔表达式为 false 时执行该语句块 --]
+end
+
+```
+
+if...elseif...else 
+
+```lua
+
+if( 布尔表达式 1)
+then
+   --[ 在布尔表达式 1 为 true 时执行该语句块 --]
+
+elseif( 布尔表达式 2)
+then
+   --[ 在布尔表达式 2 为 true 时执行该语句块 --]
+
+elseif( 布尔表达式 3)
+then
+   --[ 在布尔表达式 3 为 true 时执行该语句块 --]
+else 
+   --[ 如果以上布尔表达式都不为 true 则执行该语句块 --]
+end
+
+```
+
+#### 函数
+
+函数名前面加 local代表局部函数，不然，就代表全局函数，lua的函数支持多返回值
+
+```lua
+
+--[[ 函数返回两个值的最大值 --]]
+function max(num1, num2)
+
+   if (num1 > num2) then
+      result = num1;
+   else
+      result = num2;
+   end
+
+   return result; 
+end
+-- 调用函数
+print("两值比较最大值为 ",max(10,4))
 
 ```
