@@ -105,7 +105,7 @@ agent 目录结构
 │   ├── localtime
 │   ├── ossec.conf
 │   ├── ossec-init.conf
-│   └── shared   //cis安全基线目录
+│   └── shared   //cis安全基线/特征库
 │       ├── acsc_office2016_rcl.txt
 │       ├── cis_apache2224_rcl.txt
 │       ├── cis_debianlinux7-8_L2_rcl.txt
@@ -196,7 +196,7 @@ server 的目录结构
 │   ├── localtime
 │   ├── ossec.conf
 │   ├── ossec-init.conf
-│   └── shared   // cis安全基线目录
+│   └── shared   //cis安全基线/特征库
 │       ├── acsc_office2016_rcl.txt
 │       ├── cis_mysql5-6_community_rcl.txt
 │       ├── cis_mysql5-6_enterprise_rcl.txt
