@@ -675,7 +675,7 @@ mysql> quit
 
   </active-response>
   
-  ```
+```
 
 
 #### 常用命令
