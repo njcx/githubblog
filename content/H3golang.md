@@ -1,7 +1,7 @@
 Title: golang快速入门
 Date: 2018-06-02 13:20
 Modified: 2018-06-02 13:20
-Category: golang
+Category: 编程语言
 Tags: golang
 Slug: H3
 Authors: nJcx

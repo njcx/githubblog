@@ -1,7 +1,7 @@
 Title:Go的defer、panic和recover之惑
 Date: 2017-05-09 13:20
 Modified: 2017-05-09 13:20
-Category: Golang
+Category: 编程语言
 Tags: Golang
 Slug: F10
 Authors: nJcx

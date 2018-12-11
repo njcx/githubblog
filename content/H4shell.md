@@ -1,7 +1,7 @@
 Title: shell编程快速入门
 Date: 2018-06-03 13:20
 Modified: 2018-06-03 13:20
-Category: shell
+Category: 编程语言
 Tags: shell
 Slug: H4
 Authors: nJcx

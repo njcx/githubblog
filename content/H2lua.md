@@ -1,7 +1,7 @@
 Title: lua快速入门
 Date: 2018-06-01 13:20
 Modified: 2018-06-01 13:20
-Category: lua
+Category: 编程语言
 Tags: lua
 Slug: H2
 Authors: nJcx
