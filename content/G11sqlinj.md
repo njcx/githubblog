@@ -6,7 +6,7 @@ Tags: SQLI
 Slug: G11
 Authors: nJcx
 Summary: 记录一下学习SQL注入的心路
-
+Status: draft
 #### 原理
 
 没有过滤敏感字符，绑定变量，导致攻击者可以通过sql灵活多变的语法，构造精心巧妙的语句，不择手段，达成目的，或者通过系统报错，返回对自己有用的信息。

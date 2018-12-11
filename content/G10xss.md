@@ -6,7 +6,7 @@ Tags: XSS
 Slug: G10
 Authors: nJcx
 Summary: 记录一下XSS的学习心路
-
+Status: draft
 #### 原因
 
 xss出现的原因就是过于相信用户提交的数据，导致可以插入一些可执行脚本。

@@ -234,7 +234,6 @@ server 的目录结构
     └── run
 
 ```
-https://blog.csdn.net/qq_33020901/article/details/79148406
 
 #### 添加agent
 
@@ -461,8 +460,50 @@ agent扫描整个文件系统，检测异常文件和异常的权限设置，文
   </rootcheck>
   
 ```
+测试一下，agent在tmp下面创建一个文件
 
-#### 添加规则
+```bash
+
+touch /tmp/mcliZokhb
+
+```
+
+然后在服务端
+
+```bash
+
+/opt/ossec/bin/agent_control -r -u 001
+
+```
+```bash
+
+cat /opt/ossec/queue/rootcheck/*
+
+```
+可以看到
+
+```bash
+!1499925300!1499150323 Starting rootcheck scan.
+
+!1499925927!1499150951 Ending rootcheck scan.
+
+!1499925300!1499925300 Rootkit 'Bash' detected by the presence of file '/tmp/mcliZokhb'.
+
+```
+在报警日志中可以看到，
+tail -f alerts.log
+
+```bash
+
+[root@ossec_server alerts]# tail -f alerts.log
+** Alert 1544505860.0: mail  - ossec,rootcheck,
+2018 Dec 11 00:24:20 (001) 172.16.131.142->rootcheck
+Rule: 510 (level 7) -> 'Host-based anomaly detection event (rootcheck).'
+Rootkit 'Bash' detected by the presence of file '/tmp/mcliZokhb'.
+
+```
+
+#### 添加规
 待补充
 #### 告警输出
 
@@ -480,9 +521,7 @@ agent扫描整个文件系统，检测异常文件和异常的权限设置，文
 
 ```bash
 #/opt/ossec/bin/ossec-control enable client-syslog
-
 #/opt/ossec/bin/ossec-control restart
-
 ```
 
 - 告警E-mail发送
