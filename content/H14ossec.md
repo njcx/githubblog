@@ -1,4 +1,4 @@
-Title: ossec 学习记录
+Title: ossec 搭建与简单用法
 Date: 2017-05-27 12:20
 Modified: 2017-05-27 12:20
 Category: 安全
