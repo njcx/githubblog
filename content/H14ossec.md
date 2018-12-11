@@ -390,9 +390,8 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 
 - Syscheck    系统完整性检测
 
-命令替换在应急响应中很常见，经常被替换掉的命令例如ps、netstat、ss、lsof等等。另外还有SSH后门。完整性检测的工作方式是Agent周期性的扫描系统文件，并将检验和发送给Server端。Server端存储并进行比对，发现修改是发出告警。
+命令替换在应急响应中很常见，经常被替换掉的命令例如ps、netstat、ss、lsof等等。另外还有SSH后门。完整性检测的工作方式是Agent周期性的扫描系统文件，并将检验和发送给Server端。Server端存储并进行比对，发现修改是发出告警。OSSEC通过查找系统中关键文件的md5/sha1校验和的变化来完成这一工作。默认情况下每6个小时，但频率或时间/日是可配置的。
 
-待补充
 
 - Rootcheck    rootkit 检测
 
@@ -503,8 +502,28 @@ Rootkit 'Bash' detected by the presence of file '/tmp/mcliZokhb'.
 
 ```
 
-#### 添加规
-待补充
+#### 添加规则
+
+```bash
+https://ossec-docs.readthedocs.io/en/latest/syntax/head_rules.html
+
+https://documentation.wazuh.com/current/user-manual/ruleset/ruleset-xml-syntax/rules.html
+```
+
+添加了一个
+
+```bash
+
+<rule id="100002" level="8">
+      <if_sid>18104</if_sid>
+      <srcip>!127.0.0.1</srcip>
+      <srcip>!172.16.131.1</srcip>
+      <description>login from Unknow Host</description>
+      <group>authentication_success</group>
+ </rule>
+
+```
+
 #### 告警输出
 
 以下配置都在 server端的 /opt/ossec/etc/ossec.conf 改动添加
