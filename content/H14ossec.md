@@ -643,7 +643,6 @@ mysql> quit
 /opt/ossec/bin/ossec-control restart
 ```
 
-
 #### 常用命令
 
 
