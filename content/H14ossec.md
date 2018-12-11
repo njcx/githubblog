@@ -643,6 +643,41 @@ mysql> quit
 /opt/ossec/bin/ossec-control restart
 ```
 
+#### 联动模块
+
+/opt/ossec/etc/ossec.conf中相应配置如下,在当rule级别大于等于5时触发，封禁时间为60S
+
+```bash
+
+  <command>
+
+    <name>host-deny</name>
+
+    <executable>host-deny.sh</executable>
+
+    <expect>srcip</expect>
+
+    <timeout_allowed>yes</timeout_allowed>
+
+  </command>
+  
+  
+
+  <active-response>
+
+    <command>host-deny</command>
+
+    <location>local</location>
+
+    <level>5</level>
+
+    <timeout>30</timeout>
+
+  </active-response>
+  
+  ```
+
+
 #### 常用命令
 
 
