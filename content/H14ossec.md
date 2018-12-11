@@ -386,16 +386,81 @@ agent  #/opt/ossec/bin/agent-auth -m 192.168.1.100 -p 1515
 
 - Log monitoring/analysis   进程和log监控
 
-进程和log的监控，agent默认就是启用的，也就是说agent只要启动了，就会向server发采集到的内容,由server的规则判断是否异常，agent的配置项决定怎么发送，server端的规则判断是否异常
+进程和log的监控，agent默认就是启用的，也就是说agent只要启动了，就会向server发采集到的内容,由server的规则判断是否异常，agent的配置项决定怎么发送，OSSEC日志检测为实时检测，所监控的日志会通过1514端口发送到服务端。
 
 
 - Syscheck    系统完整性检测
+
+命令替换在应急响应中很常见，经常被替换掉的命令例如ps、netstat、ss、lsof等等。另外还有SSH后门。完整性检测的工作方式是Agent周期性的扫描系统文件，并将检验和发送给Server端。Server端存储并进行比对，发现修改是发出告警。
 
 待补充
 
 - Rootcheck    rootkit 检测
 
-待补充
+在 /opt/ossec/etc/shared目录下面，存在该文件rootkit_files.txt，该文件中包含了rootkit常用的文件名
+
+```bash
+
+# Blank lines and lines starting with '#' are ignored.
+#
+# Each line must be in the following format:
+# file_name ! Name ::Link to it
+#
+# Files that start with an '*' will be searched in the whole system.
+
+# Volc Rootkit
+usr/lib/volc            ! Volc Rootkit ::
+usr/bin/volc            ! Volc Rootkit ::
+
+# Illogic
+lib/security/.config    ! Illogic Rootkit ::rootkits/illogic.php
+usr/bin/sia             ! Illogic Rootkit ::rootkits/illogic.php
+etc/ld.so.hash          ! Illogic Rootkit ::rootkits/illogic.php
+*/uconf.inv             ! Illogic Rootkit ::rootkits/illogic.php
+
+# T0rnkit
+usr/src/.puta           ! t0rn Rootkit ::rootkits/torn.php
+usr/info/.t0rn          ! t0rn Rootkit ::rootkits/torn.php
+lib/ldlib.tk            ! t0rn Rootkit ::rootkits/torn.php
+etc/ttyhash             ! t0rn Rootkit ::rootkits/torn.php
+```
+对比rootkit_trojans.txt文件中二进制文件特征。
+
+```bash
+
+# Blank lines and lines starting with '#' are ignored.
+#
+# Each line must be in the following format:
+# file_name !string_to_search!Description
+
+# Common binaries and public trojan entries
+ls          !bash|^/bin/sh|dev/[^clu]|\.tmp/lsfile|duarawkz|/prof|/security|file\.h!
+env         !bash|^/bin/sh|file\.h|proc\.h|/dev/|^/bin/.*sh!
+echo        !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cl]|^/bin/.*sh!
+chown       !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cl]|^/bin/.*sh!
+chmod       !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cl]|^/bin/.*sh!
+chgrp       !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cl]|^/bin/.*sh!
+cat         !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cl]|^/bin/.*sh!
+bash        !proc\.h|/dev/[0-9]|/dev/[hijkz]!
+sh          !proc\.h|/dev/[0-9]|/dev/[hijkz]!
+uname       !bash|^/bin/sh|file\.h|proc\.h|^/bin/.*sh!
+date        !bash|^/bin/sh|file\.h|proc\.h|/dev/[^cln]|^/bin/.*sh!
+du          !w0rm|/prof|file\.h!
+
+```
+agent扫描整个文件系统，检测异常文件和异常的权限设置，文件属主是root，但是其他用户可写是非常危险的，rootkit将会扫描这些文件。同时还会检测具有suid权限的文件、隐藏的文件和目录。另外还会检测隐藏端口、隐藏进程、/dev目录、网卡混杂模式等。rootkit的检测配置如下：
+
+```bash
+  <rootcheck>
+    <rootkit_files>/root/ossec/etc/shared/rootkit_files.txt</rootkit_files>
+    <rootkit_trojans>/root/ossec/etc/shared/rootkit_trojans.txt</rootkit_trojans>
+    <system_audit>/root/ossec/etc/shared/system_audit_rcl.txt</system_audit>
+    <system_audit>/root/ossec/etc/shared/cis_debian_linux_rcl.txt</system_audit>
+    <system_audit>/root/ossec/etc/shared/cis_rhel_linux_rcl.txt</system_audit>
+    <system_audit>/root/ossec/etc/shared/cis_rhel5_linux_rcl.txt</system_audit>
+  </rootcheck>
+  
+```
 
 #### 添加规则
 待补充
