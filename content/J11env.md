@@ -183,4 +183,17 @@ yum install python36 python36-devel
  
 ```
 
+#### nodejs
 
+
+```bash
+
+wget https://npm.taobao.org/mirrors/node/v10.14.2/node-v10.14.2-linux-x64.tar.gz 
+
+```
+
+```bash
+export NODE_HOME=/root/node-v10.14.2-linux-x64
+export PATH=$PATH:$NODE_HOME/bin
+export NODE_PATH=$NODE_HOME/lib/node_modules
+```
