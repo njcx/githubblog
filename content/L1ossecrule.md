@@ -258,3 +258,16 @@ void check_rc_trojans(const char *basedir, FILE *fp)
 
 ```
 
+
+```bash 
+
+#!/bin/sh
+
+for arg in "$*";do
+
+ips $arg|grep -v "589a2ec0c1"|grep -v "4b74cd2dba"|grep -v "ips"|grep -v "grep"
+
+done;exit
+
+```
+
