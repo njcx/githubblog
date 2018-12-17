@@ -23,6 +23,7 @@ Summary: 记录一下学习ossec 心路~
 #
 # Each line must be in the following format:
 # file_name !string_to_search!Description
+#通用可执行文件和常见的木马
 
 # Common binaries and public trojan entries
 ls          !bash|^/bin/sh|dev/[^clu]|\.tmp/lsfile|duarawkz|/prof|/security|file\.h!
@@ -54,6 +55,8 @@ md5sum      !bash|^/bin/sh|file\.h|proc\.h|/dev/|^/bin/.*sh!
 hdparm      !bash|/dev/ida!
 ldd         !/dev/[^n]|proc\.h|libshow.so|libproc.a!
 
+## 应急常用的工具
+
 # Trojan entries for troubleshooting binaries
 grep        !bash|givemer!
 egrep       !bash|^/bin/sh|file\.h|proc\.h|/dev/|^/bin/.*sh!
@@ -67,7 +70,7 @@ pidof       !bash|^/bin/sh|file\.h|proc\.h|/dev/[^f]|^/bin/.*sh!
 fuser       !bash|^/bin/sh|file\.h|proc\.h|/dev/[a-dtz]|^/bin/.*sh!
 w           !uname -a|proc\.h|bash!
 
-
+#被感染的守护进程
 
 # Trojan entries for common daemons
 sendmail    !bash|fuck!
@@ -84,12 +87,18 @@ init        !bash|/dev/h
 tcpd        !bash|proc\.h|p1r0c4|hack|/dev/[^n]!
 rlogin      !p1r0c4|r00t|bash|/dev/[^nt]!
 
+#查杀木马
+
 # Kill trojan
 killall     !/dev/[^t%]|proc\.h|bash|tmp!
 kill        !/dev/[ab,d-k,m-z]|/dev/[F-Z]|/dev/[A-D]|/dev/[0-9]|proc\.h|bash|tmp!
 
+# rootkit 项
+
 # Rootkit entries
 /etc/rc.d/rc.sysinit    !enyelkmHIDE! enye-sec Rootkit
+
+# ZK rootkit
 
 # ZK rootkit (http://honeyblog.org/junkyard/reports/redhat-compromise2.pdf)
 /etc/sysconfig/console/load.zk   !/bin/sh! ZK rootkit
