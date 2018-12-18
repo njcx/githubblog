@@ -48,3 +48,41 @@ Summary:  常见中间件（middleware） 0day合集
     - Atlassian Bitbucket Server 4.13.0 < 5.4.8
 
     - https://www.linuxidc.com/Linux/2018-03/151578.htm
+
+- Zabbix  SQL注入漏洞
+    - 2.2.x, 3.0.0-3.0.3
+    - 在Zabbix中有两个文件存在SQL注入漏洞，分别是jsrpc.php和latest.php，存在漏洞参数分别为：profileIdx2和toggle_ids
+    - https://blog.csdn.net/Jiajiajiang_/article/details/84064957
+    - https://www.jisec.com/sec/703.html
+
+- Phpmyadmin
+
+- Jenkins
+
+- Elk
+
+- Gitlab
+
+- Kubernetes
+
+- Nagios
+
+- Apache CouchDB
+
+- WebLogic
+
+- JBoss
+    - JBOSSAS 5.x/6.x 反序列化命令执行漏洞（CVE-2017-12149）
+    - https://www.seebug.org/vuldb/ssvid-96880
+    - JBOSSAS 4.x 反序列化命令执行漏洞（CVE-2017-7504）
+    - https://www.seebug.org/vuldb/ssvid-96881
+
+-  WebSphere
+
+- Tomcat
+
+- Jetty
+
+- RabbitMQ
+
+
