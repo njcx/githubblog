@@ -35,7 +35,7 @@ Summary: django、flask 0day合集
 	- https://www.seebug.org/vuldb/ssvid-92447
 
 - django CMS 3.3.0 - (Editor Snippet) 存储型 XSS
- - https://www.exploit-db.com/exploits/40129/
+    - https://www.exploit-db.com/exploits/40129/
 	
 - django logout 函数 dos拒绝服务攻击（CVE: 2015-5963）
 	- Fix: Update/1.8.4/1.7.10/1.4.22/Add @login_required()
