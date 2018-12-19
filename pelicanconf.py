@@ -52,7 +52,7 @@ BOOTSTRAPIFY = {
 
 THEME = '/Users/njcx/githubblog/alchemy'
 
-SITESUBTITLE = ''
+SITESUBTITLE = '十年生死两茫茫，写程序，到天亮。'
 SITEIMAGE = '/images/profile.png width=200 height=200'
 DESCRIPTION = 'Linux重度用户，Python从业人员，个人小博客，欢迎访问'
 
