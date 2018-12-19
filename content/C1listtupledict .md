@@ -6,6 +6,8 @@ Tags: Python
 Slug: C1
 Authors: nJcx
 Summary: Python的列表,元组,字典方法总结
+Status: draft
+
 ####Python的列表,元组,字典方法总结
 首先，Python的列表，元组，字典都是对象
 
