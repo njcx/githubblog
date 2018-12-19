@@ -258,7 +258,7 @@ void check_rc_trojans(const char *basedir, FILE *fp)
 
 ```
 
-从相应的源码看，agent是读取文件内容，然后匹配正则，可以看下面的ps 样本
+从相应的源码看，agent是读取文件内容，然后匹配正则，可以看下面的ps 样本,为什么又有host呢，它会把相应的域名指向其他ip，主要是阻止去对应网站下载杀毒工具
 
 ```bash 
 
