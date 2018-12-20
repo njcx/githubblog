@@ -6,6 +6,7 @@ Tags: wazuh
 Slug: H18
 Authors: nJcx
 Summary: 记录一下学习Wazuh 心路 ~
+Status: draft
 
 #### 介绍
 Wazuh 是 ossec 一个分支，通过与ELK的结合，可以把相关的记录发到ELK之中，如果把bro 和 wazuh 都往elk里面打，就可以实现一个基于nids 和 hids的 soc。
