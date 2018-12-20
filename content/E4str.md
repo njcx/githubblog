@@ -6,6 +6,7 @@ Tags: Python
 Slug: E4
 Authors: nJcx
 Summary: Python 字符串方法详解
+Status: draft
 ####开始
 
 ```python

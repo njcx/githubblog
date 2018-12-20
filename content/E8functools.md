@@ -6,7 +6,7 @@ Tags: Python
 Slug: E8
 Authors: nJcx
 Summary: Python 内置方法详解
-
+Status: draft
 ####开始
 
 ```python

@@ -6,7 +6,7 @@ Tags: Python
 Slug: E6
 Authors: nJcx
 Summary: Python ditc方法详解
-
+Status: draft
 ####开始
 ```python
 dict.clear       dict.get         dict.iteritems   dict.keys        dict.setdefault  dict.viewitems

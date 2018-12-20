@@ -6,7 +6,7 @@ Tags: Python
 Slug: E5
 Authors: nJcx
 Summary: Python list方法详解
-
+Status: draft
 ####开始
 
 ```python
