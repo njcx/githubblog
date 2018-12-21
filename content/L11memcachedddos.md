@@ -15,3 +15,7 @@ Status: draft
 
 
 #### 安装
+
+```bash
+
+yum install 
