@@ -460,7 +460,7 @@ return module
 
 #### lua协程(coroutine)
 
-#### lua 的错误处理方式
+#### lua 面向对象
 
 #### lua 的异常处理
 
@@ -537,9 +537,9 @@ print( status)
 
 ```
 
-```lua
 
 执行以上程序会出现如下错误：
+
 
 ```lua
 
