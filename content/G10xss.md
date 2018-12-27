@@ -40,4 +40,4 @@ js脚本被渲染到前端了，由浏览器弹窗了
 
 - Dom型
 
-Dom型的xss，不需要与server 连接，因为dom 发生在客户端,通过JavaScript改变前端内容
+Dom型的xss，不需要与server 连接，因为dom 发生在客户端,通过JavaScript改变前端内容,从客户端获取Dom中的数据并在本地运行，
