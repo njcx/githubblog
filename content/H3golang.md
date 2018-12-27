@@ -127,7 +127,7 @@ const identifier [type] = value
 显式类型定义： const b string = "abc"
 隐式类型定义： const b = "abc"
 
-多个：			const c_name1, c_name2 = value1, value2
+多个类型定义： const c_name1, c_name2 = value1, value2
 ```
 
 - 字符串类型
@@ -275,6 +275,146 @@ func main(){
 
 if 布尔表达式 {
    /* 在布尔表达式为 true 时执行 */
+}
+
+if 布尔表达式 {
+   /* 在布尔表达式为 true 时执行 */
+} else {
+  /* 在布尔表达式为 false 时执行 */
+}
+
+if 布尔表达式 1 {
+   /* 在布尔表达式 1 为 true 时执行 */
+   if 布尔表达式 2 {
+      /* 在布尔表达式 2 为 true 时执行 */
+   }
+}
+
+
+
+```
+
+for 循环
+
+```bash
+
+Go语言的For循环有3中形式，只有其中的一种使用分号。
+
+和 C 语言的 for 一样：
+
+for init; condition; post { }
+和 C 的 while 一样：
+
+for condition { }
+和 C 的 for(;;) 一样：
+
+for { }
+init： 一般为赋值表达式，给控制变量赋初值；
+condition： 关系表达式或逻辑表达式，循环控制条件；
+post： 一般为赋值表达式，给控制变量增量或减量。
+
+```
+
+for 循环的 range 格式可以对 slice、map、数组、字符串等进行迭代循环。格式如下：
+
+```bash
+
+for key, value := range oldMap {
+    newMap[key] = value
+}
+
+
+```
+
+for 例子
+
+```bash
+
+package main
+
+import "fmt"
+
+func main() {
+
+   var b int = 15
+   var a int
+
+   numbers := [6]int{1, 2, 3, 5} 
+
+   /* for 循环 */
+   for a := 0; a < 10; a++ {
+      fmt.Printf("a 的值为: %d\n", a)
+   }
+
+   for a < b {
+      a++
+      fmt.Printf("a 的值为: %d\n", a)
+   }
+
+   for i,x:= range numbers {
+      fmt.Printf("第 %d 位 x 的值 = %d\n", i,x)
+   }   
+}
+```
+for 无限循环
+
+```bash
+package main
+
+import "fmt"
+
+func main() {
+    for true  {
+        fmt.Printf("这是无限循环。\n");
+    }
+}
+
+```
+
+break 语句
+
+```bash
+
+package main
+
+import "fmt"
+
+func main() {
+   /* 定义局部变量 */
+   var a int = 10
+
+   /* for 循环 */
+   for a < 20 {
+      fmt.Printf("a 的值为 : %d\n", a);
+      a++;
+      if a > 15 {
+         /* 使用 break 语句跳出循环 */
+         break;
+      }
+   }
+}
+
+```
+
+```bash
+
+
+import "fmt"
+
+func main() {
+   /* 定义局部变量 */
+   var a int = 10
+
+   /* for 循环 */
+   for a < 20 {
+      if a == 15 {
+         /* 跳过此次循环 */
+         a = a + 1;
+         continue;
+      }
+      fmt.Printf("a 的值为 : %d\n", a);
+      a++;     
+   }  
 }
 
 ```
