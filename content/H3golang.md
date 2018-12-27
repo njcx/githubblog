@@ -396,6 +396,8 @@ func main() {
 
 ```
 
+continue 语句
+
 ```bash
 
 
@@ -420,6 +422,164 @@ func main() {
 ```
 
 #### 函数
+
+函数定义 
+
+```bash
+
+func function_name( [parameter list] ) [return_types] {
+   函数体
+}
+
+
+```
+
+以下实例为 max() 函数的代码，该函数传入两个整型参数 num1 和 num2，并返回这两个参数的最大值：
+
+```bash
+/* 函数返回两个数的最大值 */
+func max(num1, num2 int) int {
+   /* 声明局部变量 */
+   var result int
+
+   if (num1 > num2) {
+      result = num1
+   } else {
+      result = num2
+   }
+   return result 
+}
+
+```
+
+函数可以作为值
+
+```bash
+package main
+
+import (
+   "fmt"
+   "math"
+)
+
+func main(){
+   /* 声明函数变量 */
+   getSquareRoot := func(x float64) float64 {
+      return math.Sqrt(x)
+   }
+
+   /* 使用函数 */
+   fmt.Println(getSquareRoot(9))
+
+}
+
+```
+
+闭包
+
+```bash
+
+package main
+
+import "fmt"
+
+func getSequence() func() int {
+   i:=0
+   return func() int {
+      i+=1
+     return i  
+   }
+}
+
+func main(){
+   /* nextNumber 为一个函数，函数 i 为 0 */
+   nextNumber := getSequence()  
+
+   /* 调用 nextNumber 函数，i 变量自增 1 并返回 */
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   
+   /* 创建新的函数 nextNumber1，并查看结果 */
+   nextNumber1 := getSequence()  
+   fmt.Println(nextNumber1())
+   fmt.Println(nextNumber1())
+}
+```
+
+```bash
+
+
+package main
+
+import "fmt"
+func main() {
+    add_func := add(1,2)
+    fmt.Println(add_func())
+    fmt.Println(add_func())
+    fmt.Println(add_func())
+}
+
+// 闭包使用方法
+func add(x1, x2 int) func()(int,int)  {
+    i := 0
+    return func() (int,int){
+        i++
+        return i,x1+x2
+    }
+}
+
+```
+
+```bash
+
+package main
+import "fmt"
+func main() {
+    add_func := add(1,2)
+    fmt.Println(add_func(1,1))
+    fmt.Println(add_func(0,0))
+    fmt.Println(add_func(2,2))
+} 
+// 闭包使用方法
+func add(x1, x2 int) func(x3 int,x4 int)(int,int,int)  {
+    i := 0
+    return func(x3 int,x4 int) (int,int,int){ 
+       i++
+       return i,x1+x2,x3+x4
+    }
+}
+
+```
+
+面向对象的方法
+
+```bash
+
+package main
+
+import (
+   "fmt"  
+)
+
+/* 定义结构体 */
+type Circle struct {
+  radius float64
+}
+
+func main() {
+  var c1 Circle
+  c1.radius = 10.00
+  fmt.Println("圆的面积 = ", c1.getArea())
+}
+
+//该 method 属于 Circle 类型对象中的方法
+func (c Circle) getArea() float64 {
+  //c.radius 即为 Circle 类型对象中的属性
+  return 3.14 * c.radius * c.radius
+}
+
+```
 
 #### GO IO
 
