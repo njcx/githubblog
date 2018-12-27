@@ -47,7 +47,7 @@ luarocks install lua-cjson
 
 老规矩
 
-```lua
+```bash
 #!/usr/local/bin/lua
 
 print("Hello World！")
@@ -72,7 +72,7 @@ print("Hello World！")
 - table	table是一个"关联数组"（associative arrays），数组的索引可以是数字或者是字符串。在 Lua 里，table构造表达式是{}，用来创建一个空表
 
 
-```lua
+```bash
 
 > print(#"www.njcx.bid")
 12
@@ -219,7 +219,7 @@ table.sort (table [, comp])
 Lua 变量有三种类型：全局变量、局部变量、表中的域。
 Lua 中的变量全是全局变量，那怕是语句块或是函数里，除非用 local 显式声明为局部变量。局部变量的作用域为从声明位置开始到所在语句块结束。变量的默认值均为 nil。
 
-```lua
+```bash
 a = 5               -- 全局变量
 local b = 5         -- 局部变量
 
@@ -236,7 +236,7 @@ print(c,d)          --> 5 nil
 
 while
 
-```lua
+```bash
 a=10
 while( a < 20 )
 do
@@ -252,7 +252,7 @@ end
 
 for  
 
-```lua
+```bash
 for var=exp1,exp2,exp3 do  
     <执行体>  
 end  
@@ -268,7 +268,7 @@ end
 
 ```
 
-```lua
+```bash
 
 days={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}  
 for i,v in ipairs(days) do 
@@ -281,7 +281,7 @@ end
 
 repeat
 
-```lua
+```bash
 --[ 变量定义 --]
 a = 10
 --[ 执行循环 --]
@@ -298,7 +298,7 @@ repeat 没有do end
 
 if  （then  do）
 
-```lua
+```bash
 
 --[ 定义变量 --]
 a = 10;
@@ -314,7 +314,7 @@ print("a 的值为:", a);
 
 if else
 
-```lua
+```bash
 if(布尔表达式)
 then
    --[ 布尔表达式为 true 时执行该语句块 --]
@@ -326,7 +326,7 @@ end
 
 if...elseif...else 
 
-```lua
+```bash
 
 if( 布尔表达式 1)
 then
@@ -349,7 +349,7 @@ end
 
 函数名前面加 local代表局部函数，不然，就代表全局函数，lua的函数支持多返回值
 
-```lua
+```bash
 
 --[[ 函数返回两个值的最大值 --]]
 function max(num1, num2)
@@ -371,7 +371,7 @@ print("两值比较最大值为 ",max(10,4))
 
 Lua 函数可以接受可变数目的参数，在函数参数列表中使用三点 ... 表示函数有可变的参数。
 
-```lua
+```bash
 
 function add(...)  
 local s = 0  
@@ -384,7 +384,7 @@ print(add(3,4,5,6,7))  --->25
 
 ```
 
-```lua
+```bash
 
 function average(...)
    result = 0
@@ -404,7 +404,7 @@ print("平均值为",average(10,5,3,4,5,6))
 select('#', …) 返回可变参数的长度,
 select(n, …) 用于访问 n 到 select('#',…) 的参数
 
-```lua
+```bash
 function foo(...)  
     for i = 1, select('#', ...) do  -->获取参数总数
         local arg = select(i, ...); -->读取参数
@@ -415,7 +415,7 @@ end
 
 lua 也可以固定函数参数
 
-```lua
+```bash
 
 function fwrite(fmt, ...)  ---> 固定的参数fmt
     return io.write(string.format(fmt, ...))     
@@ -429,7 +429,7 @@ fwrite("tudou\n")       --->fmt = "tudou", 没有变长参数。
 
 Lua 的模块是由变量、函数等已知元素组成的 table，因此创建一个模块很简单，就是创建一个 table，然后把需要导出的常量、函数放入其中，最后返回这个 table 就行。以下为创建自定义模块 module.lua，文件代码格式如下：
 
-```lua
+```bash
 
 -- 文件名为 module.lua
 -- 定义一个名为 module 的模块
@@ -469,7 +469,7 @@ pcall接收一个函数和要传递给后者的参数，并执行，执行结果
 
 语法格式如下
 
-```lua
+```bash
 
 if pcall(function_name, ….) then
 -- 没有错误
@@ -504,7 +504,7 @@ debug库提供了两个通用的错误处理函数:
 debug.debug：提供一个Lua提示符，让用户来检查错误的原因
 debug.traceback：根据调用桟来构建一个扩展的错误消息
 
-```lua
+```bash
 
 xpcall(function(i) print(i) error('error..') end, function() print(debug.traceback()) end, 33)
 33
@@ -522,7 +522,7 @@ false        nil
 
 xpcall 使用实例 2:
 
-```lua
+```bash
 function myfunction ()
    n = n/nil
 end
@@ -540,7 +540,7 @@ print( status)
 执行以上程序会出现如下错误：
 
 
-```lua
+```bash
 
 ERROR:    test2.lua:2: attempt to perform arithmetic on global 'n' (a nil value)
 false

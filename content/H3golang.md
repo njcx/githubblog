@@ -35,7 +35,7 @@ yum install golang -y
 #### 向世界打招呼
 
 
-```go
+```bash
 package main 
 
 import "fmt"
@@ -65,7 +65,7 @@ func main() {
 
 - 布尔型
 
-```go
+```bash
     var b bool = true
     c := false
 ```
@@ -108,7 +108,7 @@ IEEE-754 64位浮点型数
 
 变量
 
-```go
+```bash
 
 var a = 1
 
@@ -120,7 +120,7 @@ c :=3
 
 常量
 
-```go
+```bash
 
 const identifier [type] = value
 
@@ -132,13 +132,13 @@ const identifier [type] = value
 
 - 字符串类型
 
-```go
+```bash
     var b string = "demo"
     c :=  "godemo"
 ```
 - 数组类型
 
-```go
+```bash
 
 //第一种
 var arr [2]int
@@ -170,7 +170,7 @@ arr := [...]int{1:1,0:2}
 指针类型就是一个变量，里面存的是另一个变量的地址
 
 
-```go
+```bash
 var b *int
 
 b = &a
@@ -181,7 +181,7 @@ b := &a
 
 ```
 
-```go
+```bash
 
 package main 
 
@@ -268,6 +268,16 @@ func main(){
 
 
 #### 控制语句
+
+- 条件语句
+
+```bash
+
+if 布尔表达式 {
+   /* 在布尔表达式为 true 时执行 */
+}
+
+```
 
 #### 函数
 
