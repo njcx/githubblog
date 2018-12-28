@@ -369,9 +369,34 @@ struct_pointer.title;
 
 - Channel 类型
 
-- 函数类型
-
 - 接口类型（interface）
+
+```bash
+
+/* 定义接口 */
+type interface_name interface {
+   method_name1 [return_type]
+   method_name2 [return_type]
+   method_name3 [return_type]
+   ...
+   method_namen [return_type]
+}
+
+/* 定义结构体 */
+type struct_name struct {
+   /* variables */
+}
+
+/* 实现接口方法 */
+func (struct_name_variable struct_name) method_name1() [return_type] {
+   /* 方法实现 */
+}
+...
+func (struct_name_variable struct_name) method_namen() [return_type] {
+   /* 方法实现*/
+}
+
+```
 
 - Map 类型
 
@@ -389,7 +414,50 @@ var map_variable = map[string]string{"key1": "value1","key2": "value2",}
 
 ```
 
+- 类型转换
 
+```bash
+
+Go 语言类型转换基本格式如下：
+	type_name(expression)
+	type_name 为类型，expression 为表达式。
+
+```
+
+- range
+
+range 关键字用于 for 循环中迭代数组(array)、切片(slice)、通道(channel)或集合(map)的元素。在数组和切片中它返回元素的索引和索引对应的值，在map 中返回 key 和 value。
+
+```bash
+
+package main
+import "fmt"
+func main() {
+    //这是我们使用range去求一个slice的和。使用数组跟这个很类似
+    nums := []int{2, 3, 4}
+    sum := 0
+    for _, num := range nums {
+        sum += num
+    }
+    fmt.Println("sum:", sum)
+    //在数组上使用range将传入index和值两个变量。上面那个例子我们不需要使用该元素的序号，所以我们使用空白符"_"省略了。有时侯我们确实需要知道它的索引。
+    for i, num := range nums {
+        if num == 3 {
+            fmt.Println("index:", i)
+        }
+    }
+    //range也可以用在map的键值对上。
+    kvs := map[string]string{"a": "apple", "b": "banana"}
+    for k, v := range kvs {
+        fmt.Printf("%s -> %s\n", k, v)
+    }
+    //range也可以用来枚举Unicode字符串。第一个参数是字符的索引，第二个是字符（Unicode的值）本身。
+    for i, c := range "go" {
+        fmt.Println(i, c)
+    }
+}
+
+```
 
 
 
