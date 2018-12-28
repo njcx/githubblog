@@ -369,6 +369,16 @@ struct_pointer.title;
 
 - Channel 类型
 
+
+```bash
+
+ch := make(chan int)
+ch <- v    // 把 v 发送到通道 ch
+v := <-ch  // 从 ch 接收数据
+           // 并把值赋给 v
+           
+```
+
 - 接口类型（interface）
 
 ```bash
