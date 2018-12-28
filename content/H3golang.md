@@ -164,6 +164,131 @@ arr := [...]int{1:1,0:2}
 
 - 切片类型
 
+切片就是动态数组
+
+```bash
+var identifier []type
+```
+
+```bash
+s :=[] int {1,2,3 } 
+
+```
+
+切片也可以通过make 创建，其中，len 是数组的长度并且也是切片的初始长度，cap 是切片容量
+```bash
+
+s :=make([]int,len,cap) 
+
+```
+
+切片使用的例子
+
+```bash
+
+package main
+
+import "fmt"
+
+func main() {
+   /* 创建切片 */
+   numbers := []int{0,1,2,3,4,5,6,7,8}   
+   printSlice(numbers)
+
+   /* 打印原始切片 */
+   fmt.Println("numbers ==", numbers)
+
+   /* 打印子切片从索引1(包含) 到索引4(不包含)*/
+   fmt.Println("numbers[1:4] ==", numbers[1:4])
+
+   /* 默认下限为 0*/
+   fmt.Println("numbers[:3] ==", numbers[:3])
+
+   /* 默认上限为 len(s)*/
+   fmt.Println("numbers[4:] ==", numbers[4:])
+
+   numbers1 := make([]int,0,5)
+   printSlice(numbers1)
+
+   /* 打印子切片从索引  0(包含) 到索引 2(不包含) */
+   number2 := numbers[:2]
+   printSlice(number2)
+
+   /* 打印子切片从索引 2(包含) 到索引 5(不包含) */
+   number3 := numbers[2:5]
+   printSlice(number3)
+
+}
+
+func printSlice(x []int){
+   fmt.Printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+}
+
+```
+执行以上代码输出结果为：
+
+```bash
+len=9 cap=9 slice=[0 1 2 3 4 5 6 7 8]
+numbers == [0 1 2 3 4 5 6 7 8]
+numbers[1:4] == [1 2 3]
+numbers[:3] == [0 1 2]
+numbers[4:] == [4 5 6 7 8]
+len=0 cap=5 slice=[]
+len=2 cap=9 slice=[0 1]
+len=3 cap=7 slice=[2 3 4]
+
+```
+
+如果想增加切片的容量，我们必须创建一个新的更大的切片并把原分片的内容都拷贝过来。
+下面的代码描述了从拷贝切片的 copy 方法和向切片追加新元素的 append 方法。
+
+```bash
+
+package main
+
+import "fmt"
+
+func main() {
+   var numbers []int
+   printSlice(numbers)
+
+   /* 允许追加空切片 */
+   numbers = append(numbers, 0)
+   printSlice(numbers)
+
+   /* 向切片添加一个元素 */
+   numbers = append(numbers, 1)
+   printSlice(numbers)
+
+   /* 同时添加多个元素 */
+   numbers = append(numbers, 2,3,4)
+   printSlice(numbers)
+
+   /* 创建切片 numbers1 是之前切片的两倍容量*/
+   numbers1 := make([]int, len(numbers), (cap(numbers))*2)
+
+   /* 拷贝 numbers 的内容到 numbers1 */
+   copy(numbers1,numbers)
+   printSlice(numbers1)   
+}
+
+func printSlice(x []int){
+   fmt.Printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+}
+
+```
+
+以上代码执行输出结果为：
+
+```bash
+
+len=0 cap=0 slice=[]
+len=1 cap=1 slice=[0]
+len=2 cap=2 slice=[0 1]
+len=5 cap=6 slice=[0 1 2 3 4]
+len=5 cap=12 slice=[0 1 2 3 4]
+
+```
 
 - 指针类型（Pointer）
 
@@ -198,6 +323,49 @@ func main(){
 
 ```
 - 结构体类型(struct)
+
+定义结构体
+
+```bash
+type struct_variable_type struct {
+   member definition;
+   member definition;
+   ...
+   member definition;
+}
+
+```
+
+列子
+
+```bash
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+```
+
+如果要访问结构体成员，需要使用点号 . 操作符，格式为：
+
+结构体.成员名
+
+定义指向结构体的指针类似于其他指针变量，格式如下：
+
+var struct_pointer *Books
+
+以上定义的指针变量可以存储结构体变量的地址。查看结构体变量地址，可以将 & 符号放置于结构体变量前：
+
+struct_pointer = &Book1;
+
+使用结构体指针访问结构体成员，使用 "." 操作符：
+
+struct_pointer.title;
+
+
 
 - Channel 类型
 
@@ -581,6 +749,51 @@ func (c Circle) getArea() float64 {
 
 ```
 
+
+向函数传递数组
+
+```bash
+形参设定数组大小：
+
+void myFunction(param [10]int)
+{
+.
+.
+.
+}
+
+形参未设定数组大小：
+
+void myFunction(param []int)
+{
+.
+.
+.
+}
+```
+
+列子
+
+```bash
+
+func main() {
+    var array = []int{1, 2, 3, 4, 5}
+    /* 未定义长度的数组只能传给不限制数组长度的函数 */
+    setArray(array)
+    /* 定义了长度的数组只能传给限制了相同数组长度的函数 */
+    var array2 = [5]int{1, 2, 3, 4, 5}
+    setArray2(array2)
+}
+
+func setArray(params []int) {
+    fmt.Println("params array length of setArray is : ", len(params))
+}
+
+func setArray2(params [5]int) {
+    fmt.Println("params array length of setArray2 is : ", len(params))
+}
+
+```
 #### GO IO
 
 #### GO异常处理
