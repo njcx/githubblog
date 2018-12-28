@@ -371,8 +371,8 @@ struct_pointer.title;
 
 
 ```bash
-
-ch := make(chan int)
+ch := chan int // 定义一个chan
+ch := make(chan int)  //定义一个chan
 ch <- v    // 把 v 发送到通道 ch
 v := <-ch  // 从 ch 接收数据
            // 并把值赋给 v
