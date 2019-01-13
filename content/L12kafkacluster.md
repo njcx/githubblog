@@ -86,7 +86,32 @@ zookeeper.connect=172.16.202.144:2181,172.16.202.143:2181,172.16.202.145:2181
 
 ```
 
+集群就启动了，我们进 zk 任何一个节点，
 
+```bash
+# ./zkCli.sh
+
+[zk: localhost:2181(CONNECTED) 8] ls /brokers/ids
+[1, 2, 3, 4]
+[zk: localhost:2181(CONNECTED) 9] get /brokers/ids/1
+{"listener_security_protocol_map":{"PLAINTEXT":"PLAINTEXT"},"endpoints":["PLAINTEXT://172.16.202.139:9092"],"jmx_port":-1,"host":"172.16.202.139","timestamp":"1547395229963","port":9092,"version":4}
+cZxid = 0x100000066
+ctime = Sun Jan 13 11:00:29 EST 2019
+mZxid = 0x100000066
+mtime = Sun Jan 13 11:00:29 EST 2019
+pZxid = 0x100000066
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x100002b6c820004
+dataLength = 198
+numChildren = 0
+[zk: localhost:2181(CONNECTED) 10]
+
+
+```
+
+可以看到4个节点
 
 
 
