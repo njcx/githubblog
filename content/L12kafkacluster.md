@@ -62,6 +62,29 @@ IP如下，对应加入hostname
 
 
 #### 配置 
+zk集群 搭建的记录如下
+
+[zookeeper 集群搭建](https://www.njcx.bid/posts/M2.html)
+
+
+然后，进入 kafka的配置conf文件夹，修改vim server.properties
+
+```bash
+broker.id=2
+listeners=PLAINTEXT://172.16.202.141:9092
+message.max.byte=5242880
+default.replication.factor=2
+replica.fetch.max.bytes=5242880
+zookeeper.connect=172.16.202.144:2181,172.16.202.143:2181,172.16.202.145:2181
+
+```
+
+这里主要修改 broker.id 和 listeners 的ip，然后进入bin目录里面
+
+```bash
+./kafka-server-start.sh -daemon ../config/server.properties
+
+```
 
 
 
