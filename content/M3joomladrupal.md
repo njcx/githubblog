@@ -8,8 +8,17 @@ Authors: nJcx
 Summary: Drupal、Joomla 0day合集
 
 
-- redis 未授权公网访问
-	- https://www.seebug.org/vuldb/ssvid-89715
+- Drupal core Remote Code Execution(CVE-2018-7602)
+	- https://www.seebug.org/vuldb/ssvid-97246
+
+- Drupal Anonymous Open Redirect
+	- https://www.seebug.org/vuldb/ssvid-97618
+
+- Drupal Contextual Links validation Remote Code Execution
+	- https://www.drupal.org/sa-core-2018-006
+
+- Drupal DefaultMailSystem::mail Remote Code Execution
+	- https://www.seebug.org/vuldb/ssvid-97616
 
 
 
