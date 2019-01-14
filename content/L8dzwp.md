@@ -8,8 +8,8 @@ Authors: nJcx
 Summary: Discuz、WordPress 0day合集
 
 
-- redis 未授权公网访问
-	- https://www.seebug.org/vuldb/ssvid-89715
+- DiscuzX 两处 SSRF 挖掘及利用
+	- https://www.seebug.org/vuldb/ssvid-97709
 
 
 
