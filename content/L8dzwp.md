@@ -6,13 +6,10 @@ Tags: Discuz、WordPress 0day
 Slug: L8
 Authors: nJcx
 Summary: Discuz、WordPress 0day合集
-Status: draft
 
-#### 问题
 
-#### 安装
-
-#### 内容
+- redis 未授权公网访问
+	- https://www.seebug.org/vuldb/ssvid-89715
 
 
 
