@@ -17,5 +17,32 @@ Summary: Discuz、WordPress 0day合集
 -  Discuz!X前台任意文件删除漏洞
 	-  https://www.seebug.org/vuldb/ssvid-96608
 	
--Discuz!x 利用SSRF远程命令执行漏洞
+- Discuz!x 利用SSRF远程命令执行漏洞
 	- https://www.seebug.org/vuldb/ssvid-91879
+
+- WordPress Privilege Escalation through Post Types
+	- https://www.seebug.org/vuldb/ssvid-97751
+	
+- WordPress Design Flaw Leads to WooCommerce RCE  关注 0
+	- https://www.seebug.org/vuldb/ssvid-97668
+
+- WordPress Plugin DZS-VideoGallery XSS / Command Injection
+	- https://www.seebug.org/vuldb/ssvid-97599
+	
+- Wordpress <= 4.8.2 SQL Injection
+	- https://www.seebug.org/vuldb/ssvid-96850
+
+- WordPress File Delete to Code Execution
+	- https://www.seebug.org/vuldb/ssvid-97378
+
+- WordPress Plugin File Upload 4.3.3 - Stored Cross-Site Scripting (PoC)
+	- https://www.seebug.org/vuldb/ssvid-97249
+
+- WordPress Core - 'load-scripts.php' Denial of Service(CVE-2018-6389)
+	- https://www.seebug.org/vuldb/ssvid-97129
+
+- WordPress Core <= 4.7.4 Potential Unauthorized Password Reset
+	- https://www.seebug.org/vuldb/ssvid-93078
+
+- WordPress Core 4.6 - Unauthenticated Remote Code Execution
+	- https://www.seebug.org/vuldb/ssvid-93077
