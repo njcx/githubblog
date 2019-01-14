@@ -21,4 +21,4 @@ Summary: Drupal、Joomla 0day合集
 	- https://www.seebug.org/vuldb/ssvid-97616
 
 
-
+- Drupal 8 – CVE-2017-6926 越权
