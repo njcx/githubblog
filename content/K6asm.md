@@ -50,3 +50,5 @@ start:mov ax,0
 code ends
 end start
 ```
+
+![](../images/asm.jpeg)
