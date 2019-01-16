@@ -51,4 +51,4 @@ code ends
 end start
 ```
 
-![](../images/asm.jpeg)
+![asm](../images/asm.jpeg)
