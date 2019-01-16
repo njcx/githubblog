@@ -145,6 +145,105 @@ numChildren = 0
 #### 高可用HA
 
 
+#### 监控
+
+推荐使用
+
+```bash
+kafka-eagle
+
+https://github.com/smartloli/kafka-eagle/archive/v1.2.8.tar.gz
+
+```
+
+```bash
+
+export KE_HOME=/opt/kafka_eagle
+export PATH=$PATH:$KE_HOME/bin
+
+```
+
+
+```bash
+######################################
+# multi zookeeper&kafka cluster list
+######################################
+kafka.eagle.zk.cluster.alias=cluster1
+cluster1.zk.list=127.0.0.1:2181
+#cluster2.zk.list=xdn10:2181,xdn11:2181,xdn12:2181
+
+######################################
+# zk client thread limit
+######################################
+kafka.zk.limit.size=25
+
+######################################
+# kafka eagle webui port
+######################################
+kafka.eagle.webui.port=8048
+
+######################################
+# kafka offset storage
+######################################
+cluster1.kafka.eagle.offset.storage=kafka
+cluster2.kafka.eagle.offset.storage=zk
+
+######################################
+# enable kafka metrics
+######################################
+kafka.eagle.metrics.charts=false
+kafka.eagle.sql.fix.error=false
+
+######################################
+# kafka sql topic records max
+######################################
+kafka.eagle.sql.topic.records.max=5000
+
+######################################
+# alarm email configure
+######################################
+kafka.eagle.mail.enable=false
+kafka.eagle.mail.sa=alert_sa
+kafka.eagle.mail.username=alert_sa@163.com
+kafka.eagle.mail.password=mqslimczkdqabbbh
+kafka.eagle.mail.server.host=smtp.163.com
+kafka.eagle.mail.server.port=25
+
+######################################
+# alarm im configure
+######################################
+#kafka.eagle.im.dingding.enable=true
+#kafka.eagle.im.dingding.url=https://oapi.dingtalk.com/robot/send?access_token=
+
+#kafka.eagle.im.wechat.enable=true
+#kafka.eagle.im.wechat.url=https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=
+#kafka.eagle.im.wechat.touser=
+#kafka.eagle.im.wechat.toparty=
+#kafka.eagle.im.wechat.totag=
+#kafka.eagle.im.wechat.agentid=
+
+######################################
+# delete kafka topic token
+######################################
+kafka.eagle.topic.token=keadmin
+
+######################################
+# kafka sasl authenticate
+######################################
+kafka.eagle.sasl.enable=false
+kafka.eagle.sasl.protocol=SASL_PLAINTEXT
+kafka.eagle.sasl.mechanism=PLAIN
+
+######################################
+# kafka jdbc driver address
+######################################
+kafka.eagle.driver=org.sqlite.JDBC
+kafka.eagle.url=jdbc:sqlite:/opt/kafka_eagle/db/ke.db
+kafka.eagle.username=root
+kafka.eagle.password=root
+
+```
+
 
 
 
