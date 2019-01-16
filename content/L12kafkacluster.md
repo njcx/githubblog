@@ -118,6 +118,30 @@ numChildren = 0
 #### 测试
 
 
+```bash
+
+#./ kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test_topic
+
+创建 test_topic
+
+#./kafka-topics.sh --list --zookeeper localhost:2181
+
+查看是否创建 test_topic
+
+#./kafka-console-producer.sh --broker-list localhost:9092 --topic  test_topic
+
+创建生产者
+
+#./kafka-console-consumer.sh --zookeeper localhost:2181 --topic  test_topic --from-beginning
+
+创建消费者
+
+# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic  test_topic --from-beginning (新版本kafka .90版本之后)
+
+创建消费者（新版本）	
+
+```
+
 #### 高可用HA
 
 
