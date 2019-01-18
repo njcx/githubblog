@@ -6,7 +6,7 @@ Tags: kafka
 Slug: M1
 Authors: nJcx
 Summary:  kafka 的加密和认证 ~
-
+Status: draft
 
 #### 介绍
 
