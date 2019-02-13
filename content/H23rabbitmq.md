@@ -56,3 +56,5 @@ service rabbitmq-server start
 启动
 
 访问 http://IP:15672/，账号 ：guest ： guest
+
+然后，我们就可以访问该IP了
