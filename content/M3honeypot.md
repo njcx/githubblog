@@ -12,3 +12,9 @@ Status: draft
 
 #### 安装
 
+```bash
+
+https://github.com/p1r06u3/opencanary_web
+
+```
+
