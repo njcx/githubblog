@@ -39,7 +39,7 @@ Status: draft
 - 期望城市：上海、杭州、成都
 ---
 ## 自我简介
-在点融网安全应急响应中心工作1.5年，收获颇丰，熟悉甲方的安全建设流程，熟悉企业安全建设，日常工作主要负责安全运维工作、安全工具维护、安全工具开发、渗透测试，日常喜欢关注安全事件、威胁情报，对网络安全充满热爱，熟悉项目开发流程和团队协同工作，有很好的团队合作意识，能很好利用baidu、google解决问题，有良好的逻辑思维能力，喜好新事物，对新技术比较敏感，兴趣面和技术面比较广泛，希望能在日后通过继续学习更进一步
+在点融网安全应急响应中心工作1.5年，收获颇丰，熟悉甲方的安全建设流程，熟悉企业安全建设，日常工作主要负责安全运维工作、安全工具维护、安全工具开发、渗透测试，日常喜欢关注安全事件、威胁情报，业余偶尔挖挖SRC，对网络安全充满热爱，熟悉项目开发流程和团队协同工作，有很好的团队合作意识，能很好利用baidu、google解决问题，有良好的逻辑思维能力，喜好新事物，对新技术比较敏感，兴趣面和技术面比较广泛，希望能在日后通过继续学习更进一步
 
 
 ---
@@ -94,17 +94,14 @@ flask写的个人博客
 ---
 
 ## 技术文章
-- [Nginx 作为负载均衡服务器应用实践](http://www.njcxs.cc/posts/A7.html)
-- [MySQL主从复制解决方案实践](http://www.njcxs.cc/posts/A2.html)
-- [docker 常用命令记录](http://www.njcxs.cc/posts/B4.html)
-- [docker应用实践](http://www.njcxs.cc/posts/B3.html)
-- [Linux 运维常用命令总结](http://www.njcxs.cc/posts/B1.html)
-- [centos6.8 下lvs+keepalived高并发实践](http://www.njcxs.cc/posts/A1.html)
-- [Python的面向对象编程](http://www.njcxs.cc/posts/B10.html)
-- [Python的多进程](http://www.njcxs.cc/posts/C2.html)
-- [使用PyPy性能调优](http://www.njcxs.cc/posts/C3.html)
-- [Redis 入门与实践](http://www.njcxs.cc/posts/C6.html)
-- [MongoDB 学习与实践](http://www.njcxs.cc/posts/C5.html)
+- [反弹shell总结](https://www.njcx.bid/posts/K4.html)
+- [抓包和nids规则编写](https://www.njcx.bid/posts/H1.html)
+- [rootkit的检测工具使用介绍](https://www.njcx.bid/posts/K3.html)
+- [ossec 搭建与简单用法](https://www.njcx.bid/posts/H14.html)
+- [机器学习简介](https://www.njcx.bid/posts/G6.html)
+- [K-means算法简介](https://www.njcx.bid/posts/G9.html)
+- [使用PyPy性能调优](https://www.njcx.bid/posts/C3.html)
+- [kafka 集群搭建实践笔记](https://www.njcx.bid/posts/L12.html)
 ---
 ## 技能列表
 
