@@ -1,3 +1,14 @@
+Title: 简历
+Date: 2017-04-2 10:20
+Modified: 2017-04-2 10:20
+Category: Python
+Tags: Python
+Slug: sec_resume
+Authors: nJcx
+Summary:简历
+Status: draft
+
+
 ---
 # 联系方式
 
