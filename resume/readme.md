@@ -32,7 +32,7 @@
 - 熟悉主流WEB安全技术，如SQL注入、XSS、CSRF、文件包含、命令执行、文件上传等，以及简单的漏洞修补建议
 - 熟悉常见的业务逻辑漏洞，如水平越权、纵向越权、业务绕过等
 - 熟悉常用安全渗透测试工具的使用，比如Burp Suite、AWVS、SQLMAP、Nmap、MSF等
-- 熟悉常用安全开发工具的使用，比如Kafak、ELK、Bro、Snort、Suricata等
+- 熟悉常用安全开发组件的使用，比如Kafak、ELK、Bro、Snort、Suricata等
 - 熟悉Python WEB开发、爬虫编写，了解JavaScript、CSS、HTML，可以进行简单的前端开发
 - 熟悉常用Python标准库和常用的第三方库的使用，比如requests等
 - 熟悉常见的Linux发行版本，了解shell编程,了解常见服务搭建与故障排除，能以Linux为开发环境正常工作
@@ -50,25 +50,25 @@
 #### 上海点融网安全应急响应中心 （ 2018年7月 ~  至今）
 
 ###### 代码依赖异常审计项目
-- 简介：点融网安全应急响应中心平台是一个对外提供服务的项目，主要是收录白帽子提交的漏洞，以及提供漏洞审核、奖品发放的项目
+- 简介：目前很多代码项目没有对依赖的包进行检查，导致很多依赖的包存在cve和exp，存在巨大的风险，危及到上线的项目的安全，所以，安全部门建立该项目，进行项目包依赖检查，该项目把大量风险扼杀在摇篮之中
 - 主要工作
-	+ 项目是基于Django开发而成，我在此项目负责了主要的开发工作，包括，前端和后端，项目采用了docker容器化部署，项目在对外漏洞收集过程中起到重要的作用，服务白帽子超过1000人
+	+ 担任主要开发、管理、运维工作，项目与自动集成工具联动，从kafka中获取项目发布信息，拉取repo，使用DependencyCheck 检测对应repo，然后把检测报告放到nginx下面，并把对应的url 通过email发送出来，供对应的人员参考查阅，并修复升级相关的依赖包，主要编程语言是python，主要使用DependencyCheck模块，生成html格式的异常检测报告
 
 ###### 企业内部蜜罐的平台的建设
-- 简介：点融网安全应急响应中心平台是一个对外提供服务的项目，主要是收录白帽子提交的漏洞，以及提供漏洞审核、奖品发放的项目
+- 简介：由于我们的nids是通过镜像交换机流量建设而成，无法检测网段间的内部异常，一旦来内网段间内部攻击，就无法通过nids检测到，所以我们在各个生产环境的网段部署了蜜罐的agent，我们采用了开源的蜜罐做了简单二次开发，部署网段超过100个，蜜罐工作期间检测到大量的异常
 - 主要工作
-	+ 项目是基于Django开发而成，我在此项目负责了主要的开发工作，包括，前端和后端，项目采用了docker容器化部署，项目在对外漏洞收集过程中起到重要的作用，服务白帽子超过1000人
+	+ 项目是基于开源的蜜罐做了简单二次开发而成，我在此项目负责了主要的开发工作，包括，前端和后端、以及一些组件，项目采用了docker容器化部署，大量的agent节点分布在各个网段，在安全异常事件收集过程中，起到了较好的作用
 	
+###### nids 的自研项目
+- 简介：公司内部的nids是自主研发的，主要镜像核心交换流量,采用PacketBeat、Bro工具解析流量，通过kafka做传输管道，然后进行后续规则引擎分析,分析的维度包括:主机的异常连接行为、异常流量等
 
-###### nids 规则编写，防爬虫，挖矿检测
-- 简介：点融网安全应急响应中心平台是一个对外提供服务的项目，主要是收录白帽子提交的漏洞，以及提供漏洞审核、奖品发放的项目
 - 主要工作
-	+ 项目是基于Django开发而成，我在此项目负责了主要的开发工作，包括，前端和后端，项目采用了docker容器化部署，项目在对外漏洞收集过程中起到重要的作用，服务白帽子超过1000人
+	+ 我在此项目负责了规则添加、规则编写、自定义组件的开发，添加了比如防爬虫规则、挖矿检测、扫描器检测等，在目前力严重依赖前置WAF的前提下,需要有一定的入侵感知能力,给内部环境一定的安全感知能力,可以做到及时感知及时处理
 	
-###### hids 安全基线规则等等编写
-- 简介：hids 
+###### hids 的自研项目
+- 简介：公司内部的hids是自主研发的，主要通过加载LKM模块的方式进入Ring0层，通过修改寄存器CR0中保护控制位中的WP位来达到可修改Linux原本syscall地址的方式来Hook主要操作,主要支持安全基线、系统完整性检测、反弹shell、webshell检测等
 - 主要工作
-	+ 项目是基于Django开发而成，我在此项目负责了主要的开发工作，包括，前端和后端，项目采用了docker容器化部署，项目在对外漏洞收集过程中起到重要的作用，服务白帽子超过1000人
+	+ 我在此项目负责了hids的规则添加，比如，日志删除检测、history删除检测、异常下载检测，以及安全基线规则添加等，hids和nids联动，可以提高异常的关联度，方便异常发生的溯源
 	
 ###### ELK 平台的建设和维护
 - 简介：ELK 平台共用了8个CentOS7节点，容量为40T，主要服务对象是安全部门，用于流量收集、日志存放检索、nids的告警收集、hids的告警收集等
@@ -93,20 +93,24 @@
 简介：基于K-means算法训练的机器学习算法模型，基于时间、设备、IP、在线时长等为特征，把相关异常记录在数据库，并通知到对应的devops人员
 
 - 主要工作
-	+ 我在此项目负责了主要的开发工作，包括，前端和后端以及数据分析工作，在项目中用到了pandas、numpy、scikit-learn以及 kafka等
+	+ 我在此项目负责了主要的开发工作，包括前端和后端以及数据分析工作，在项目中用到了pandas、numpy、scikit-learn以及 kafka等
 
 
 ---
 
 ## 开源项目
- - [jobbolespy](https://github.com/njcx/jobbolespy)：https://github.com/njcx/jobbolespy
+ - [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)：https://github.com/njcx/pocsuite_poc_collect
  
-  通过解析http响应，爬取伯乐在线相关内容并保存pdf
+  收集的poc
   
- - [njcx-as](https://github.com/njcx/njcx-as):  https://github.com/njcx/njcx-as 
+ - [peppa_gitscan](https://github.com/njcx/peppa_gitscan.git):  https://github.com/njcx/peppa_gitscan.git 
  
- 基于webview 的 个人博客安卓APP
+ github 扫描器
 
+ - [Linux Basics for Hackers](https://github.com/OpenCyberTranslationProject/TP1):  https://github.com/OpenCyberTranslationProject/TP1 
+ 
+ 参与翻译的书，Linux Basics for Hackers，第5、6、7章节
+ 
 ---
 
 ## 技术文章
