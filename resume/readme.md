@@ -13,7 +13,7 @@
  - 刘少华/男/1995 
  - 本科/黄山学院计算机系 
  - 工作年限：1.5年
- - [技术博客](https://www.njcx.bid )：：https://www.njcx.bid 
+ - [技术博客](https://www.njcx.bid )：https://www.njcx.bid 
  - [Github](http://github.com/njcx)：http://github.com/njcx 
  - [ 知乎]( https://www.zhihu.com/people/njcxs)： https://www.zhihu.com/people/njcxs
  - [知乎专栏](https://zhuanlan.zhihu.com/pythons)：https://zhuanlan.zhihu.com/pythons
