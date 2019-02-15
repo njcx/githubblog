@@ -100,7 +100,7 @@
 简介：github 代码泄露扫描项目是一个爬虫项目，会按预定时间频率爬取github，匹配相关的关键字，检测是否有公司的相关的代码以及敏感信息泄露
 
 - 主要工作
-	+ 我在此项目负责了主要的开发工作，包括前端和后端以及数据分析工作，在项目中用到了pandas、numpy、scikit-learn以及 kafka等
+	+ 我在此项目负责了主要的开发工作和维护工作，该项目包含两个子项目：代理获取模块和爬虫模块，主要开发语言是python，该项目上线以后，查找到大量的源代码泄露和敏感信息泄露
 
 ---
 
@@ -142,6 +142,22 @@
 - Http服务器：Nginx/Apache/uwsgi
 - 常用组件： ELK/Kafka/Zookeeper/Splunk/Syslog
 - 常用工具：Burp Suite/AWVS/Nessus/Bro/OSSEC/Snort/Suricata/Wireshark
+
+---
+
+## 漏洞挖掘经验
+
+- 某在线借贷平台的ssrf 引起的xss打cookie
+- 某OA 任意文件上传拿webshell
+- 某OA 平台存在字符型SQL注入
+- 某在线视频的json挟持
+- 某在线视频的vip限制绕过
+- 某在线教育平台发短信验证绕过
+- 某在线商城的扣一次金币多次订单提交
+- 某在线商城的任意订单查询
+- 某在线教育平台发短信验证绕过
+
+......
 
 ---
 
