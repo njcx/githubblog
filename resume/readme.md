@@ -95,6 +95,12 @@
 - 主要工作
 	+ 我在此项目负责了主要的开发工作，包括前端和后端以及数据分析工作，在项目中用到了pandas、numpy、scikit-learn以及 kafka等
 
+###### github 代码泄露扫描项目
+
+简介：github 代码泄露扫描项目是一个爬虫项目，会按预定时间频率爬取github，匹配相关的关键字，检测是否有公司的相关的代码以及敏感信息泄露
+
+- 主要工作
+	+ 我在此项目负责了主要的开发工作，包括前端和后端以及数据分析工作，在项目中用到了pandas、numpy、scikit-learn以及 kafka等
 
 ---
 
@@ -134,7 +140,7 @@
 - 数据库相关：MySQL/Redis
 - 系统平台： Centos7.3/Debian 9.0/Ubuntu Server 18.04/KALI Linux2.0
 - Http服务器：Nginx/Apache/uwsgi
-- 常用组件： ELK/Kafka/Zookeeper/Splunk/
+- 常用组件： ELK/Kafka/Zookeeper/Splunk/Syslog
 - 常用工具：Burp Suite/AWVS/Nessus/Bro/OSSEC/Snort/Suricata/Wireshark
 
 ---
