@@ -715,6 +715,45 @@ func max(num1, num2 int) int {
 
 ```
 
+向函数传递数组
+
+```bash
+形参设定数组大小：
+
+void myFunction(param [10]int)
+{
+}
+
+形参未设定数组大小：
+
+void myFunction(param []int)
+{
+}
+```
+
+列子
+
+```bash
+
+func main() {
+    var array = []int{1, 2, 3, 4, 5}
+    /* 未定义长度的数组只能传给不限制数组长度的函数 */
+    setArray(array)
+    /* 定义了长度的数组只能传给限制了相同数组长度的函数 */
+    var array2 = [5]int{1, 2, 3, 4, 5}
+    setArray2(array2)
+}
+
+func setArray(params []int) {
+    fmt.Println("params array length of setArray is : ", len(params))
+}
+
+func setArray2(params [5]int) {
+    fmt.Println("params array length of setArray2 is : ", len(params))
+}
+
+```
+
 函数可以作为值
 
 ```bash
@@ -815,6 +854,9 @@ func add(x1, x2 int) func(x3 int,x4 int)(int,int,int)  {
 
 ```
 
+#### 接口
+
+#### 面向对象
 面向对象的方法
 
 ```bash
@@ -844,51 +886,6 @@ func (c Circle) getArea() float64 {
 
 ```
 
-
-向函数传递数组
-
-```bash
-形参设定数组大小：
-
-void myFunction(param [10]int)
-{
-.
-.
-.
-}
-
-形参未设定数组大小：
-
-void myFunction(param []int)
-{
-.
-.
-.
-}
-```
-
-列子
-
-```bash
-
-func main() {
-    var array = []int{1, 2, 3, 4, 5}
-    /* 未定义长度的数组只能传给不限制数组长度的函数 */
-    setArray(array)
-    /* 定义了长度的数组只能传给限制了相同数组长度的函数 */
-    var array2 = [5]int{1, 2, 3, 4, 5}
-    setArray2(array2)
-}
-
-func setArray(params []int) {
-    fmt.Println("params array length of setArray is : ", len(params))
-}
-
-func setArray2(params [5]int) {
-    fmt.Println("params array length of setArray2 is : ", len(params))
-}
-
-```
 #### GO IO
 
 #### GO异常处理
