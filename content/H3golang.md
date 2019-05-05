@@ -893,8 +893,8 @@ import (
     "fmt"
 )
 
-type cat interface {
-    ()
+type Phone interface {
+    call()
 }
 
 type NokiaPhone struct {
@@ -957,6 +957,56 @@ func (c Circle) getArea() float64 {
 #### GO IO
 
 #### GO异常处理
+
+这里会提到3个关键词， defer, panic, recover
+defer就是用来添加函数结束时执行的语句，Go中的defer是动态的。
+
+```bash
+
+func f() (result int) {
+
+  deferfunc() {
+    result++
+  }()
+  return0
+}
+
+```
+上面函数返回1，因为defer中添加了一个函数，在函数返回前改变了命名返回值的值。是不是很好用呢。但是，要注意的是，如果我们的defer语句没有执行，那么defer的函数就不会添加，如果把上面的程序改成这样：
+
+```bash
+	func f() (result int) {
+	
+	  return0
+	  deferfunc() {
+	    result++
+	  }()
+	  return0
+	}
+```
+然后，我们在defer里面用recover捕获panic，完成go的异常处理
+
+```bash
+package main
+import "fmt"
+func main(){
+    defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+        fmt.Println("c")
+        if err:=recover();err!=nil{
+            fmt.Println(err) // 这里的err其实就是panic传入的内容，55
+        }
+        fmt.Println("d")
+    }()
+    f()
+}
+func f(){
+    fmt.Println("a")
+    panic(55)
+    fmt.Println("b")
+    fmt.Println("f")
+}
+```
+
 
 #### GO 并发
 
