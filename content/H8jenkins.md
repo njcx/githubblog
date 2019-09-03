@@ -6,6 +6,8 @@ Tags: jenkins
 Slug: H8
 Authors: nJcx
 Summary: Jenkins 安装和使用
+Status: draft
+
 
 #### 安装
 方法1：

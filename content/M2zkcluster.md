@@ -6,7 +6,7 @@ Tags: kafka
 Slug: M2
 Authors: nJcx
 Summary: zookeeper 集群搭建实践笔记 ~
-
+Status: draft
 
 #### 介绍
 
