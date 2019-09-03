@@ -6,6 +6,7 @@ Tags: kafka
 Slug: H5
 Authors: nJcx
 Summary: kafka相关
+Status: draft
 
 #### 安装
 

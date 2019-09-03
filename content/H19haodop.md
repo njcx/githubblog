@@ -6,6 +6,7 @@ Tags: hadoop
 Slug: H19
 Authors: nJcx
 Summary: 记录一下hadoop搭建 ~
+Status: draft
 
 #### 介绍
 Hadoop是一个开源框架，它允许在整个集群使用简单编程模型计算机的分布式环境存储并处理大数据。它的目的是从单一的服务器到上千台机器的扩展，每一个台机都可以提供本地计算和存储。Hadoop的框架最核心的设计就是：HDFS和MapReduce。HDFS为海量的数据提供了存储，则MapReduce为海量的数据提供了计算。NameNode是一个通常在 HDFS 实例中的单独机器上运行的软件。它负责管理文件系统名称空间和控制外部客户机的访问。DataNode也是一个通常在 HDFS实例中的单独机器上运行的软件。DataNode 响应来自 HDFS 客户机的读写请求。它们还响应来自 NameNode 的创建、删除和复制块的命令。MapReduce是处理大量半结构化数据集合的编程模型。

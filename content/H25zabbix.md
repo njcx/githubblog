@@ -6,7 +6,7 @@ Tags: zabbix
 Slug: H25
 Authors: nJcx
 Summary: 记录一下Zabbix实践笔记 ~
-
+Status: draft
 
 #### 介绍
 

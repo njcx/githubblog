@@ -6,7 +6,7 @@ Tags: saltstack
 Slug: J1
 Authors: nJcx
 Summary: 记录一下saltstack实践笔记 ~
-
+Status: draft
 
 #### 介绍
 

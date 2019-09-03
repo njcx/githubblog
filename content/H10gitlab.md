@@ -6,6 +6,8 @@ Tags: gitlab
 Slug: H10
 Authors: nJcx
 Summary: gitlab安装与使用
+Status: draft
+
 
 #### 安装
 

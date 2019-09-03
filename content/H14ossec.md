@@ -6,6 +6,8 @@ Tags: ossec
 Slug: H14
 Authors: nJcx
 Summary: 记录一下学习ossec 心路~
+Status: draft
+
 
 #### 介绍
 OSSEC是一款开源的hids，可以运行于Windows, Linux, OpenBSD/FreeBSD, 以及 MacOS等操作系统中。包括日志分析，全面检测，root-kit检测，审计，实时报警以及联动响应等功能。

@@ -6,6 +6,8 @@ Tags: storm
 Slug: H20
 Authors: nJcx
 Summary: 记录一下storm集群的搭建 ~
+Status: draft
+
 
 #### 介绍
 Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。

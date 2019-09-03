@@ -6,7 +6,7 @@ Tags: rabbitmq
 Slug: H23
 Authors: nJcx
 Summary: 记录一下学习rabbitmq心路~
-
+Status: draft
 
 #### 介绍
 

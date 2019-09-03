@@ -6,6 +6,7 @@ Tags: kubernetes
 Slug: H9
 Authors: nJcx
 Summary: Kubernetes安装与使用
+Status: draft
 
 #### 介绍
 

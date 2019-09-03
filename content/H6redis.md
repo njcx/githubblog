@@ -6,6 +6,7 @@ Tags: Redis
 Slug: H6
 Authors: nJcx
 Summary: redis相关
+Status: draft
 
 #### 安装
 

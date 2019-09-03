@@ -6,7 +6,7 @@ Tags: Celery
 Slug: H24
 Authors: nJcx
 Summary: 记录一下Celery 实践笔记 ~
-
+Status: draft
 
 #### 介绍
 Celery(芹菜)是一个异步任务队列/基于分布式消息传递的作业队列。Celery建议的消息队列是RabbitMQ，但提供有限支持Redis。在Celery中几个基本的概念，需要先了解下。概念：Broker、Backend。

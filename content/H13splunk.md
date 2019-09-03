@@ -6,6 +6,8 @@ Tags: splunk
 Slug: H13
 Authors: nJcx
 Summary: 记录一下splunk 的安装与使用
+Status: draft
+
 
 #### 安装
 

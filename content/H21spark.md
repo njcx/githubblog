@@ -6,6 +6,8 @@ Tags: spark
 Slug: H21
 Authors: nJcx
 Summary: 记录一下spark集群的搭建 ~
+Status: draft
+
 
 #### 介绍
 Spark是一个计算引擎,是加州大学伯克利分校的AMP实验室所开源的通用并行框架，是在 Scala中实现的，拥有如下模块，SQL、DataFrames、MLlib、GraphX、Spark Streaming。 开发者可以在同一个应用程序中无缝组合使用这些库。
