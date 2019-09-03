@@ -10,5 +10,11 @@ Status: draft
 
 #### 介绍
 
+我们先介绍一下 icmp协议，然后再介绍
+
+![icmp](../images/icmp.png)
+
+![icmp](../images/tcpip.gif)
+
 #### 安装
 
