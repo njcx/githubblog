@@ -6,7 +6,7 @@ Tags: kafka
 Slug: L12
 Authors: nJcx
 Summary: 记录一下kafka 集群搭建 ~
-
+Status: draft
 
 #### 安装
 实验环境： vmware fusion 

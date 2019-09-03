@@ -1,11 +1,11 @@
-Title: elk 实践
+Title: ELK 实践
 Date: 2018-06-05 09:20
 Modified: 2018-06-05 09:20
 Category: Big data
 Tags: elk
 Slug: H12
 Authors: nJcx
-Summary: 记录一下elk的使用过程 
+Summary: 记录一下ELK的使用过程 
 
 #### 安装
 
