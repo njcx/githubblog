@@ -1,11 +1,11 @@
-Title: nids 中的 dns 隐蔽隧道检测
+Title: NIDS 中的 DNS隐蔽隧道检测
 Date: 2018-07-08 20:20
 Modified: 2018-07-08 20:20
 Category: 安全
 Tags: nids
 Slug: M5
 Authors: nJcx
-Summary: nids 中的 dns 隐蔽隧道检测~
+Summary: NIDS 中的 DNS隐蔽隧道检测~
 
 
 #### 介绍
