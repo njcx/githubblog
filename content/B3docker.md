@@ -6,6 +6,8 @@ Tags: docker
 Slug: B3
 Authors: nJcx
 Summary: 介绍一下docker 容器应用，记录一下学习过程
+Status: draft
+
 ##安装
 2017年4月测试正常,ubuntu16.04
 ```bash

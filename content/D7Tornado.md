@@ -6,6 +6,8 @@ Tags: Tornado
 Slug: D7
 Authors: nJcx
 Summary: tornado 学习笔记
+Status: draft
+
 ####开始
 Tornado全称Tornado Web Server，是一个用Python语言写成的Web服务器兼Web应用框架。作为Web框架，是一个轻量级的Web框架，其拥有异步非阻塞IO的处理方式。作为Web服务器，Tornado有较为出色的抗负载能力。得利于其非阻塞的方式和对 epoll 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时Web服务来说，Tornado 是一个理想的 Web 框架。无论做为一个HTTP Server 还是一个Web框架，Tornado都足够优秀。
 ####安装

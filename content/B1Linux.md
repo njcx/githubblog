@@ -6,6 +6,8 @@ Tags: Linux
 Slug: B1
 Authors: nJcx
 Summary: Linux 运维常用命令总结
+Status: draft
+
 ## Linux 运维常用命令总结
 
 很多都是从网上收集的和自己总结的
