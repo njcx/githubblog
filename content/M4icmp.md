@@ -31,6 +31,7 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 我们测试一下，Linux 的icmp 的隐藏后门[ish](https://sourceforge.net/projects/icmpshell/files/ish/)，如果是Windows，推荐 [icmpsh](https://github.com/inquisb/icmpsh)， 
 
 受控机CentOS7 ：172.19.25.53
+
 控制机KALI ：172.19.25.73
 
 ![icmp](../images/ish.jpeg)
