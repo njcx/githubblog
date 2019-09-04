@@ -17,7 +17,22 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 ![icmp](../images/icmp.png)
 
+![icmp](../images/wiresharkicmp.jpeg)
+
+
+从上图看，也就是说，我们重点关注 Checksum 字段和Data字段，因为我们改变Data字段的时候，Checksum也要改变,我们把我们的payload或者数据放到Data字段里面即可.
+
 ![icmp](../images/icmpfield.png)
 
 #### 安装
 
+![icmp](../images/ish.jpeg)
+
+![icmp](../images/ishwireshark.jpeg)
+
+![icmp](../images/wireshark1.jpeg)
+
+
+[icmpsh](https://github.com/inquisb/icmpsh)
+
+[ish](https://sourceforge.net/projects/icmpshell/files/ish/)
