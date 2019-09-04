@@ -44,6 +44,17 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 可以看出，payload 是放在Data字段的
 
+我们总结一下ICMP隐蔽隧道的特征：
+
+1、ICMP隧道短时间会产生大量 ICMP 数据包，用来数据发送，可能存在大于 64 比特的数据包。
+
+2、ICMP隧道发送的 ICMP 数据包前后Data字段不一样，而且响应数据包中 payload 跟请求数据包不一致。
+
+3、ICMP 数据包的协议标签可能存在特殊字段。例如，icmptunnel 会在所有的 ICMP Data 前面增加 ‘TUNL’ 标记以用于识别隧道
+
+4，Data 里面可能存在一些系统命令
 
 
+防御和检测手段：
 
+1，禁止 ping。
