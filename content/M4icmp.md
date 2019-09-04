@@ -32,7 +32,7 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 受控机CentOS7 ：172.19.25.53
 
-控制机KALI ：172.19.25.73
+控制机Parrot Linux ：172.19.25.73
 
 ![icmp](../images/ish.jpeg)
 
