@@ -35,9 +35,15 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 控制机Parrot Linux ：172.19.25.73
 
+我们在受控机上编译（make linux），启动 ishd，在控制机上启动 ./ish 172.19.25.53
+
 ![icmp](../images/ish.jpeg)
 
+我们可以在 Data 里面可以看到一个ls
+
 ![icmp](../images/ishwireshark.jpeg)
+
+我们可以在响应里面发现 相关目录的数据
 
 ![icmp](../images/wireshark1.jpeg)
 
