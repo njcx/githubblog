@@ -41,3 +41,8 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 ![icmp](../images/wireshark1.jpeg)
 
 
+可以看出，payload 是放在Data字段的
+
+
+
+
