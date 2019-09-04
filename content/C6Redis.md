@@ -6,6 +6,7 @@ Tags: Redis
 Slug: C6
 Authors: nJcx
 Summary: Redis学习笔记
+Status: draft
 
 ####介绍
 Redis是很火的一个Key-Value数据库,它以优异的性能得到了广泛的应用.Redis是一个内存数据库，但在磁盘数据库上是持久的，它有5种数据类型，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)，它所有的操作都是原子类型的,可以应对复杂的生产环境,可用于多种用例，如：缓存，消息队列，应用程序中短期数据。

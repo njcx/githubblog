@@ -6,6 +6,7 @@ Tags: MongoDB
 Slug: C5
 Authors: nJcx
 Summary: 记录一下自己学到的东西
+Status: draft
 
 ####介绍
 Mongodb的3大元素:数据库(db),集合(collection),文档(document),"数据库"还是对应关系数据库中的"数据库",其中"集合"就是对应关系数据库中的"表"，"文档"对应"记录"。
