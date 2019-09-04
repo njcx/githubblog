@@ -6,7 +6,7 @@ Tags: 恶意进程检测
 Slug: M11
 Authors: nJcx
 Summary: 如何判断一个Linux进程是不是恶意进程 ~
-Status: draft
+
 
 #### 介绍
 
