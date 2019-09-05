@@ -19,7 +19,7 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 ![icmp](../images/icmpfield.png)
 
 
-从上图看，也就是说，我们重点关注 Checksum 字段和Data字段，因为我们改变Data字段的时候，Checksum也要改变,我们把我们的payload或者数据放到Data字段里面即可.
+从上图看，也就是说，我们重点关注 Checksum 字段和Data字段，因为我们改变Data字段的时候，Checksum也要改变,我们把我们的payload或者数据放到Data字段里面即可.我们分别使用，Linux和Windows测试一下， Linux ping 发出的Data的内容为 ：!\"#$%&'()*+,-./01234567  ， Windows ping 的发出的Data的内容为 abcdefghijklmnopqrstuvwabcdefghi
 
 如图，我们用wireshark抓的包
 
@@ -64,4 +64,55 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 1，禁止 ping（不太可能），会影响到很多运维和安全检测设备的运行。
 
-2，
+2，ICMP Data字段 形成一个白名单，不在白名单内的告警
+
+```
+pass icmp any any -> any any (msg:"Whitecap: OSX or Linux ICMP Echo Request"; icode:0; itype:8; dsize:56; content:"!\"#$%&'()*+,-./01234567"; classtype:misc-activity; sid:5110001; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: OSX or Linux ICMP Echo Reply"; icode:0; itype:0; dsize:56; content:"!\"#$%&'()*+,-./01234567"; classtype:misc-activity; sid:5110002; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Windows XP/7/8 ICMP Echo Request"; icode:0; itype:8; dsize:32; content:"abcdefghijklmnopqrstuvwabcdefghi"; classtype:misc-activity; sid:5110003; rev:1; nocase;)
+pass icmp any any -> any any (msg:"Whitecap: Windows XP/7/8 ICMP Echo Reply"; icode:0; itype:0; dsize:32; content:"abcdefghijklmnopqrstuvwabcdefghi"; classtype:misc-activity; sid:5110004; rev:1; nocase;)
+pass icmp any any -> any any (msg:"Whitecap: Nmap ICMP Echo Request"; icode:0; itype:8; dsize:0; classtype:misc-activity; sid:5110005; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Nmap ICMP Echo Reply"; icode:0; itype:0; dsize:0; classtype:misc-activity; sid:5110006; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Group Policy Slow Link Detection"; icode:0; itype:8; dsize:>1400; content:"WANG2"; classtype:misc-activity; sid:5110007; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Group Policy Slow Link Detection"; icode:0; itype:0; dsize:>1400; content:"WANG2"; classtype:misc-activity; sid:5110008; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds Status Query"; icode:0; itype:8; dsize:23; content:"SolarWinds Status Query"; classtype:misc-activity; sid:5110009; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds Status Query"; icode:0; itype:0; dsize:23; content:"SolarWinds Status Query"; classtype:misc-activity; sid:5110010; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Domain Controller ICMP Traffic"; icode:0; itype:8; dsize:1; content:"?"; classtype:misc-activity; sid:5110011; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Domain Controller ICMP Traffic"; icode:0; itype:0; dsize:1; content:"?"; classtype:misc-activity; sid:5110012; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: McAfee ICMP ping Request"; icode:0; itype:8; dsize:36; content:"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"; offset:3; classtype:misc-activity; sid:5110013; rev:2;)
+pass icmp any any -> any any (msg:"Whitecap: McAfee ICMP ping Reply"; icode:0; itype:0; dsize:36; content:"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"; offset:3; classtype:misc-activity; sid:5110014; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Lots of Xs"; icode:0; itype:8; dsize:32; content:"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; classtype:misc-activity; sid:5110015; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Lots of Xs"; icode:0; itype:0; dsize:32; content:"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; classtype:misc-activity; sid:5110016; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: DHCP ICMP Duplicate IP Check"; icode:0; itype:8; dsize:11; content:"DhcpIcmpChk"; classtype:misc-activity; sid:5110017; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: DHCP ICMP Duplicate IP Check"; icode:0; itype:0; dsize:11; content:"DhcpIcmpChk"; classtype:misc-activity; sid:5110018; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds ICMP Version 5"; icode:0; itype:8; dsize:<80; content:"SolarWinds.Net ICMP Version 5.0.4.16Copyright  1995-2005 SolarWinds.Net"; classtype:misc-activity; sid:5110019; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds ICMP Version 5"; icode:0; itype:0; dsize:<80; content:"SolarWinds.Net ICMP Version 5.0.4.16Copyright  1995-2005 SolarWinds.Net"; classtype:misc-activity; sid:5110020; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds Sonar ICMP Scan"; icode:0; itype:8; dsize:24; content:"Orion Network Sonar Scan"; classtype:misc-activity; sid:5110021; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: Solarwinds Sonar ICMP Scan"; icode:0; itype:0; dsize:24; content:"Orion Network Sonar Scan"; classtype:misc-activity; sid:5110022; rev:1;)
+pass icmp any any -> $DNS_SERVERS any (msg:"Whitecap: ICMP to DNS Servers"; icode:0; itype:8; dsize:<57; classtype:misc-activity; threshold:type limit, track by_src, count 1, seconds 60; sid:5110500; rev:2;) 
+pass icmp any any -> $DNS_SERVERS any (msg:"Whitecap: ICMP to DNS Servers"; icode:0; itype:0; dsize:<57; classtype:misc-activity; threshold:type limit, track by_src, count 1, seconds 60; sid:5110501; rev:2;) 
+pass icmp any any -> any any (msg:"Whitecap: Domain controller to domain controller"; icode:0; itype:8; dsize:32; content:"|00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00|"; classtype:misc-activity; threshold:type limit, track by_src, count 1, seconds 60; sid:5110502; rev:2;)
+pass icmp any any -> any any (msg:"Whitecap: Domain controller to domain controller"; icode:0; itype:0; dsize:32; content:"|00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00|"; classtype:misc-activity; threshold:type limit, track by_src, count 1, seconds 60; sid:5110503; rev:2;)
+pass icmp any any -> any any (msg:"Whitecap: All As"; icode:0; itype:8; dsize:64; content:"|AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA|"; classtype:misc-activity; sid:5110504; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: All As"; icode:0; itype:0; dsize:64; content:"|AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA|"; classtype:misc-activity; sid:5110505; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: All 0s"; icode:0; itype:8; dsize:56; content:"|00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00|"; classtype:misc-activity; sid:5110506; rev:1;)
+pass icmp any any -> any any (msg:"Whitecap: All 0s"; icode:0; itype:0; dsize:56; content:"|00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00|"; classtype:misc-activity; sid:5110507; rev:1;)
+pass icmp [$ICMP_SRC_HOSTS_IGNORE] any -> any any (msg:"ICMP Pass: Ignore Hosts"; icode:0; itype:8; classtype:misc-activity; sid:5111000; rev:1;)
+pass icmp [$ICMP_SRC_HOSTS_IGNORE] any -> any any (msg:"ICMP Pass: Ignore Hosts"; icode:0; itype:0; classtype:misc-activity; sid:5111001; rev:1;)
+pass icmp any any -> [$ICMP_DST_HOSTS_IGNORE] any (msg:"ICMP Pass: Ignore Hosts"; icode:0; itype:8; classtype:misc-activity; sid:5111002; rev:1;)
+pass icmp any any -> [$ICMP_DST_HOSTS_IGNORE] any (msg:"ICMP Pass: Ignore Hosts"; icode:0; itype:0; classtype:misc-activity; sid:5111003; rev:1;)
+```
+
+3,检测包大于多少，或者发送频率高于某个数，报警
+
+
+```
+alert icmp any any -> any any (msg:"Whitecap Echo Request Payload > 100 bytes"; icode:0; itype:8; dsize:>100; classtype:misc-activity; sid:5113000; rev:1;)
+alert icmp any any -> any any (msg:"Whitecap Echo Reply Payload > 100 bytes"; icode:0; itype:0; dsize:>100; classtype:misc-activity; sid:5113001; rev:1;)
+```
+
+4, 检测 Data里面包含的特殊字段报警（检测base64）
+
+```
+drop icmp any any -> any any (msg:"LOCAL ICMP Large ICMP Packet (Base64)"; dsize:>800; content:"="; pcre:"/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/"; reference:url,www.notsosecure.com/2015/10/15/icmp-tunnels-a-case-study/; classtype:bad-unknown; sid:1000028; rev:1;)
+```
