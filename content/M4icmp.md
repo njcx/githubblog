@@ -111,7 +111,7 @@ alert icmp any any -> any any (msg:"Whitecap Echo Request Payload > 100 bytes"; 
 alert icmp any any -> any any (msg:"Whitecap Echo Reply Payload > 100 bytes"; icode:0; itype:0; dsize:>100; classtype:misc-activity; sid:5113001; rev:1;)
 ```
 
-4, 检测 Data里面包含的特殊字段报警（检测base64）
+4, 检测 Data里面包含的特殊字段报警（例子是检测base64）
 
 ```
 drop icmp any any -> any any (msg:"LOCAL ICMP Large ICMP Packet (Base64)"; dsize:>800; content:"="; pcre:"/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/"; reference:url,www.notsosecure.com/2015/10/15/icmp-tunnels-a-case-study/; classtype:bad-unknown; sid:1000028; rev:1;)
