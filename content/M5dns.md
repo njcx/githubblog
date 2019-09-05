@@ -29,3 +29,6 @@ DNS协议报文格式
 
 #### 安装
 
+![dns](../images/dnsq.jpeg)
+
+![dns](../images/dnstun.jpeg)
