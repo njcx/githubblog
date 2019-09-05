@@ -18,9 +18,14 @@ DNS协议报文格式
 
 ![dns](../images/dns-protocol-format.png)
 
+通过wireshark 抓到的包：
+
+![dns](../images/dnswireshark.png)
+
 由于关于dns报文介绍太长，参考下面url 
 
 [DNS协议详解及报文格式分析](https://www.cnblogs.com/davidwang456/articles/10660051.html)
+
 
 #### 安装
 
