@@ -45,3 +45,22 @@ DNS协议报文格式
 ![dns](../images/dnstun.jpeg)
 
 如果在企业内网，那么黑客的攻击机器，就是所谓的权威服务器
+
+第一步: 受控机向内部dns服务器发送一个查询NKNFjklKLuJNVIUMvKL.ml.org的请求
+
+第二步：内部dns服务器通过防火墙向根dns服务器发出查询请求
+
+第三步：经过大量迭代后，DNS请求到达NKNFjklKLuJNVIUMvKL.ml.org的权威DNS服务器（黑客所控制）
+
+第四步：受控机请求查询的响应通过防火墙返回到内部DNS服务器
+
+第五步：内部DNS服务器将响应结果返回给受控机
+
+
+上面的流程展示了一个受控机在连接外部网络时dns解析的一个过程。由于防火墙并没有对dns协议做任何处理，所以我们可以通过这种方式来穿透防火墙。
+
+这里很多人会有一个疑问，关于dns 请求查询NKNFjklKLuJNVIUMvKL.ml.org 是怎么到达黑客所控制的权威DNS服务器的？
+
+请求一个域名，比如b.xxx.org 。这台DNS服务器上没有b.xxx.org，那么它将向root，也就是根域名服务器请求，看看根知道不。root一看是.org的域名，就交 给.org域名服务器进行解析。.org的域名服务器一看是.xxx.org那么就会去找.xxxi.org的域名服务器 (f1g1ns1.dnspod.net),看看它有没有这条记录。.xxx.org的域名服务器上一看是b.xxx.org，如果它有这 条A记录，那么就会返回b.xxx.org的地址。
+
+但是，如果没有，你可以再在guanwei.org的域名服务器上设定一个NS 类型的记录人，如：xxx.org NS 111.222.333.444(通常这里不让设置为地址，那么也好办，你可以先在DNS服务器上添加一条A记录，如ns.xxx.org 111.222.333.444，再添加NS记录：guanwei.org NS ns.xxx.org)，这里指定一个公网服务器，就是黑客所控制的权威DNS服务器的
