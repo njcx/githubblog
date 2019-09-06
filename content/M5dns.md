@@ -132,14 +132,16 @@ shell 如下，
 
 ![dnsshell](../images/dnsshell.png)
 
-我在被控机上抓包，如图
+我在被控机上抓包，如图，可以看出受控机器一直TXT请求 CentOS 控制机
 
 ![dnsshell](../images/WechatIMG19.jpeg)
 
-
-![dnsshell](../images/WechatIMG21.jpeg)
-
+可以看出我们的payload是 放到TXT字段里面，由CentOS 控制机响应给客户端的
 
 ![dnsshell](../images/WechatIMG23.jpeg)
+
+然后，数据都分段放到子域名里面，分多次，再次用请求的方式，发送到我们的控制机器上了
+
+![dnsshell](../images/WechatIMG21.jpeg)
 
 #### 检测
