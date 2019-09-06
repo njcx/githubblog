@@ -132,4 +132,14 @@ shell 如下，
 
 ![dnsshell](../images/dnsshell.png)
 
+我在被控机上抓包，如图
+
+![dnsshell](../images/WechatIMG19.jpeg)
+
+
+![dnsshell](../images/WechatIMG21.jpeg)
+
+
+![dnsshell](../images/WechatIMG23.jpeg)
+
 #### 检测
