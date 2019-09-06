@@ -128,6 +128,8 @@ while (1){
 
 ```
 
+shell 如下，
+
 ![dnsshell](../images/dnsshell.png)
 
 #### 检测
