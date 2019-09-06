@@ -72,3 +72,22 @@ DNS协议报文格式
 请求一个域名，比如NKNFjklKLuJNVIUMvKL.ml.org ,本地DNS服务器上没有 NKNFjklKLuJNVIUMvKL.ml.org，那么它将向root，也就是根域名服务器请求，看看根知道不, root一看是.org的域名，就交 给.org域名服务器进行解析，.org的域名服务器一看是.ml.org那么就会去找.ml.org的域名服务器 (ns1.myhostadmin.net),看看它有没有这条记录，.ml.org的域名服务器上一看是.ml.org，如果它有这 条A记录，那么就会返回NKNFjklKLuJNVIUMvKL.ml.org 的记录。
 
 但是，如果没有，你可以再在ml.org的域名服务器上设定一个NS 类型的记录，如：ml.org NS 111.222.333.444(通常这里不让设置为地址，你可以先在DNS服务器上添加一条A记录，如ns.ml.org A 111.222.333.444，再添加NS记录：ml.org NS ns.xxx.org)，这里指定一个公网服务器，就是黑客所控制的权威DNS服务器。
+
+
+#### 测试
+
+
+我们测试一下使用dns反弹shell，用于测试的域名： test.njcx.bid
+
+该域名的dns服务器位于  ns1.njcx.bid（公网ip：111.222.333.444）
+
+
+受控机Windows7 ：  172.16.42.134
+
+控制机 CentOS7：  111.222.333.444
+
+
+https://github.com/sensepost/DNS-Shell
+
+
+#### 检测
