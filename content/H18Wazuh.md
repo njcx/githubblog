@@ -1,4 +1,4 @@
-Title: wazuh(ossec)学习记录
+Title: 基于Wazuh二次开发的HIDS在企业大规模应用实践
 Date: 2017-05-28 17:20
 Modified: 2017-05-28 17:20
 Category: 安全
@@ -17,7 +17,9 @@ Wazuh 是 ossec 一个分支，通过与ELK的结合，可以把相关的记录�
 
 yum groupinstall development tools -y
 
-curl -Ls https://github.com/wazuh/wazuh/archive/v3.6.1.tar.gz | tar zx
+yum install make gcc policycoreutils-python automake autoconf libtool
+
+curl -Ls https://github.com/wazuh/wazuh/archive/v3.10.2.tar.gz | tar zx
 
 ```
 
