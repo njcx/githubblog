@@ -15,13 +15,48 @@ bro的安装参照[bro安装](https://www.njcx.bid/posts/H11.html)
 
 ```bash
 
+二选一
+
 # wget https://github.com/edenhill/librdkafka/archive/v0.11.5.tar.gz
 
 # tar -zxvf v0.11.5.tar.gz
 
 # cd librdkafka-0.11.5 && ./configure && make && make install
 
+
+# yum install librdkafka  librdkafka-devel -y
+ 
 ```
+
+把bro 添加到环境变量  （/etc/profile）
+
+```bash
+export BRO_HOME=/opt/bro
+export PATH=$PATH:$BRO_HOME/bin
+
+```
+
+注意：
+
+bro-2.5.5.tar.gz  解压后的源码目录不要删除，后面有用
+
+
+```bash
+#  pip install bro-pkg
+#  bro-pkg autoconfig
+```
+
+bro-pkg 是bro的包管理器，在包安装的过程中，会依赖bro源码目录，不然某些bro插件安装会报错
+
+安装metron-bro-plugin-kafka插件
+
+```bash
+#  bro-pkg install apache/metron-bro-plugin-kafka --version master
+```
+
+
+
+
 
 编译 bro 的 kafka插件
 
