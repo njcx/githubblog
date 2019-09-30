@@ -42,8 +42,8 @@ bro-2.5.5.tar.gz  解压后的源码目录不要删除，后面有用
 
 
 ```bash
-#  pip install bro-pkg
-#  bro-pkg autoconfig
+#  pip install zkg
+#  zkg autoconfig
 ```
 
 bro-pkg 是bro的包管理器，在包安装的过程中，会依赖bro源码目录，不然某些bro插件安装会报错
@@ -51,7 +51,7 @@ bro-pkg 是bro的包管理器，在包安装的过程中，会依赖bro源码目
 安装metron-bro-plugin-kafka插件
 
 ```bash
-#  bro-pkg install apache/metron-bro-plugin-kafka --version master
+#  zkg install apache/metron-bro-plugin-kafka --version master
 ```
 
 
