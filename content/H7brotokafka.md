@@ -85,6 +85,98 @@ redef Kafka::kafka_conf = table(
 );
 redef Kafka::topic_name = "bro";
 ```
+
+
+```bash
+@load Apache/Kafka
+
+redef Kafka::logs_to_send = set(Conn::LOG, DNS::LOG, SSH::LOG,SNMP::LOG, SMTP::LOG, mysql::LOG, NTLM::LOG, HTTP::LOG);
+
+redef Kafka::topic_name = "bro_all";
+redef Kafka::kafka_conf = table(
+["metadata.broker.list"] = "10.10.128.9:9092"
+
+);
+#redef Kafka::tag_json = T;
+
+event bro_init() &priority=-10
+{
+    # handles HTTP
+    local http_filter: Log::Filter = [
+        $name = "kafka-http",
+        $writer = Log::WRITER_KAFKAWRITER,
+        $config = table(
+                ["topic_name"] = "http"       
+)
+    ];
+    Log::add_filter(HTTP::LOG, http_filter);
+
+
+    local dns_filter: Log::Filter = [
+        $name = "kafka-dns",
+        $writer = Log::WRITER_KAFKAWRITER,
+        $config = table(
+                ["topic_name"] = "dns" )
+    ];
+    Log::add_filter(DNS::LOG, dns_filter);
+
+    local mysql_filter: Log::Filter = [
+        $name = "kafka-mysql", 
+        $writer = Log::WRITER_KAFKAWRITER, 
+        $config = table(
+                ["topic_name"] = "mysql" )
+    ]; 
+    Log::add_filter(mysql::LOG, mysql_filter);
+
+    local conn_filter: Log::Filter = [
+        $name = "kafka-conn", 
+        $writer = Log::WRITER_KAFKAWRITER, 
+        $config = table(
+                ["topic_name"] = "conn" )
+    ]; 
+    Log::add_filter(Conn::LOG, conn_filter);
+
+
+    local ntlm_filter: Log::Filter = [
+        $name = "kafka-ntlm", 
+        $writer = Log::WRITER_KAFKAWRITER, 
+        $config = table(
+                ["topic_name"] = "ntlm" )
+    ]; 
+    Log::add_filter(NTLM::LOG, ntlm_filter);
+
+
+    local ssh_filter: Log::Filter = [
+        $name = "kafka-ssh", 
+        $writer = Log::WRITER_KAFKAWRITER, 
+        $config = table(
+                ["topic_name"] = "ssh" )
+    ]; 
+    Log::add_filter(SSH::LOG, ssh_filter);
+
+
+    local smtp_filter: Log::Filter = [
+        $name = "kafka-smtp",
+        $writer = Log::WRITER_KAFKAWRITER,
+        $config = table(
+                ["topic_name"] = "smtp" )
+    ];
+    Log::add_filter(SMTP::LOG, smtp_filter);
+
+
+
+    local snmp_filter: Log::Filter = [
+        $name = "kafka-snmp",
+        $writer = Log::WRITER_KAFKAWRITER,
+        $config = table(
+                ["topic_name"] = "snmp" )
+    ];
+    Log::add_filter(SNMP::LOG, snmp_filter);
+
+}
+
+```
+
 启动
 
 ```bash
