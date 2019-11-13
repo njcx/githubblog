@@ -37,6 +37,6 @@ Summary:  Centos7.5 下正则引擎Hyperscan安装~
 # make
 # make install
 
-# pip install hyperscan
+# pip install hyperscan(好像不需要上面那一堆，尴尬)
 
 ```
