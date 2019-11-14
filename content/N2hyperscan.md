@@ -1,4 +1,4 @@
-Title: Centos7.5 下正则引擎Hyperscan安装
+Title: CentOS7.5 下正则引擎Hyperscan安装
 Date: 2018-07-16 20:20
 Modified: 2018-07-16 20:20
 Category: 安全
