@@ -6,7 +6,7 @@ Tags: Kafka
 Slug: N3
 Authors: nJcx
 Summary:  尝试使用Kafka connector写es ~
-
+Status: draft
 
 #### 安装
 
