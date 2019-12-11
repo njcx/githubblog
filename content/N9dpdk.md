@@ -21,6 +21,13 @@ Summary:  CentOS7下 DPDK18 安装~
 这里我们选择 
 [15] x86_64-native-linuxapp-gcc
 
+这里可能会报错，make: *** /lib/modules/3.10.0-1062.4.1.el7.x86_64/build: 没有那个文件或目录。 停止。
+
+# ln -s /usr/src/kernels/3.10.0-1062.9.1.el7.x86_64/  /lib/modules/3.10.0-1062.4.1.el7.x86_64/build 
+
+即可
+
+
 [18] Insert IGB UIO module
 
 [22] Setup hugepage mappings for NUMA
