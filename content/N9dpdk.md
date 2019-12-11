@@ -76,14 +76,6 @@ No 'Compress' devices detected
 
 ```
 
-安装完成后，最后一步骤
-
-```bash
-
-# make install T=x86_64-native-linuxapp-gcc 
-
-```
-
 
 
 手动安装，绑定网卡（备选）
