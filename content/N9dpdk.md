@@ -95,9 +95,10 @@ No 'Compress' devices detected
 # cd /opt/dpdk-18.11/usertools/
 # ./dpdk-devbind.py --bind=igb_uio ens38
 
-[22] Setup hugepage mappings for NUMA
+# mkdir -p /mnt/huge
+# mount -t hugetlbfs nodev /mnt/huge
+# echo 1024>/sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
 
-填写 1024
 
 ```
 
