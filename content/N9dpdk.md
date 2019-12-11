@@ -1,4 +1,4 @@
-Title: CentOS7 DPDK18 安装
+Title: CentOS7下DPDK18 安装
 Date: 2018-07-23 20:20
 Modified: 2018-07-23 20:20
 Category: 安全
