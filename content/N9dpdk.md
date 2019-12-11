@@ -15,6 +15,19 @@ Summary:  CentOS7下 DPDK18 安装~
 #  yum install numactl-devel  numactl  net-tools pciutils kernel-devel 
 #  wget http://fast.dpdk.org/rel/dpdk-18.11.tar.xz
 #  tar xvJf  dpdk-18.11.tar.xz 
+
+```
+
+下面这一步，很重要，可以避免很多错误
+
+```bash
+# export  RTE_SDK=/opt/dpdk-18.11/
+# export  RTE_TARGET=x86_64-native-linuxapp-gcc
+
+```
+
+```bash
+
 #  cd /opt/dpdk-18.11/usertools
 # ./dpdk-setup.sh
 
@@ -30,40 +43,62 @@ Summary:  CentOS7下 DPDK18 安装~
 
 [18] Insert IGB UIO module
 
-[22] Setup hugepage mappings for NUMA
-
-[24] Bind Ethernet/Crypto device to IGB UIO module
-
-```
-
-
-```bash
-
-# modprobe uio
-# insmod igb_uio.ko
-# lsmod | grep uio
-
-# ifconfig ens38 down
-# cd usertools/
-# ./dpdk-devbind.py --bind=igb_uio ens38
-
-
-```
-
-```bash
+Loading DPDK UIO module
 
 [22] Setup hugepage mappings for NUMA
 
 我这里设置的 1024
 
+[24] Bind Ethernet/Crypto device to IGB UIO module
+
+# ifconfig ens38 down   这里要把网卡停用，不然会安装失败
+
+Network devices using DPDK-compatible driver
+============================================
+0000:02:06.0 '82545EM Gigabit Ethernet Controller (Copper) 100f' drv=igb_uio unused=e1000
+
+Network devices using kernel driver
+===================================
+0000:02:01.0 '82545EM Gigabit Ethernet Controller (Copper) 100f' if=ens33 drv=e1000 unused=igb_uio *Active*
+0000:02:05.0 '82545EM Gigabit Ethernet Controller (Copper) 100f' if=ens37 drv=e1000 unused=igb_uio *Active*
+
+No 'Crypto' devices detected
+============================
+
+No 'Eventdev' devices detected
+==============================
+
+No 'Mempool' devices detected
+=============================
+
+No 'Compress' devices detected
+==============================
+
+
 ```
+
+
+手动绑定（备选）
 
 ```bash
+# cd /opt/dpdk-18.11/x86_64-native-linuxapp-gcc/kmod
+# modprobe uio
+# insmod igb_uio.ko
+# lsmod | grep uio
 
-# export  RTE_SDK=/opt/dpdk-18.11/
-# export  RTE_TARGET=x86_64-native-linuxapp-gcc
+# ifconfig ens38 down
+# cd /opt/dpdk-18.11/usertools/
+# ./dpdk-devbind.py --bind=igb_uio ens38
+
+[22] Setup hugepage mappings for NUMA
+
+填写 1024
 
 ```
+
+
+
+#### 测试
 
 
 ```bash
@@ -73,7 +108,7 @@ Summary:  CentOS7下 DPDK18 安装~
  
  
  
- EAL: Detected 1 lcore(s)
+EAL: Detected 1 lcore(s)
 EAL: Detected 1 NUMA nodes
 EAL: Multi-process socket /var/run/dpdk/rte/mp_socket
 EAL: No free hugepages reported in hugepages-1048576kB
