@@ -5,7 +5,7 @@ Category: 安全
 Tags: DPDK
 Slug: N9
 Authors: nJcx
-Summary:  CentOS7 DPDK18 安装~
+Summary:  CentOS7下 DPDK18 安装~
 
 #### 安装
 
