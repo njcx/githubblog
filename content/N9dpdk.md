@@ -81,6 +81,11 @@ No 'Compress' devices detected
 手动绑定（备选）
 
 ```bash
+
+# make config T=x86_64-native-linuxapp-gcc
+# make
+# make install T=x86_64-native-linuxapp-gcc
+
 # cd /opt/dpdk-18.11/x86_64-native-linuxapp-gcc/kmod
 # modprobe uio
 # insmod igb_uio.ko
