@@ -40,7 +40,6 @@ Summary:  CentOS7下 DPDK18 安装~
 
 即可
 
-
 [18] Insert IGB UIO module
 
 Loading DPDK UIO module
@@ -77,8 +76,17 @@ No 'Compress' devices detected
 
 ```
 
+安装完成后，最后一步骤
 
-手动绑定（备选）
+```bash
+
+# make install T=x86_64-native-linuxapp-gcc 
+
+```
+
+
+
+手动安装，绑定网卡（备选）
 
 ```bash
 
