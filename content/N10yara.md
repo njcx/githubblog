@@ -174,6 +174,7 @@ go build --ldflags '-extldflags "-static -lm"' test.go
 ```bash
 
 https://github.com/Velocidex/go-yara
+该库集成了yara 的c代码
 
 go build --ldflags '-extldflags "-static -lm"' test.go  
 
