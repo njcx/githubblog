@@ -5,7 +5,7 @@ Category: 安全
 Tags: PF_RING
 Slug: N12
 Authors: nJcx
-Summary: 高版本Packetbeat借pcap兼容PF_RING~
+Summary: 高版本Packetbeat借Pcap兼容PF_RING~
 
 #### 安装
 
