@@ -33,3 +33,17 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
 ```
 
 ![linux提权](../images/WechatIMG169.png)
+
+
+- 内核漏洞提权
+
+
+- SUID 提权
+
+
+- 环境变量提权
+
+
+-  
+
+ 
