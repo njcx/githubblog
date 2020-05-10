@@ -1,11 +1,11 @@
-Title: Linux 提权
+Title: Linux环境的下提权方式总结
 Date: 2018-06-15 03:20
 Modified: 2018-06-15 03:20
 Category: 安全
-Tags: Nmap
+Tags: Linux
 Slug: O6
 Authors: nJcx
-Summary: 使用Masscan、Nmap、ELK做内网资产收集~
+Summary: Linux环境的下提权方式总结~
 
 #### 工具
 
