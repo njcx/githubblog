@@ -1,11 +1,11 @@
-Title: Linux rootkit
+Title: Linux环境下的Rootkit技术细节
 Date: 2018-06-17 03:20
 Modified: 2018-06-17 03:20
 Category: 安全
-Tags: Nmap
+Tags: Linux
 Slug: O4
 Authors: nJcx
-Summary: 使用Masscan、Nmap、ELK做内网资产收集~
+Summary: Linux环境下的Rootkit技术细节~
 
 #### 安装
 
