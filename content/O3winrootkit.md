@@ -5,7 +5,7 @@ Category: 安全
 Tags: Windows
 Slug: O3
 Authors: nJcx
-Summary: Linux环境下的Rootkit技术细节~
+Summary: Windows环境下的Rootkit技术细节~
 
 #### 安装
 
