@@ -32,6 +32,4 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
 
 ```
 
-
-
 ![linux提权](../images/WechatIMG169.png)
