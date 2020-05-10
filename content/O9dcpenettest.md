@@ -2,10 +2,10 @@ Title: Windows 域环境下的渗透测试
 Date: 2018-06-11 03:20
 Modified: 2018-06-11 03:20
 Category: 安全
-Tags: Nmap
+Tags: Windows
 Slug: O9
 Authors: nJcx
-Summary: 使用Masscan、Nmap、ELK做内网资产收集~
+Summary: Windows 域环境下的渗透测试~
 
 #### 安装
 

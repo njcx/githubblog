@@ -2,7 +2,7 @@ Title: Linux环境失陷机器命令和控制
 Date: 2018-06-10 03:20
 Modified: 2018-06-10 03:20
 Category: 安全
-Tags: Nmap
+Tags: Linux
 Slug: O10
 Authors: nJcx
 Summary: Linux环境失陷机器命令和控制~
