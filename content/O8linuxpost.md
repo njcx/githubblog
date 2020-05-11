@@ -14,14 +14,9 @@ Summary: Linux环境下的后渗透测试与权限维持~
 
 ```bash
 
-# yum install git gcc make libpcap-devel
-
-#git clone https://github.com/robertdavidgraham/masscan
-# cd masscan
-# make
-
-# cp bin/masscan  /bin
 
 ```
 
 ![icmp](../images/WechatIMG171.jpeg)
+
+
