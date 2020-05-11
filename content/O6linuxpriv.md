@@ -39,8 +39,13 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
  利用比如脏牛漏洞提权(CVE-2016-5195) overlayfs （CVE-2015-1328）
 ，等等
 
+上工具linux-exploit-suggester
+
 ![linux提权](../images/WechatIMG180.jpeg)
 
+
+
+用 overlayfs（CVE-2015-1328） 测试一下 
 ![linux提权](../images/WechatIMG182.jpeg)
  
 
