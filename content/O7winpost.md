@@ -1,11 +1,11 @@
-Title: 使用Masscan、Nmap、ELK做内网资产收集
-Date: 2018-07-16 03:20
-Modified: 2018-07-16 03:20
+Title: Windows环境下的后渗透测试与权限维持
+Date: 2018-06-12 03:20
+Modified: 2018-06-12 03:20
 Category: 安全
-Tags: Nmap
-Slug: N14
+Tags: Windows
+Slug: O7
 Authors: nJcx
-Summary: 使用Masscan、Nmap、ELK做内网资产收集~
+Summary: Windows环境下的后渗透测试与权限维持~
 
 #### 安装
 

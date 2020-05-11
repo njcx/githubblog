@@ -3,7 +3,7 @@ Date: 2018-07-28 20:20
 Modified: 2018-07-28 20:20
 Category: 安全
 Tags: flink
-Slug: N13
+Slug: O1
 Authors: nJcx
 Summary: 使用flink和syslog、flume做大规模主机日志审计~
 
