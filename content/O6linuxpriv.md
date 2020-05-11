@@ -46,10 +46,12 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
 
 
 用 脏牛漏洞提权(CVE-2016-5195) 测试一下 
+
 ![linux提权](../images/WechatIMG96.jpeg)
 
 
 用 overlayfs（CVE-2015-1328） 测试一下 
+
 ![linux提权](../images/WechatIMG182.jpeg)
  
 
