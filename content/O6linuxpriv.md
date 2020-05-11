@@ -35,7 +35,8 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
 ![linux提权](../images/WechatIMG169.png)
 
 
-- 内核漏洞提权
+#### 内核漏洞提权
+
  利用比如脏牛漏洞提权(CVE-2016-5195) overlayfs （CVE-2015-1328）
 ，等等
 
@@ -53,10 +54,10 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
  
 
 
-- SUID 提权
+#### SUID 提权
 
 
-- 环境变量提权
+#### 环境变量提权
 
 
 -  
