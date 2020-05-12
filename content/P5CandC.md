@@ -5,7 +5,7 @@ Category: 安全
 Tags: C&C
 Slug: P5
 Authors: nJcx
-Summary: C&C的一些隐藏策略~
+Summary: C&C的一些隐藏策略与防丢失~
 
 
 
