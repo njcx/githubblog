@@ -1,4 +1,4 @@
-Title: ossec的rootkit_trojans.txt的理解
+Title: OSSEC的rootkit_trojans.txt的理解
 Date: 2017-05-27 12:21
 Modified: 2017-05-27 12:21
 Category: 安全

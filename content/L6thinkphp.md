@@ -1,4 +1,4 @@
-Title: thinkphp、laravel 0day合集
+Title: Thinkphp、Laravel 0day合集
 Date: 2017-06-5 15:20
 Modified: 2017-06-5 15:20
 Category: 安全
