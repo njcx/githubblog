@@ -1,4 +1,4 @@
-Title: DDOS种类与防御
+Title: DDoS种类与防御
 Date: 2018-06-07 01:20
 Modified: 2018-06-07 01:20
 Category: 安全
