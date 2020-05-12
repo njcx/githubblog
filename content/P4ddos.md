@@ -5,7 +5,17 @@ Category: 安全
 Tags: DDOS
 Slug: P4
 Authors: nJcx
-Summary: DDOS种类与防御~
+Summary: DDoS种类与防御~
 
-#### 安装
+
+
+#### TCP
+
+
+#### UDP
+
+
+#### 应用层反射
+
+
 
