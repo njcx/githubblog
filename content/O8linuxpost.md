@@ -10,13 +10,21 @@ Summary: Linux环境下的后渗透测试与权限维持~
 #### 安装
 
 
-安装masscan
 
-```bash
-
-
-```
 
 ![icmp](../images/WechatIMG171.jpeg)
 
+#### 添加ROOT账号/添加普通用户，设置隐藏的SUID Shell/ 插入SSH公钥
+
+
+#### 各种反弹Shell/隐蔽隧道Shell
+
+
+#### PAM 后门
+
+
+#### SSH 后门
+
+
+#### Rootkit
 
