@@ -1,11 +1,11 @@
-Title: 抓包和nids规则编写
+Title: 抓包和NIDS规则编写
 Date: 2018-05-29 13:20
 Modified: 2018-05-29 13:20
 Category: 安全
 Tags: nids
 Slug: H1
 Authors: nJcx
-Summary: 抓包和nids规则编写
+Summary: 抓包和NIDS规则编写
 
 ##### 两种抓包方式
 

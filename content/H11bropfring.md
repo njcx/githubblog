@@ -1,4 +1,4 @@
-Title: 安装 bro-2.5.5和pf_ring 
+Title: 安装 Bro-2.5.5和PF_RING
 Date: 2018-06-05 10:20
 Modified: 2018-06-05 10:20
 Category: bro
