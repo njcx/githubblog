@@ -26,5 +26,8 @@ Summary: Linux环境下的后渗透测试与权限维持~
 #### SSH 后门
 
 
+#### 预加载型动态链接库后门ld.so.preload/进程注入
+
+
 #### Rootkit
 
