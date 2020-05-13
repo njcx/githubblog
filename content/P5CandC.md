@@ -27,6 +27,8 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 ```
 
 
+#### 各种隧道，加密（icmp隧道/ssh隧道/dns隧道/http隧道）
+
 
 #### DGA 算法
 
