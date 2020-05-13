@@ -29,7 +29,12 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 #### 
 
 
-####
+#### 利用一些在线网站或者程序做为C2 Server
+
+
+比如， gmail，github，twitter，telegram等等
+
+
 
 
 
