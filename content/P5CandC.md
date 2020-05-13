@@ -26,7 +26,9 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 
 ```
 
-#### 
+
+
+#### DGA 算法
 
 
 #### 利用一些在线网站或者程序做为C2 Server
