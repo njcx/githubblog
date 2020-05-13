@@ -13,17 +13,11 @@ Summary: C&C的一些隐藏策略与防丢失~
 
 ```bash
 https://github.com/malwaredllc/byob.git
-
 https://github.com/sweetsoftware/Ares.git
-
 https://github.com/UBoat-Botnet/UBoat.git
-
 https://github.com/sin5678/gh0st.git
-
 https://github.com/alibawazeeer/rat-njrat-0.7d-modded-source-code.git
-
 https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
-
 ```
 
 

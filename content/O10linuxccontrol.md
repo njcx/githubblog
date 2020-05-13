@@ -6,6 +6,7 @@ Tags: Linux
 Slug: O10
 Authors: nJcx
 Summary: Linux环境失陷机器命令和控制~
+Status: draft
 
 #### 安装
 

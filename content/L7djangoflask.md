@@ -1,11 +1,11 @@
-Title: django、flask 0day合集
+Title: Django、Flask 0day合集
 Date: 2017-06-6 15:20
 Modified: 2017-06-6 15:20
 Category: 安全
 Tags: django、flask 0day
 Slug: L7
 Authors: nJcx
-Summary: django、flask 0day合集
+Summary: Django、Flask 0day合集
 
 
 - Django任意代码执行漏洞 
