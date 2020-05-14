@@ -7,6 +7,13 @@ Slug: O9
 Authors: nJcx
 Summary: Windows 域环境下的渗透测试~
 
+#### 
+
+```bash
+
+https://github.com/uknowsec/Active-Directory-Pentest-Notes
+
+```
 
 #### 域成员主机到域控
 
