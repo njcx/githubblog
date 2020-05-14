@@ -11,7 +11,8 @@ Summary: DDoS种类与防御~
 #### 工具
 
 ```bash
-https://github.com/cxueqin/falcon.git  //tfn2k
+https://github.com/poornigga/tfn2k.git
+https://github.com/cxueqin/falcon.git  //tfn2k web版本
 https://github.com/GinjaChris/pentmenu.git
 https://github.com/OffensivePython/Saddam.git
 https://github.com/649/Memcrashed-DDoS-Exploit
@@ -21,7 +22,7 @@ https://github.com/649/Memcrashed-DDoS-Exploit
 
 - SYN FLOOD 
 
-SYN FLOOD攻击是在TCP三次握手过程中产生的。攻击者通过发送大量伪造的带有SYN标志位的TCP报文，与目标主机建立了很多虚假的半开连接，在服务器返回SYN+ACK数据包后，攻击者不对其做出响应，也就是不返回ACK数据包给服务器，这样服务器就会一直等待直到超时。这种攻击方式会使目标服务器连接资源耗尽、链路堵塞，从而达到拒绝服务的目的。SYN FLOOD攻击图示如下
+SYN FLOOD攻击是在TCP三次握手过程中产生的。攻击者通过发送大量伪造的带有SYN标志位的TCP报文，与目标主机建立了很多虚假的半开连接，在服务器返回SYN+ACK数据包后，攻击者不对其做出响应，也就是不返回ACK数据包给服务器，这样服务器就会一直等待直到超时。这种攻击方式会使目标服务器连接资源耗尽、链路堵塞，从而达到拒绝服务的目的。
 
 - ACK FLOOD
 
@@ -36,17 +37,30 @@ ACK FLOOD攻击是利用TCP三次握手过程。这里可以分为两种。
   TCP协议头部有一个标志位称为“RST”位，正常的数据包中该位为0，一旦该位设置为1,则接收该数据包的主机将立即断开TCP会话。TCP Reset攻击中，攻击者可以伪造TCP连接其中的一方给另一方发送带有RST位的包来断开TCP连接，但是要确保这个数据包的源IP地址、源端口号、目的IP地址、目的端口号、序列号等特征符合已有TCP连接的特征。
 
 
+![ICMP](../images/WechatIMG103.jpeg)
+
+![ICMP](../images/WechatIMG104.jpeg)
+
+
 #### UDP
 
 - UDP Flood
 
-UDP协议与TCP协议不同， UDP是一个无连接协议。使用UDP协议传输数据之前，客户端和服务器之间不建立连接，UDP Flood属于带宽类攻击，黑客们通过僵尸网络向目标服务器发起大量的UDP报文，可以使用小数据包(64字节)进行攻击,也可以使用大数据包(大于1500字节,以太网MTU为1500字节)进行攻击。大量小数据包会增大网络设备处理数据包的压力；而对于大数据包，网络设备需要进行分片、重组，迅速造成链路拥塞
+UDP协议与TCP协议不同， UDP是一个无连接协议。使用UDP协议传输数据之前，客户端和服务器之间不建立连接，UDP Flood属于带宽类攻击，黑客们通过僵尸网络向目标服务器发起大量的UDP报文，可以使用小数据包(64字节)进行攻击,也可以使用大数据包(大于1500字节,以太网MTU为1500字节)进行攻击。大量小数据包会增大网络设备处理数据包的压力；而对于大数据包，网络设备需要进行分片、重组，迅速造成链路拥塞。
+
+![UDP](../images/WechatIMG101.jpeg)
+
+![UDP](../images/WechatIMG102.jpeg)
 
 
 #### ICMP
 
 - ICMP Echo Flood     
 ICMP协议位于IP层，主要通过含有ICMP功能的主机与路由器之间发送ICMP数据包，来达到实现信息查询和错误通知的功能。因此攻击者利用icmp获取主机信息，时间、路由信息等。所以为攻击者创造了极大得便利条件。攻击者通过足够快的数据包速度和足够的带宽，对目标发出攻击请求，造成网络拥堵。
+
+![ICMP](../images/WechatIMG99.jpeg)
+
+![ICMP](../images/WechatIMG100.jpeg)
 
 - ICMP Blacknurse  
 
