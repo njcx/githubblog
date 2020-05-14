@@ -11,6 +11,7 @@ Summary: DDoS种类与防御~
 #### 工具
 
 ```bash
+https://github.com/cxueqin/falcon.git  //tfn2k
 https://github.com/GinjaChris/pentmenu.git
 https://github.com/OffensivePython/Saddam.git
 https://github.com/649/Memcrashed-DDoS-Exploit
@@ -66,6 +67,9 @@ BlackNurse攻击基于Type3（Destination Unreachable） Code3（Port Unreachabl
 
 #### 防御
 
+
+
+
 防御：
 SYNCheck：使用防护设备，3次握手变成了6次握手，由防护设备检测SYN请求是否合法，通过后再由防护设备将报文转发给服务器，后续报文仍由防护设备代理。
 Micro blocks：管理员可以在内存中为每个SYN请求创建一个小索引(小于16字节)，而不必把整个连接对象存入内存。
@@ -90,4 +94,9 @@ STACK tweaking：管理员可以调整TCP堆栈以减缓SYN泛洪攻击的影响
 
  
 防火墙防御UDP Flood攻击主要有两种方式：限流和指纹学习，两种方式各有利弊。限流方式属于暴力型，可以很快将UDP流量限制在一个合理的范围内，但是不分青红皂白，超过就丢，可能会丢弃一些正常报文；而指纹学习属于理智型，不会随意丢弃报文，但是发生攻击后需要有个指纹学习的过程。目前，指纹学习功能是针对UDP Flood攻击的主流防御手段，在华为防火墙产品中广泛应用。
+
+
+ICMP 防御：
+
+可以考虑禁用ICMP 协议
 
