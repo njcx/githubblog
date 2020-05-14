@@ -14,4 +14,7 @@ Summary: Windows环境的下提权方式总结~
 ```bash
 https://github.com/SecWiki/windows-kernel-exploits
 
+https://github.com/AonCyberLabs/Windows-Exploit-Suggester  //比较老了，可以考虑用下面的
+
+https://github.com/johnchakauya/wesng.git
 ```
