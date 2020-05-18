@@ -595,9 +595,14 @@ http://www.cloudera.com/documentation/cdh/5-1-x/CDH5-Security-Guide/cdh5sg_hbase
 2.7.6 Spark
 Spark是UC Berkeley AMP lab所开源的类Hadoop MapReduce的通用的并行计算框架，Spark基于map reduce算法实现的分布式计算，拥有Hadoop MapReduce所具有的优点；但不同于MapReduce的是Job中间输出和结果可以保存在内存中，从而不再需要读写HDFS。
 
+
 参考：
 
 http://cwiki.apachecn.org/pages/viewpage.action?pageId=2887905
+
+- Flink 
+
+Apache Flink 任意jar包上传漏洞
 
 
 
