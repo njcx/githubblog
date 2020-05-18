@@ -263,6 +263,15 @@ Exchange
 IBM Lotus
 
 
+Jira
+
+Confluence 
+
+Bitbucket
+
+Teambition 
+
+
 CMS 应用
 2.4 数据库/缓存/消息服务
 
