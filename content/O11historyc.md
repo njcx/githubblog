@@ -12,6 +12,41 @@ Summary: Windows&Linux环境的痕迹清理~
 
 #### Windows 痕迹清理
 
+```bash
+
+https://github.com/hlldz/Invoke-Phant0m.git
+
+```
+
+Windows的日志文件通常有应用程序日志，安全日志、系统日志、DNS服务器日志、FTP日志、WWW日志等等。
+应用程序日志文件：%systemroot%\system32\config\AppEvent.EVT;
+
+安全日志文件：%systemroot%\system32\config\SecEvent.EVT;
+
+系统日志文件：%systemroot%\system32\config\SysEvent.EVT;
+
+DNS日志默认位置：%sys temroot%\system32\config，默认文件大小512KB
+
+Internet信息服务FTP日志默认位置：%systemroot%\system32\logfiles\msftpsvc1\，默认每天一个日志;
+
+Internet信息服务WWW日志默认位置：%systemroot%\system32\logfiles\w3svc1\，默认每天一个日志;
+
+Scheduler服务日志默认位置：%sys temroot%\schedlgu.txt;
+
+
+```bash
+
+@del c:\%systemroot%\system32\config\*.evt
+@del c:\%systemroot%\system32\logfiles\*.*
+@del c:\%systemroot%\system32\*.log
+@del c:\%systemroot%\system32\*.txt
+@del c:\%systemroot%\system32\Winevt\Logs\*.evt
+@del c:\%systemroot%\*.evt
+@del c:\%systemroot%\*.log
+@del cl.bat
+
+```
+
 
 
 #### Linux痕迹清理
