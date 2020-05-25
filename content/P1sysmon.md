@@ -104,6 +104,13 @@ sysmon -c xxx.xml
  
  ```
   
+  
+  一些配置规则
+  
+ ```bash
+ https://github.com/sametsazak/sysmon.git
+ 
+ ```
  
  ```bash
   
