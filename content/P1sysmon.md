@@ -72,6 +72,37 @@ https://download.sysinternals.com/files/Sysmon.zip
 sysmon -c xxx.xml
 注：安装需要管理员权限并重启，windows 7 或者以上，服务器系统windows server 2012 及以上。   
   
+ 配置样例
+  
+ ```bash
+ <Sysmon schemaversion="4.21">
+<!-- Capture all hashes -->
+<HashAlgorithms>*</HashAlgorithms> <!--哈希配置(默认使用sha1) -->
+<EventFiltering> <!--事件筛选-->
+<!-- Log all drivers except if the signature -->
+<!-- contains Microsoft or Windows -->
+<DriverLoad onmatch="exclude"> <!--默认记录所有日志 除非标记 ? -->
+     <Signature condition="contains">microsoft</Signature>
+     <Signature condition="contains">windows</Signature>
+</DriverLoad>
+<!-- Do not log process termination -->
+<!--不记录进程终止-->
+<ProcessTerminate onmatch="include" />
+<!-- Log network connection if the destination port equal 443 -->
+<!-- or 80, and process isn't InternetExplorer -->
+<NetworkConnect onmatch="include">
+     <DestinationPort>443</DestinationPort> <!-- 记录443 端口连接记录-->
+     <DestinationPort>80</DestinationPort>
+</NetworkConnect>
+<NetworkConnect onmatch="exclude">
+     <Image condition="end with">iexplore.exe</Image>
+</NetworkConnect>
+</EventFiltering>
+</Sysmon>
+ -- 配置条目直接位于Sysmon 标签下, 过滤器位于 EventFiltering 标签下 
+
+ 
+ ```
   
  
  ```bash
