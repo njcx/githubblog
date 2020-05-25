@@ -73,6 +73,35 @@ sysmon -c xxx.xml
 注：安装需要管理员权限并重启，windows 7 或者以上，服务器系统windows server 2012 及以上。   
   
   
+ 
+ ```bash
+  
+ ProcessCreate            进程创建
+ FileCreateTime           文件创建时间更改
+ NetworkConnect           检测到网络连接
+ ProcessTerminate         进程终止
+ DriverLoad               驱动程序已加载
+ ImageLoad                镜像加载
+ CreateRemoteThread       已检测到创建远程线程
+ RawAccessRead            检测到原始访问读取
+ ProcessAccess            已访问的进程
+ FileCreate               文件创建
+ RegistryEvent            添加或删除注册表对象
+ RegistryEvent            注册表值设置
+ RegistryEvent            注册表对象已重命名
+ FileCreateStreamHash     已创建文件流
+ PipeEvent                管道创建
+ PipeEvent                管道已连接
+ WmiEvent                 检测到WmiEventFilter活动 -- WmiEventFilter activity detected
+ WmiEvent                 检测到WmiEventConsumer活动 -- WmiEventConsumer activity detected
+ WmiEvent                 检测到WmiEventConsumerToFilter活动 -- WmiEventConsumerToFilter activity 
+ DnsQuery                 DNS查询
+
+ ```
+ 
+ 
+ 
+ 
   
  我们也可以使用一些工具辅助我们分析，如下：
  
