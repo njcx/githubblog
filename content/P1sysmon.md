@@ -71,9 +71,27 @@ https://download.sysinternals.com/files/Sysmon.zip
 
 sysmon -c xxx.xml
 注：安装需要管理员权限并重启，windows 7 或者以上，服务器系统windows server 2012 及以上。   
-   
+  
+  
+  
+ 我们也可以使用一些工具辅助我们分析，如下：
+ 
+ 
+Sysmon View：Sysmon日志可视化工具
+
+Sysmon Shell：Sysmon配置文件生成工具
+
+Sysmon Box：Sysmon和网络捕获日志记录工具
 
 
+
+ 
+
+```bash
+
+https://github.com/nshalabi/SysmonTools
+
+```
 
    
  #### 防御
