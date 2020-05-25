@@ -15,3 +15,89 @@ Summary: Windows攻防之sysmon的使用与绕过~
   Sysmon安装后分为用户态系统服务，驱动两部分，用户态通过ETW(Event Tracing for Windows)实现对网络数据记录，通过EventLog对驱动返回的数据进行解析，驱动部分则通过进、线程，模块的回调函数收集进程相关的信息，通过Minifilter文件过滤驱动和注册表回调函数记录访问文件、注册表的数据。
   
    从功能上来讲，Sysmon是一款优秀的HIDS、EDR的主机入侵检测引擎，其依托于Windows内核层进、线程，模块，注册表回调，及文件过滤驱动针对相应的行为进行实时的增、删、改信息收集并通过ETW存储并展示于Windows日志。
+   
+   
+   
+#### 安装
+
+```bash
+    Install:    Sysmon.exe -i <configfile>
+    [-h <[sha1|md5|sha256|imphash|*],...>] [-n [<process,...>]]
+    [-l (<process,...>)]
+
+    Configure:  Sysmon.exe -c <configfile>
+                  [--|[-h <[sha1|md5|sha256|imphash|*],...>] [-n [<process,...>]]
+                   [-l [<process,...>]]]
+
+    Uninstall:  Sysmon.exe -u
+     
+```
+
+
+-c 更新或显示配置
+
+-h 指定hash记录的算法
+
+-i 安装，可用xml文件来更新配置文件
+
+-l 记录加载模块，可指定进程
+
+-m 安装事件清单
+
+-n 记录网络链接
+
+-r 检测证书是否撤销
+
+-u 卸载服务和驱动
+
+一键安装：
+
+ sysmon -accepteula  –i -n
+指定配置文件（安装时请用-i）
+
+sysmon -c xxx.xml
+注：安装需要管理员权限并重启，windows 7 或者以上，服务器系统windows server 2012 及以上。   
+   
+
+
+
+   
+ #### 防御
+ 
+ 
+ 
+ 
+ 
+ #### 绕过
+ 
+ 
+ 
+ 阻断Sysmon​：
+
+1.   管理员权限CMD执行fltMC.exe upload SysmonDrv直接卸载
+
+
+2.   删除Sysmon规则
+
+
+3.    停止Sysmon驱动
+
+
+4.    结束Sysmon日志句柄的对应进程可间接停止Windows EventLog服务
+
+5.   使用Mimikatz中Event::Drop使日志服务暂停，对wevtsvc.dll链接库劫持 
+
+下面这个工具，也可以达到类似的功能
+
+```bash 
+https://github.com/bats3c/Ghost-In-The-Logs
+```
+ 
+ 
+ 
+ 
+   
+   
+   
+   
+   
