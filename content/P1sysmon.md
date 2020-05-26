@@ -74,7 +74,8 @@ sysmon -c xxx.xml
   
  配置样例
   
- ```bash
+```bash
+
  <Sysmon schemaversion="4.21">
 <!-- Capture all hashes -->
 <HashAlgorithms>*</HashAlgorithms> <!--哈希配置(默认使用sha1) -->
@@ -101,18 +102,17 @@ sysmon -c xxx.xml
 </Sysmon>
  -- 配置条目直接位于Sysmon 标签下, 过滤器位于 EventFiltering 标签下 
 
- 
- ```
+```
   
   
   一些配置规则
-  
- ```bash
+
+```bash
  https://github.com/sametsazak/sysmon.git
  
- ```
+```
  
- ```bash
+```bash
   
  ProcessCreate            进程创建
  FileCreateTime           文件创建时间更改
@@ -135,7 +135,7 @@ sysmon -c xxx.xml
  WmiEvent                 检测到WmiEventConsumerToFilter活动 -- WmiEventConsumerToFilter activity 
  DnsQuery                 DNS查询
 
- ```
+```
  
  
 我们可以使用 winlogbeat采集到elk，也可以使用wazuh完成数据日志采集，然后用来分析
