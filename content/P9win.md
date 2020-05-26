@@ -23,7 +23,6 @@ https://blog.csdn.net/qq_20307987/article/details/85087960
 
 ```bash
 
-
 certutil-----从远程url下载文件
 案例:certutil -urlcache  -split  -f http://baidu.com/test.exe
 
@@ -146,10 +145,6 @@ winrs -r:https://myserver.com -t:600 -u:administrator -p:$%fgh7 ipconfig
 winrs -r:myserver -env:PATH=^%PATH^%;c:\tools -env:TEMP=d:\temp config.cmd
 winrs -r:myserver netdom join myserver /domain:testdomain /userd:johns /passwordd:$%fgh789
 winrs -r:myserver -ad -u:administrator -p:$%fgh7 dir \\anotherserver\share
-
-
-
-
 
 ```
 
