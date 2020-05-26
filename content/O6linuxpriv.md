@@ -50,6 +50,24 @@ http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
 #### SUID 提权
 
 
+SUID是赋予文件的一种权限，它会出现在文件拥有者权限的执行位上，具有这种权限的文件会在其执行时，使调用者暂时获得该文件拥有者的权限。也就是如果ROOT用户给某个可执行文件加了S权限，那么该执行程序运行的时候将拥有ROOT权限。
+
+以下命令可以发现系统上运行的所有SUID可执行文件
+
+```bash
+find / -perm -u=s -type f 2>/dev/null
+find / -user root -perm -4000-print2>/dev/null
+find / -user root -perm -4000-exec ls -ldb {} \;
+
+```
+配合进行提权
+
+```bash
+https://gtfobins.github.io/
+```
+
+
+
 #### 环境变量提权
 
 
