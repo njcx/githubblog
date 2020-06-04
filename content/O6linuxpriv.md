@@ -74,5 +74,32 @@ https://gtfobins.github.io/
 
 
 
-#### 
+#### 配置错误提权
+
+
+####  其他工具提权
+
+
+
+OpenSMTPD 提权
+
+Exim 4.87 / 4.91 提权
+
+Ubuntu 18.04 - 'lxd'  提权
+
+Serv-U FTP Server  提权
+
+systemtap 1.1-3.el5  提权
+
+Chkrootkit 0.49  提权
+
+OSSEC 2.8 - 'hosts.deny'  提权
+
+Docker Daemon 	提权
+
+
+ 
+
+
+
  
