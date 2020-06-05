@@ -110,6 +110,10 @@ sysmon -c xxx.xml
 ```bash
  https://github.com/sametsazak/sysmon.git
  
+ https://github.com/SwiftOnSecurity/sysmon-config
+ 
+ https://github.com/ion-storm/sysmon-config
+ 
 ```
  
 ```bash
