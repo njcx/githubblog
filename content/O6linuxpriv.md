@@ -21,6 +21,8 @@ https://github.com/jondonas/linux-exploit-suggester-2.git
 https://github.com/belane/linux-soft-exploit-suggester.git
 linuxprivchecker： https://www.securitysift.com/download/linuxprivchecker.py
 http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz
+https://github.com/rebootuser/LinEnum
+https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
 ```
 
 ![linux提权](../images/WechatIMG169.png)
