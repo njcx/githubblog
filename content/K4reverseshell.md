@@ -1,11 +1,11 @@
-Title: 反弹Shell总结
+Title: Linux反弹Shell总结
 Date: 2017-05-27 14:20
 Modified: 2017-05-27 14:20
 Category: 安全
 Tags: 反弹shell
 Slug: K4
 Authors: nJcx
-Summary: 反弹shell总结
+Summary: Linux反弹shell总结
 
 
 
