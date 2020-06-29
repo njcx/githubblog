@@ -100,6 +100,11 @@ OSSEC 2.8 - 'hosts.deny'  提权
 Docker Daemon 	提权
 
 
+使用Chkrootkit 0.49  提权
+
+![linux提权](../images/msfchk.png)
+
+![linux提权](../images/msfchk1.png)
  
 
 
