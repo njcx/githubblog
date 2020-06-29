@@ -53,6 +53,21 @@ execute
 
 
 ```
+
+
+
+使用 cve-2019-1458 提权
+
+![提权](../images/WechatIMG13.jpeg)
+
+
+使用  CVE-2020-0787 提权
+
+![提权](../images/WechatIMG14.jpeg)
+
+![提权](../images/WechatIMG15.jpeg)
+
+
 2，系统配置错误提权
 
 
