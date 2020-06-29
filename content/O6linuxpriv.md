@@ -40,7 +40,7 @@ https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/m
 
 用 脏牛漏洞提权(CVE-2016-5195) 测试一下 
 
-![linux提权](../images/WechatIMG96.jpeg)
+![linux提权](../images/cow1.png)
 
 
 用 overlayfs（CVE-2015-1328） 测试一下 
@@ -67,6 +67,9 @@ find / -user root -perm -4000-exec ls -ldb {} \;
 ```bash
 https://gtfobins.github.io/
 ```
+
+下面做个演示
+
 
 
 
