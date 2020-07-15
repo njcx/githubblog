@@ -58,6 +58,8 @@ exit
 
 ```
 
+![sysmon](../images/WechatIMG3.jpeg)
+
 
 
 然后安装 Winlogbeat
