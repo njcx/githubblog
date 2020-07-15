@@ -61,3 +61,10 @@ exit
 
 
 然后安装 Winlogbeat
+
+
+```bash
+https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows-x86_64.msi
+
+```
+
