@@ -1,11 +1,11 @@
-Title: docker 常用命令记录
+Title: Docker 常用命令记录
 Date: 2017-02-16 10:20
 Modified: 2017-02-16 10:20
 Category: Linux
 Tags: docker
 Slug: B4
 Authors: nJcx
-Summary: 介绍一下docker常用命令，记录一下学习过程
+Summary: 介绍一下Docker常用命令，记录一下学习过程
 #### 查看docker信息（version、info）
 
 - 查看docker版本  
