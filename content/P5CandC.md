@@ -136,7 +136,7 @@ DGA的缺点
 
 
 
-#### 利用一些在线网站或者程序做为C2 Server
+#### 利用一些在线网站或者程序做为C2 Server或者中转C2 Server真实IP
 
 
 比如， gmail，github，twitter，telegram等等
@@ -160,6 +160,53 @@ https://github.com/maldevel/canisrufus
 https://github.com/blazeinfosec/bt2
 
 ```
+
+主要有两种玩法：
+
+1， 直接做C2 Server 
+
+比如， getlook23使用GitHub Issues作为C2
+
+![botnet2](../images/command_edit.png)
+
+
+解析出来就是
+
+```bash
+
+1. whoami
+2. "\r\nUser accounts for \\\\JOHN-PC\r\n\r\n-------------------------------------------------------------------------------\r\nAdministrator            Guest                    John                     \r\nThe command completed successfully.\r\n\r\n----John"
+3.  "\r\nUser accounts for \\\\BEA-CHI-T-7PR01\r\n\r\n-------------------------------------------------------------------------------\r\n5upervisor               Administrator            Guest                    \r\nJohn Doe                 \r\nThe command completed successfully.\r\n\r\n----John Doe"
+4.  "john-pc\\administrator\r\n----Administrator"
+5.  "warzone1\\worker\r\n----worker"
+6.  "win7pro-maltest\\buf\r\n----BUF"
+7.  "anna-pc\\anna\r\n----anna"
+8.  "johnson-pc\\johnson\r\n----Johnson"
+9.  "klone-pc\\admin\r\n----admin"
+10. "john-pc\\john\r\n----John"
+11. "admin-win7\admin\r\n----Admin"
+12. "admin-win7\admin\r\n----Admin"
+13. "admin-win7\admin\r\n----Admin"
+14. "warzone1\worker\r\n----worker"
+15. "warzone1\worker\r\n----worker"
+16. "warzone1\worker\r\n----worker"
+17. "od-sploit\od\r\n----od"
+18. "bea-chi-t-7pr01\john doe\r\n----John Doe"
+
+```
+
+
+2， 把C2 Server IP 或者Dns域名藏起来（比如，藏到repo里面），解析到真正的C2的地址
+
+
+![botnet2](../images/winnti-github-5.png)
+
+
+
+
+
+
+
 
 
 
