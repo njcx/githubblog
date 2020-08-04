@@ -31,19 +31,64 @@ DGA算法最早是在2008年的Conficker恶意软件中发现的。Conficker的�
 
 ![botnet1](../images/botnets1.png)
 
+传统僵尸网络基础架构
 
 ![botnet2](../images/botnets2.png)
+
+DGA僵尸网络基础架构
+
+
+
+
+Banjori  DGA 域名生成
+
+```python
+
+def map_to_lowercase_letter(s):
+    return ord('a') + ((s - ord('a')) % 26)
+
+def next_domain(domain):
+    dl = [ord(x) for x in list(domain)]
+    dl[0] = map_to_lowercase_letter(dl[0] + dl[3])
+    dl[1] = map_to_lowercase_letter(dl[0] + 2*dl[1])
+    dl[2] = map_to_lowercase_letter(dl[0] + dl[2] - 1)
+    dl[3] = map_to_lowercase_letter(dl[1] + dl[2] + dl[3])
+    return ''.join([chr(x) for x in dl])
+
+seed = 'earnestnessbiophysicalohax.com' # 15372 equal to 0 (seed = 0)
+domain = seed
+for i in range(1000):
+    print(domain)
+    domain = next_domain(domain)
+
+```
+
+```bash
+
+zfrpestnessbiophysicalohax.com
+hdquestnessbiophysicalohax.com
+umcuestnessbiophysicalohax.com
+hrbyestnessbiophysicalohax.com
+ysrtestnessbiophysicalohax.com
+kgteestnessbiophysicalohax.com
+hfsnestnessbiophysicalohax.com
+njxfestnessbiophysicalohax.com
+lpagestnessbiophysicalohax.com
+kacuestnessbiophysicalohax.com
+
+```
+
 
 DGA的优点
 
 1、使用DGA的僵尸网络有较为健壮的寻址方式，可对抗域名黑名单屏蔽、静态声望系统以及特征码检测系统。
-2、DGA是一种理想的备用信道，可作为back up手段恢复僵尸网络控制，如Zeus v3。
+2、DGA是一种理想的备用信道，可作为back up手段恢复僵尸网络控制。
 
 DGA的缺点
 
 1、需要逐一便利AGD，寻址效率低。
-2、大量NXDomain流量导致通信易被检测发现。
-3、如果AGD数量过多，出于时间和金钱成本开销，攻击者难以全部注册，防御人员可以抢注并通过sinkhole手段测量或劫持僵尸网络
+2、大量NX Domain流量导致通信易被检测发现。
+3、如果DGA数量过多，出于时间和金钱成本开销，攻击者难以全部注册，防御人员可以抢注并通过sink hole手段劫持僵尸网络
 
 
 
