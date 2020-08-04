@@ -82,7 +82,9 @@ DGA僵尸网络基础架构
 
 ![DGA](../images/DGA.png)
 
-Banjori  DGA 域名生成
+DGA算法生成逻辑
+
+Banjori  DGA 域名生成算法
 
 ```python
 
