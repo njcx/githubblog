@@ -53,8 +53,11 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 
 
 可以看出DNS隧道的一些特征
+
 1， 请求的Type一般都是TXT（为了能够加入更多的信息）
+
 2， payload部分一般都会编码（可能为base64、2进制或16进制）后放到子域名里面，而且多变，不一致
+
 3， DNS发生频率很高，短时间为了发送大量数据，会产生大量请求
 
 
