@@ -33,6 +33,34 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 比如， gmail，github，twitter，telegram等等
 
 
+```bash
+
+https://github.com/maldevel/gdog
+
+```
+用Gmail 做C2 Server
+
+
+```bash
+
+https://github.com/maldevel/canisrufus
+
+```
+
+用Github 做C2 Server
+
+
+```bash
+
+https://github.com/blazeinfosec/bt2
+
+```
+用telegram 做C2 Server
+
+
+
+
+
 
 
 
