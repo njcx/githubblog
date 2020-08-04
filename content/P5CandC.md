@@ -109,27 +109,28 @@ DGA的缺点
 
 ```bash
 
+用Gmail 做C2 Server
 https://github.com/maldevel/gdog
 
 ```
-用Gmail 做C2 Server
+
 
 
 ```bash
-
+用Github 做C2 Server
 https://github.com/maldevel/canisrufus
 
 ```
 
-用Github 做C2 Server
+
 
 
 ```bash
-
+用telegram 做C2 Server
 https://github.com/blazeinfosec/bt2
 
 ```
-用telegram 做C2 Server
+
 
 
 
