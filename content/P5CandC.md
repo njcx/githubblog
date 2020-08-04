@@ -30,18 +30,35 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 
 ![icmp](../images/ishwireshark.jpeg)
 
+我们可以在 Data 里面可以看到一个ls
+
+
 ![icmp](../images/wireshark1.jpeg)
 
+返回的系统目录数据是放到Data里面的
 
+简单介绍一下 DNS协议，DNS协议是一个应用层协议，用来将域名转换为IP地址（也可以将IP地址转换为相应的域名地址），类似一个分布式数据库，数据通过udp传输,IP报头中的协议字段值为17.DNS隧道抓包如下：
 
 ![dns](../images/WechatIMG26.jpeg)
 
+我在被控机上抓包，如图，可以看出受控机器一直TXT请求 CentOS 控制机
+
 ![dns](../images/WechatIMG21.jpeg)
+
+可以看出我们的payload是 放到TXT字段里面，由CentOS 控制机响应给客户端的
 
 ![dns](../images/WechatIMG23.jpeg)
 
+然后，数据都分段放到子域名里面，分多次，再次用请求的方式，发送到我们的控制机器上了
 
 
+可以看出DNS隧道的一些特征
+1， 请求的Type一般都是TXT（为了能够加入更多的信息）
+2， payload部分一般都会编码（可能为base64、2进制或16进制）后放到子域名里面，而且多变，不一致
+3， DNS发生频率很高，短时间为了发送大量数据，会产生大量请求
+
+
+更多的内容，见本人的详细文章介绍，如下
 
 NIDS(suricata)中的ICMP隐蔽隧道检测
 https://www.freebuf.com/articles/es/243486.html
