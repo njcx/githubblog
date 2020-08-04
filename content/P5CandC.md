@@ -28,9 +28,20 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 我们先介绍一下 ICMP协议，ICMP的内容是放在ip数据包的数据部分里传输的，ICMP是基于IP协议工作的，我们要区别于传输层，它仍然属于网络层协议。ICMP报文包含在IP数据报中，IP报头在ICMP报文的最前面。一个ICMP报文包括IP报头（至少20字节）、ICMP报头（至少八字节）和ICMP报文（属于ICMP报文的数据部分）。当IP报头中的协议字段值为1时，就说明这是一个ICMP报文。重点关注 Checksum 字段和Data字段，因为我们改变Data字段的时候，Checksum也要改变,我们把我们的payload或者数据放到Data字段里面即可.我们分别使用，Linux和Windows测试一下， Linux ping 发出的Data的内容为 ：!\"#$%&'()*+,-./01234567  ， Windows ping 的发出的Data的内容为 abcdefghijklmnopqrstuvwabcdefghi. 一般攻击者会把Payload放到Data 字段里面，返回的内容也放到Data里面。
 
 
-![botnet2](../images/ishwireshark.jpeg)
+![icmp](../images/ishwireshark.jpeg)
 
-![botnet2](../images/wireshark1.jpeg)
+![icmp](../images/wireshark1.jpeg)
+
+
+
+![dns](../images/WechatIMG26.jpeg)
+
+![dns](../images/WechatIMG21.jpeg)
+
+![dns](../images/WechatIMG23.jpeg)
+
+
+
 
 NIDS(suricata)中的ICMP隐蔽隧道检测
 https://www.freebuf.com/articles/es/243486.html
