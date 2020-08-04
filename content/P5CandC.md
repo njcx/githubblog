@@ -29,6 +29,10 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 
 DGA算法最早是在2008年的Conficker恶意软件中发现的。Conficker的第一个变体（变体A）每天使用日期作为种子来产生250个不同的域名。后来FBI进行了报复，逆向了Conficker，并注册恶意软件使用的所有域（真的假的？）。随着Conficker恶意软件的发展，引入了另外4种恶意软件变体（从B到E），变体C每天生成超过50,000个域，从中随机选择仅500个域以尝试与C&C服务器进行通信。
 
+![botnet1](../images/botnet1.png)
+
+
+![botnet2](../images/botnet2.png)
 
 DGA的优点
 
