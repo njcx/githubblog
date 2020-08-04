@@ -40,6 +40,8 @@ DGA是恶意程序所使用的一种DNS技术，用于隐藏C2服务器。恶意
 DGA僵尸网络基础架构
 
 
+![DGA](../images/DGA.png)
+
 Banjori  DGA 域名生成
 
 ```python
