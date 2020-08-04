@@ -27,6 +27,11 @@ https://github.com/NYAN-x-CAT/RevengeRAT-Stub-CSsharp.git
 
 我们先介绍一下 ICMP协议，ICMP的内容是放在ip数据包的数据部分里传输的，ICMP是基于IP协议工作的，我们要区别于传输层，它仍然属于网络层协议。ICMP报文包含在IP数据报中，IP报头在ICMP报文的最前面。一个ICMP报文包括IP报头（至少20字节）、ICMP报头（至少八字节）和ICMP报文（属于ICMP报文的数据部分）。当IP报头中的协议字段值为1时，就说明这是一个ICMP报文。重点关注 Checksum 字段和Data字段，因为我们改变Data字段的时候，Checksum也要改变,我们把我们的payload或者数据放到Data字段里面即可.我们分别使用，Linux和Windows测试一下， Linux ping 发出的Data的内容为 ：!\"#$%&'()*+,-./01234567  ， Windows ping 的发出的Data的内容为 abcdefghijklmnopqrstuvwabcdefghi. 一般攻击者会把Payload放到Data 字段里面，返回的内容也放到Data里面。
 
+
+![botnet2](../images/ishwireshark.jpeg)
+
+![botnet2](../images/wireshark1.jpeg)
+
 NIDS(suricata)中的ICMP隐蔽隧道检测
 https://www.freebuf.com/articles/es/243486.html
 
@@ -95,7 +100,7 @@ DGA的优点
 
 DGA的缺点
 
-1、需要逐一遍历DGA，寻址效率低。
+1、需要遍历DGA列表，寻址效率低。
 2、大量NX Domain流量导致通信易被检测发现。
 3、如果DGA数量过多，出于时间和金钱成本开销，攻击者难以全部注册，安全人员可以抢注并通过sink hole手段劫持僵尸网络
 
@@ -108,21 +113,16 @@ DGA的缺点
 
 
 ```bash
-
 用Gmail 做C2 Server
 https://github.com/maldevel/gdog
 
 ```
-
-
 
 ```bash
 用Github 做C2 Server
 https://github.com/maldevel/canisrufus
 
 ```
-
-
 
 
 ```bash
