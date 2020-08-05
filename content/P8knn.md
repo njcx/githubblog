@@ -5,7 +5,8 @@ Category: 安全
 Tags: KNN
 Slug: P8
 Authors: nJcx
-Summary: 流量日志审计中常用的聚类算法（KNN）~
+Summary: 流量日志审计中常用的聚类算法（KNN）~、
+Status: draft
 
 
 #### 算法介绍
