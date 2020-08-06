@@ -11,8 +11,6 @@ Summary: 甲方自研分布式WAF落地全程实录~
 
 #### 架构
 
-![WAF](../images/WechatIMG6.jpeg)
-
 
 ![WAF](../images/WechatIMG7.jpeg)
 
