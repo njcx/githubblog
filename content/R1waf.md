@@ -22,26 +22,25 @@ if cc_policy  then
         local time = tonumber(util.split_str_table(cc_policy , ",")[1])   -- 单位时间
         local times = tonumber(util.split_str_table(cc_policy , ",")[2])  -- 请求次数
         local block_time = tonumber(util.split_str_table(cc_policy , ",")[3])  -- 封禁时间
-        local req, _ = ngx.shared.challenge:get("cc_deny_"..host..real_ip)
+        local req, _ = ngx.shared.cc:get("cc_deny_"..host..real_ip)
         if req then
             _M.log_record("cc_module", 'cc_01', 'cc',
                     'cc','cc attack)
             util.waf_output(block_template_cc)
             end
         end
-        local req_h, _ = ngx.shared.challenge:get(host..real_ip)
+        local req_h, _ = ngx.shared.cc:get(host..real_ip)
         if req_h then
             if req_h >= times then
-                ngx.shared.challenge:set("cc_deny_"..host..real_ip, "1", block_time*60)
-                _M.log_record("cc_module", 'cc_01', 'cc',
-                        'cc','cc attack')
+                ngx.shared.cc:set("cc_deny_"..host..real_ip, "1", block_time*60)
+                _M.log_record("cc_module", 'cc_01', 'cc', 'cc','cc attack')
                 util.waf_output(block_template_cc)
   
             else
-                ngx.shared.challenge:incr(host..real_ip, 1)
+                ngx.shared.cc:incr(host..real_ip, 1)
             end
         else
-            ngx.shared.challenge:set(host..real_ip, 1, time)
+            ngx.shared.cc:set(host..real_ip, 1, time)
         end
     end
     
@@ -66,9 +65,7 @@ if cc_policy  then
     if flow_count then
         if flow_count>= flow_max then
             ngx.shared.flow_control:set("flow_deny_"..host..real_ip, "1", block_time*60)
-            _M.log_record("flow_module", 'flow_01',
-                    'flow', 'flow',
-                    'flow policy')
+            _M.log_record("flow_module", 'flow_01','flow', 'flow','flow policy')
 
             util.waf_output(block_template_flow)
         else
@@ -91,11 +88,8 @@ if flow_rate then
     local flow_count, _ = ngx.shared.flow_control:get('flow_ip'..host..real_ip)
     if flow_count then
         if flow_count>= tonumber(flow_rate) then
-            _M.log_record("flow_module", 'flow_ip_01',
-                    'flow', 'flow_ip',
-                    'flow policy')
+            _M.log_record("flow_module", 'flow_ip_01','flow', 'flow_ip','flow policy')
             util.waf_output(block_template_flow)
-    
         else
             ngx.shared.flow_control:incr('flow_ip'..host..real_ip, 1)
         end
