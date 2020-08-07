@@ -34,12 +34,11 @@ make && make install
 wget https://luarocks.github.io/luarocks/releases/luarocks-3.1.3.tar.gz
 tar -zxvf luarocks-3.1.3.tar.gz 
 cd luarocks-3.1.3/
-./configure --prefix=/usr/local/openresty/luajit --with-lua=/usr/local/openresty/luajit/ --lua-suffix=jit  --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1                               
- //根据真实需求调整配置项目
+./configure --prefix=/usr/local/openresty/luajit --with-lua=/usr/local/openresty/luajit/ --lua-suffix=jit  --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1 
+//根据真实需求调整配置项目
 make &&make install
 第三步，安装luasocket
 /usr/local/openresty/luajit/bin/luarocks install luasocket                                                                                                                                                                                  //根据真实环境调整目录
-
 注意： 这里有个bug，显示安装成功，其实没有安装成功，通过检查 /usr/local/openresty/luajit/lib/lua/5.1  目录下面，有没有mime  socket 目录来确定是否安装成功，否则再次执行安装步骤三，直到安装成功
 
 ``` 
