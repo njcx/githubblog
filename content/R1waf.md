@@ -154,22 +154,22 @@ end
  
 ##### 对IP的限流 
 
-对IP限流的模块位于access.lua 文件中
+对IP限流的模块位于access.lua 文件中，主要逻辑就是，把IP和当前的域名作为一个key写入共享内存，在1s内对该key累加计数，把超过阀值的流量拦截并返回一个拦截的页面。见下面演示代码：
 
 ```bash
 
 flow_rate =ngx.shared.flow_ip_rules:get(ip_str_key)   -- 单个IP 1s内最大请求数
 if flow_rate then
-    local flow_count, _ = ngx.shared.flow_control:get('flow_ip'..host..real_ip)
+    local flow_count, _ = ngx.shared.flow_control:get(host..real_ip)
     if flow_count then
         if flow_count>= tonumber(flow_rate) then
             _M.log_record("flow_module", 'flow_ip_01','flow', 'flow_ip','flow policy')
             util.waf_output(block_template_flow)
         else
-            ngx.shared.flow_control:incr('flow_ip'..host..real_ip, 1)
+            ngx.shared.flow_control:incr(host..real_ip, 1)
         end
     else
-        ngx.shared.flow_control:set('flow_ip'..host..real_ip, 1, 1)
+        ngx.shared.flow_control:set(host..real_ip, 1, 1)
     end
 end
 
