@@ -189,19 +189,16 @@ WAF会把拦截记录序列化成json格式，写入log中，而不是直接写�
 
 ```bash
 
+WAF所在物理机：
+
 14.04.1-Ubuntu  IP :  110.110.110.110
 Kernel Version: 4.2.0-27-generic
 CPU Type : Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz    * 2
-Memory Size : 64050M
+Memory Size : 64G
+Network Card : Intel 10-Gigabit X540-AT2 (rev 01)    10G万兆
 
-Disk Size : 479.6GB
-Mainborad Ver : INSPUR
-Network Card : Intel Corporation Ethernet Controller 10-Gigabit X540-AT2 (rev 01)    10G万兆
-Net-Card eth0 : 6c:92:bf:5d:c4:38
-Net-Card eth1 : 6c:92:bf:5d:c4:38
 
 物理机公网网速：
-
 Testing download speed........
 Download: 588.17 Mbit/s
 Testing upload speed..........
