@@ -87,7 +87,7 @@ rule_dict :safe_set("rule_version",1.2,0)
 
 ##### CC算法
 
-CC 模块位于access.lua 文件中
+CC 模块位于access.lua 文件中，主要逻辑就是，把IP和当前的域名作为一个key写入共享内存，在单位内对该key累加计数，只要超过阀值，就拦截指定时间长度并返回一个拦截的页面，下一次访问的时候就直接拦截。见下面演示代码：
 
 ```bash
 
