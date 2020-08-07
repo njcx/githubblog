@@ -181,7 +181,54 @@ end
 
 ![WAF](../images/WechatIMG7.jpeg)
 
- WAF log输出是用的nginx 的worker 进程执行权限，一般www-data, 保证log输出目录，拥有对应权限，否则无log输出，且不报错
+WAF会把拦截记录序列化成json格式，写入log中，而不是直接写入任何数据库，因为这里对性能要求较高，综合考虑采取此方法，然后使用logstash写入kafka再写入es。WAF log输出是用的nginx 的worker 进程执行权限，一般www-data, 保证log输出目录，拥有对应权限，否则无log输出，且不报错。
 
 
 #### 压测
+
+
+```bash
+
+14.04.1-Ubuntu  IP :  110.110.110.110
+Kernel Version: 4.2.0-27-generic
+CPU Type : Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz    * 2
+Memory Size : 64050M
+
+Disk Size : 479.6GB
+Mainborad Ver : INSPUR
+Network Card : Intel Corporation Ethernet Controller 10-Gigabit X540-AT2 (rev 01)    10G万兆
+Net-Card eth0 : 6c:92:bf:5d:c4:38
+Net-Card eth1 : 6c:92:bf:5d:c4:38
+
+物理机公网网速：
+
+Testing download speed........
+Download: 588.17 Mbit/s
+Testing upload speed..........
+Upload: 332.21 Mbit/s
+
+请求机公网网速： CentOS 6.5   IP：112.112.112.112
+
+Testing download speed...............
+Download: 500.96 Mbit/s
+Testing upload speed................
+Upload: 327.65 Mbit/s
+
+```
+
+http性能测试工具：  wrk
+
+公网测试：
+
+由请求机从公网链路发出请求，贴近真实场景
+ 
+命令: ./wrk -t8 -c200 -d10s   http://110.110.110.110/
+
+
+这里从压测报告中挑出一个场景，抛砖引玉：
+
+开启waf，upstream转发转发到 server1, server2, server3 ,80端口 (静态页面)，黑白ip，各100条，常规流控100个域名, 常规cc 域名100个，其他模块开启（包括get post ua url 拦截模块等）
+
+Requests/sec:  15423.37
+
+Latency：28.59ms
