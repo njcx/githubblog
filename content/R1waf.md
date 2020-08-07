@@ -49,7 +49,7 @@ make &&make install
 
 ##### 传统规则引擎
 
- 一些安全拦截的规则，主要有GET和POST参数、Header里面的一些字段过滤，文件上传的拦截，是编写在json文件之中，就像下面列子一样，规则在OpenResty启动时候，由init_worker.lua写入共享内存，在 nginx reload 的过程中可完成更新，无缝对接更新规则
+一些安全拦截的规则，主要有GET和POST参数、Header里面的一些字段过滤，文件上传的拦截，是编写在json文件之中，就像下面列子一样，规则在OpenResty启动时候，由init_worker.lua写入共享内存，在 nginx reload 的过程中可完成更新，无缝对接更新规则
 
 ```bash
 {
@@ -193,7 +193,7 @@ WAF所在物理机：
 
 14.04.1-Ubuntu  IP :  110.110.110.110
 Kernel Version: 4.2.0-27-generic
-CPU Type : Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz    * 2
+CPU Type : Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz  * 2
 Memory Size : 64G
 Network Card : Intel 10-Gigabit X540-AT2 (rev 01)    10G万兆
 
@@ -223,7 +223,7 @@ http性能测试工具：  wrk
 
 这里从压测报告中挑出一个场景，抛砖引玉：
 
-开启waf，upstream转发转发到 server1, server2, server3 ,80端口 (静态页面)，黑白ip，各100条，常规域名、常规URL拦截各100条,常规流控100个域名, 常规cc 域名100个，其他模块开启（包括get post ua url 拦截模块等）
+开启waf，upstream转发转发到 server1, server2, server3 ,80端口 (静态页面)，黑白ip，各100条，常规域名、常规URL拦截各100条,常规流控100个域名, 常规cc域名100个，其他模块开启（包括get post ua url 拦截模块等）
 
 Requests/sec:  15423.37
 
