@@ -178,6 +178,7 @@ end
 
 ![WAF](../images/WechatIMG7.jpeg)
 
+ WAF log输出是用的nginx 的worker 进程执行权限，一般www-data, 保证log输出目录，拥有对应权限，否则无log输出，且不报错
 
 
 #### 压测
