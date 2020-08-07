@@ -44,15 +44,49 @@ make &&make install
 
 ``` 
 
-动态规则更新
+##### 动态规则更新
 
-比如，黑白IP的添加，域名url的拦截封禁，流控CC规则的添加，这些动态的规则要求快速生效，这一块规则是存放在Redis里面的，定时从Redis里面读取，使用了redis-lua 2.0.5-dev类库和luasocket类库完成， 相关的代码放到init_worker.lua文件中， 如果有什么修改， nginx reload 即可，在 nginx reload 的过程中， master进程不退出，worker 进程陆续退出重启，这里特别注意，不然容易踩坑，比如，init.lua 在 nginx reload 的过后代码不会生效
+比如，黑白IP的添加，域名url的拦截封禁，流控CC规则的添加，这些动态的规则要求快速生效，这一块规则是存放在Redis里面的，通过API进行修改添加，WAF定时从Redis里面读取到共享内存中，Lua更新规则部分使用了redis-lua 2.0.5-dev类库和luasocket类库完成， 相关的代码放到init_worker.lua文件中， 如果有什么修改， nginx reload 即可，在 nginx reload 的过程中， master进程不退出，worker 进程陆续退出重启，这里特别注意，不然容易踩坑，比如，init.lua 在 nginx reload 的过后代码不会生效
 
-传统规则引擎
+##### 传统规则引擎
+
+ 一些安全拦截的规则，是编写在json文件之中，就像下面列子一样
+
+```bash
+{
+	"state": "enable",
+	"rule_id":"scanner_01",
+	"rule_tag":"scanner",
+	"rule_name":"scanner_hunter",
+	"useragent": ["(dirbuster|pangolin|nmap|BBBike|sqlmap|w3af|owasp|Nikto|apachebench)","jios"],
+	"action": "deny",
+	"info": "scanner attack"
+}
+
+```
 
 
+```bash
 
-CC算法
+local _basedir = config.prod.config_rule_dir
+_M.rule_table.referer_rule = load_json(_basedir.."referer.json")
+_M.rule_table.uri_rule = load_json(_basedir.."uri.json")
+_M.rule_table.header_rule = load_json(_basedir.."header.json")
+_M.rule_table.useragent_rule = load_json(_basedir.."useragent.json")
+_M.rule_table.cookie_rule = load_json(_basedir.."cookie.json")
+_M.rule_table.args_rule = load_json(_basedir.."args.json")
+_M.rule_table.post_rule = load_json(_basedir.."post.json")
+rule_dict :safe_set("rule",cjson.encode(_M.rule_table),0)
+if info then
+    util.waf_info_log(util.table_to_json(_M.rule_table))
+    util.waf_info_log(env .. ':loadrule.lua work well')
+end
+rule_dict :safe_set("rule_version",1.2,0)
+           
+```
+
+
+##### CC算法
 
 ```bash
 
@@ -84,7 +118,7 @@ if cc_policy  then
     
 ```
 
-对域名的限流
+##### 对域名的限流
 
 
 ```bash
@@ -116,7 +150,7 @@ end
 
 ```
  
-对IP的限流 
+##### 对IP的限流 
 
 
 ```bash
