@@ -224,10 +224,9 @@ http性能测试工具：  wrk
  
 命令: ./wrk -t8 -c200 -d10s   http://110.110.110.110/
 
-
 这里从压测报告中挑出一个场景，抛砖引玉：
 
-开启waf，upstream转发转发到 server1, server2, server3 ,80端口 (静态页面)，黑白ip，各100条，常规流控100个域名, 常规cc 域名100个，其他模块开启（包括get post ua url 拦截模块等）
+开启waf，upstream转发转发到 server1, server2, server3 ,80端口 (静态页面)，黑白ip，各100条，常规域名、常规URL拦截各100条,常规流控100个域名, 常规cc 域名100个，其他模块开启（包括get post ua url 拦截模块等）
 
 Requests/sec:  15423.37
 
