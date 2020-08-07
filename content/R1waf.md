@@ -23,16 +23,11 @@ Summary: 甲方自研分布式WAF落地全程实录~
 
 ```bash
 wget https://openresty.org/download/openresty-1.13.6.1.tar.gz
-
 tar -zxvf openresty-1.13.6.1.tar.gz
-
 cd openresty-1.13.6.1/ && ./configure --prefix=/usr/local/openresty --with-pcre-jit --with-http_iconv_module  --with-http_gunzip_module --with-http_auth_request_module  --with-http_stub_status_module   --with-http_gzip_static_module
-              //根据真实需求调整配置项目
-
+//根据真实需求调整配置项目
 gmake && gmake install
-
 或者
-
 make && make install
 
 第二步，安装luarocks-3.1.3
@@ -40,7 +35,8 @@ make && make install
 wget https://luarocks.github.io/luarocks/releases/luarocks-3.1.3.tar.gz
 tar -zxvf luarocks-3.1.3.tar.gz 
 cd luarocks-3.1.3/
-./configure --prefix=/usr/local/openresty/luajit --with-lua=/usr/local/openresty/luajit/ --lua-suffix=jit  --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1                                //根据真实需求调整配置项目
+./configure --prefix=/usr/local/openresty/luajit --with-lua=/usr/local/openresty/luajit/ --lua-suffix=jit  --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1                               
+ //根据真实需求调整配置项目
 make &&make install
 第三步，安装luasocket
 /usr/local/openresty/luajit/bin/luarocks install luasocket                                                                                                                                                                                  //根据真实环境调整目录
