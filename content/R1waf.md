@@ -50,7 +50,7 @@ make &&make install
 
 ##### 传统规则引擎
 
- 一些安全拦截的规则，是编写在json文件之中，就像下面列子一样
+ 一些安全拦截的规则，是编写在json文件之中，就像下面列子一样，规则在OpenResty启动时候，由init_worker.lua写入共享内存，在 nginx reload 的过程中可完成更新，无缝对接更新规则
 
 ```bash
 {
