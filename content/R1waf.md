@@ -19,10 +19,43 @@ Summary: 甲方自研分布式WAF落地全程实录~
 
 #### 技术选型
 
+目前，主流的自研WAF实现技术主要是依赖OpenResty技术栈（由中国人章亦春发起），代码部分主要是使用Lua编写,简单的安装如下：
+
+```bash
+wget https://openresty.org/download/openresty-1.13.6.1.tar.gz
+
+tar -zxvf openresty-1.13.6.1.tar.gz
+
+cd openresty-1.13.6.1/ && ./configure --prefix=/usr/local/openresty --with-pcre-jit --with-http_iconv_module  --with-http_gunzip_module --with-http_auth_request_module  --with-http_stub_status_module   --with-http_gzip_static_module
+              //根据真实需求调整配置项目
+
+gmake && gmake install
+
+或者
+
+make && make install
+
+第二步，安装luarocks-3.1.3
+
+wget https://luarocks.github.io/luarocks/releases/luarocks-3.1.3.tar.gz
+tar -zxvf luarocks-3.1.3.tar.gz 
+cd luarocks-3.1.3/
+./configure --prefix=/usr/local/openresty/luajit --with-lua=/usr/local/openresty/luajit/ --lua-suffix=jit  --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1                                //根据真实需求调整配置项目
+make &&make install
+第三步，安装luasocket
+/usr/local/openresty/luajit/bin/luarocks install luasocket                                                                                                                                                                                  //根据真实环境调整目录
+
+注意： 这里有个bug，显示安装成功，其实没有安装成功，通过检查 /usr/local/openresty/luajit/lib/lua/5.1  目录下面，有没有mime  socket 目录来确定是否安装成功，否则再次执行安装步骤三，直到安装成功
+
+``` 
 
 动态规则更新
 
+比如，黑白IP的添加，域名url的拦截封禁，流控CC规则的添加，这些动态的规则要求快速生效，这一块规则是存放在Redis里面的，定时从Redis里面读取，使用了redis-lua 2.0.5-dev类库和luasocket类库完成， 相关的代码放到init_worker.lua文件中， 如果有什么修改， nginx reload 即可，在 nginx reload 的过程中， master进程不退出，worker 进程陆续退出重启，这里特别注意，不然容易踩坑，比如，init.lua 在 nginx reload 的过后代码不会生效
+
 传统规则引擎
+
+
 
 CC算法
 
