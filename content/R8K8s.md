@@ -1,11 +1,11 @@
-Title: K8S集群安装
+Title: Kubernetes集群安装
 Date: 2018-08-08 20:20
 Modified: 2018-08-08 20:20
 Category: 安全
 Tags: K8S
 Slug: R8 
 Authors: nJcx
-Summary: K8S集群安装~
+Summary: Kubernetes集群安装~
 
 
 
