@@ -11,6 +11,18 @@ Summary: K8S集群安装~
 
 #### 安装
 
+一共3个节点，
+
+```bash
+10.10.252.215   master   
+10.10.252.214   node1 
+10.10.252.213   node2  
+```
+
+除了初始化，软件安装一致
+
+
+
 k8s repo
 
 ```bash
@@ -93,6 +105,12 @@ systemctl restart docker && systemctl enable docker
  systemctl restart kubelet && systemctl enable kubelet
 
 
+
+master node1 node2 上面内容一致
+
+
+master执行
+
 kubeadm init --kubernetes-version=1.19.0 --apiserver-advertise-address=10.10.252.215 --image-repository registry.aliyuncs.com/google_containers --service-cidr=10.10.0.0/16 --pod-network-cidr=10.244.0.0/16
 
   mkdir -p $HOME/.kube
@@ -107,20 +125,20 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 
 
-  kubeadm join 10.10.252.215:6443 --token u3toqk.8j7fnn0lmajgvnvq     --discovery-token-ca-cert-hash sha256:49b37a021f9223d2f3af10d71a5ca47cc34e12d2c20147adfc61a6a4b90c4b97 
 
 
 ```bash
 
-kubeadm join 172.16.251.175:6443 --token gc9vwd.stdwhqf0crus6qdp \
-    --discovery-token-ca-cert-hash sha256:6fe5cfa6036b98a971d74f40f70e007ed139787463983826e0db267e483eb62d 
+node1 node2 执行
+
+ kubeadm join 10.10.252.215:6443 --token u3toqk.8j7fnn0lmajgvnvq     --discovery-token-ca-cert-hash sha256:49b37a021f9223d2f3af10d71a5ca47cc34e12d2c20147adfc61a6a4b90c4b97 
+  
     
 ```
 
 
 
-
-
+master 生成join语句脚本备用
 
 ```bash
 
