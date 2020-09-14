@@ -24,7 +24,7 @@ Scheduler负责决定将Pod放在哪个Node上。会对各个节点的负载、�
 
 Controller Manager
 负责管理Cluster资源，保证资源处于预期状态。Controller Manager由多种controller组成：replication controller、endpoints controller、namespace controller、service accounts controller等。
-不同的controller管理不同的资源。
+不同的controller管理不同的资源。Controller Manager作为集群内部管理控制中心，负责集群内的Node、Pod副本、EndPoint、命名空间、服务账号、资源定额等管理。当某个Node意外宕机了，Controller Manager会及时发现此故障并执行自动修复流程，确保集群始终处于预期的工作状态。
 
 etcd
 etcd保存Cluster配置信息和各种资源的状态信息。当数据发生变化时，etcd会快速通知Kubernetes相关组件。
