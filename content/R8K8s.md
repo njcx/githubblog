@@ -13,16 +13,18 @@ Summary: K8S集群安装~
 
 k8s repo
 
+```bash
 [k8s]
 name=k8s
 enabled=1
 gpgcheck=0
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
 
-
+```
 
 base.repo
 
+```bash
 [base]
 name=CentOS-$releasever - Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra
@@ -55,10 +57,14 @@ gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
+```
 
 
 
-  cd /etc/yum.repos.d/
+
+```bash
+
+ cd /etc/yum.repos.d/
  wget http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
  vim k8s.repo
 yum makecache
@@ -97,17 +103,26 @@ kubeadm init --kubernetes-version=1.19.0 --apiserver-advertise-address=10.10.252
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 
+```
+
+
 
   kubeadm join 10.10.252.215:6443 --token u3toqk.8j7fnn0lmajgvnvq     --discovery-token-ca-cert-hash sha256:49b37a021f9223d2f3af10d71a5ca47cc34e12d2c20147adfc61a6a4b90c4b97 
 
 
+```bash
+
 kubeadm join 172.16.251.175:6443 --token gc9vwd.stdwhqf0crus6qdp \
     --discovery-token-ca-cert-hash sha256:6fe5cfa6036b98a971d74f40f70e007ed139787463983826e0db267e483eb62d 
+    
+```
 
 
 
 
 
+
+```bash
 
 #!/bin/bash
 
@@ -127,3 +142,6 @@ cert_hash=`openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pu
 
 echo "Refer the following command to join kubernetes cluster:"
 echo "kubeadm join $1:6443 --token ${token} --discovery-token-ca-cert-hash sha256:${cert_hash}"
+
+
+```
