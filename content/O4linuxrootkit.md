@@ -19,25 +19,39 @@ https://github.com/m0nad/Diamorphine.git
 https://raw.githubusercontent.com/yzimhao/godpock/master/Rootkit/mafix.tar.gz
 ```
 
-Linux Rootkit 主要分为两种，一种是用户态的rootkit，一种是内核态的rootkit. Rootkit 主要的目的干坏事且隐藏自己，像个鬼影，隐藏自身的文件、进程、网络连接、rootkit模块本身。用户态的rootkit主要是替换相关命令完成，内核态的rootkit主要是可装载内核模块（LKM）实现。
+Linux Rootkit 主要分为两种，一种是用户态的rootkit，一种是内核态的rootkit. Rootkit 主要的目的干坏事且隐藏自己，像个鬼影，隐藏自身的文件、进程、网络连接、rootkit模块本身。用户态的rootkit主要是替换相关命令完成(通过替换ps、top、ls、ss、netstat等系统工具)，内核态的rootkit主要是可装载内核模块（LKM）实现。
 
  
 
-关于ls
-我们首先尝试一下如何借助ls来找到这些文件。我们知道，当某个程序需要借助网络、文件系统或其他系统特定活动进行工作时，它就必须经过内核。也就是说，在此时它将使用系统调用。我们可以在这个表格中，查到64位Linux系统的系统调用。
 
-为了找出ls所使用的系统调用，我们使用了一个名为Strace的工具。Strace将会列出程序所使用的系统调用。当我们执行strace ls后，会出现很多程序连接产生的杂项，但如果我们继续向下查看， 会发现有以下几行：
+内核态的rootkit，我们主要靠挂钩hook技术来实现，系统调用hook，函数api hook，还有一种，直接内核对象操作系统，主要通过/dev/mem、/dev/kmem设备直接操作内存，从而对内核进行修改
+    
+    
+ 
+当某个程序需要借助网络、文件系统或其他系统特定活动进行工作时，它就必须经过内核。也就是说，在此时它将使用系统调用。我们使用了一个名为Strace的工具。Strace将会列出程序所使用的系统调用。
 
-openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_DIRECTORY|O_CLOEXEC) = 3
+```bash
+# yum -y install strace
+#cd /bin && strace ls 
 
-getdents(3, /* 11 entries */, 32768) = 344
+ioctl(1, TIOCGWINSZ, 0x7ffedb86fcd0)    = -1 ENOTTY (Inappropriate ioctl for device)
+openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3
+getdents(3, /* 1036 entries */, 32768)  = 32744
+brk(NULL)                               = 0xc6f000
+brk(0xc99000)                           = 0xc99000
+brk(NULL)                               = 0xc99000
+brk(NULL)                               = 0xc99000
+brk(0xc90000)                           = 0xc90000
+brk(NULL)                               = 0xc90000
+mmap(NULL, 311296, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f60ea4a8000
+getdents(3, /* 32 entries */, 32768)    = 1096
+getdents(3, /* 0 entries */, 32768)     = 0
 
-getdents(3, /* 0 entries */, 32768) = 0
+```
+我们需要关注的系统调用是getdents函数。
 
-close(3) = 0
-由此看来，我们需要重点分析的系统调用是getdents。在执行后，ls可能会调用libc函数、readdir，但最终还是会调用getdents。
 
-在具体分析getdents之前，首先让我们来讨论一下如何进入内核。
+
 
  
 
