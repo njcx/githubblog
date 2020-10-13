@@ -1,4 +1,4 @@
-Title: 甲方自研分布式WAF落地全程实录
+Title: 自研分布式WAF落地全程实录
 Date: 2018-08-03 20:20
 Modified: 2018-08-03 20:20
 Category: 安全
