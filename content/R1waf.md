@@ -177,6 +177,49 @@ end
 ```
 
 
+###### 旁路分析
+
+我们把流量解析后序列化写入log里面，然后，采集到kafka里面，用于与威胁情报联动拦截，以及业务安全上面的分析，比如，机器人爬虫、刷接口、刷单、撞库、恶意注册账号、薅羊毛、骗补贴等等
+
+
+```bash
+local client_ip = client_ip
+local user_agent = user_agent
+local local_time = local_time
+local host = host
+local url = http_req_url
+local waf_host = waf_host
+local req_data = req_data
+local req_method = req_method
+local header = header
+local cookie = cookie
+local log_json_obj = {
+    ip = client_ip,
+    time = local_time,
+    host = host,
+    useragent = user_agent,
+    req_method =req_method,
+    url = url,
+    header = header,
+    cookie = cookie,
+    req_data=req_data,
+    waf_host = waf_host
+}
+local log_line = cjson.encode(log_json_obj)
+local log_name = string.format("%s/%s-access-waf.log", log_path, os.date("%Y-%m-%d"))
+local file = io.open(log_name, "a")
+if file == nil then
+    return
+end
+file:write(string.format("%s\n", log_line))
+file:flush()
+file:close()
+
+```
+
+
+
+
 #### 数据传输
 
 
