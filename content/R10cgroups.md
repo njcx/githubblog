@@ -50,12 +50,12 @@ cpu.cfs_quota_us：表示该control group限制占用的时间（微秒），默
 
 如果要限制CPU 使用5% ，cpu.cfs_quota_us 写入5000。
 
-```
+```bash
 echo 5000 >  /sys/fs/cgroup/cpu/test1/cpu.cfs_quota_us 
 ```
 
 然后，把受限进程pid写入cgroup.procs文件中，即可完成对该进程限制CPU 使用5%，当进程退出，cgroup.procs以及tasks会清除相关pid的记录。
-```
+```bash
 echo 1234  >  /sys/fs/cgroup/cpu/test1/cgroup.procs
 ```
 
@@ -82,13 +82,36 @@ memory.kmem.failcnt    memory.kmem.tcp.max_usage_in_bytes  memory.memsw.limit_in
 
 主要配置含义：
 
-cgroup.procs: 使用该组配置的进程列表。
-memory.limit_in_bytes：内存使用限制。
-memory.memsw.limit_in_bytes：内存和交换分区总计限制。
-memory.swappiness: 交换分区使用比例。
-memory.usage_in_bytes： 当前进程内存使用量。
-memory.stat: 内存使用统计信息。
-memory.oom_control: OOM 控制参数。
+- cgroup.procs: 使用该组配置的进程列表。
+- memory.limit_in_bytes：内存使用限制。
+- memory.memsw.limit_in_bytes：内存和交换分区总计限制。
+- memory.swappiness: 交换分区使用比例。
+- memory.usage_in_bytes： 当前进程内存使用量。
+- memory.stat: 内存使用统计信息。
+- memory.oom_control: OOM 控制参数。
+
+
+假设有进程 pid 1234，希望设置内存限制为 10MB，我们可以这样操作：
+
+limit_in_bytes 设置为 10MB
+
+```bash
+echo "10*1024*1024" | bc > /sys/fs/cgroup/memory/test1/memory.limit_in_bytes
+```
+
+swappiness 设置为 0，表示禁用交换分区，实际生产中可以配置合适的比例。
+
+```bash
+echo 0 > /sys/fs/cgroup/memory/test1/memory.swappiness
+```
+
+添加控制进程pid,当进程 1234 使用内存超过 10MB 的时候，默认进程 1234 会触发 OOM，被系统 Kill 掉。
+
+```bash
+echo 1234 > /sys/fs/cgroup/memory/test1/cgroup.procs
+```
+
+
 
 
 
