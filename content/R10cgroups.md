@@ -117,7 +117,55 @@ echo 1234 > /sys/fs/cgroup/memory/test1/cgroup.procs
 
 
 
+#### cgroups 挂载问题
 
+
+测试发现很多Ubuntu 机器开机没有挂载cgroupfs，下面提供一个挂载脚本
+
+
+
+```bash
+
+#!/bin/sh
+set -e
+
+if grep -v '^#' /etc/fstab | grep -q cgroup; then
+        echo "cgroups mounted from fstab, not mounting /sys/fs/cgroup"
+        exit 0
+fi
+
+if [ ! -e /proc/cgroups ]; then
+        exit 0
+fi
+
+mountpoint -q /sys/fs/cgroup || mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
+
+for d in `tail -n +2 /proc/cgroups | awk '{
+        if ($2 == 0)
+                print $1
+        else if (a[$2])
+                a[$2] = a[$2]","$1
+        else
+                a[$2]=$1
+};END{
+        for(i in a) {
+                print a[i]
+        }
+}'`; do
+        mkdir -p /sys/fs/cgroup/$d
+        mountpoint -q /sys/fs/cgroup/$d || (mount -n -t cgroup -o $d cgroup /sys/fs/cgroup/$d || rmdir /sys/fs/cgroup/$d || true)
+done
+
+dir=/sys/fs/cgroup/systemd
+if [ ! -d "${dir}" ]; then
+        mkdir "${dir}"
+        mount -n -t cgroup -o none,name=systemd name=systemd "${dir}" || rmdir "${dir}" || true
+fi
+
+echo "Cgroupfs successfully mounted"
+exit 0
+
+```
 
 
 
