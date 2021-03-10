@@ -59,6 +59,40 @@ echo 5000 >  /sys/fs/cgroup/cpu/test1/cpu.cfs_quota_us
 echo 1234  >  /sys/fs/cgroup/cpu/test1/cgroup.procs
 ```
 
+#### 使用cgroups限制内存使用
+
+测试系统： CentOS7 ，内核版本 3.10.0-1062.18.1.el7.x86_64，cgroup v1
+
+首先进入cpu子系统对应的层级路径下：cd /sys/fs/cgroup/memory
+通过新建文件夹创建一个内存控制族群：mkdir test1，即新建了一个内存控制族群：test1
+新建test1之后，可以看到目录下自动建立了相关的文件，这些文件是伪文件。
+
+```bash
+
+$ ls -la /sys/fs/cgroup/memory/test1
+
+cgroup.clone_children  memory.kmem.limit_in_bytes          memory.kmem.tcp.usage_in_bytes  memory.memsw.max_usage_in_bytes  memory.soft_limit_in_bytes  tasks
+cgroup.event_control   memory.kmem.max_usage_in_bytes      memory.kmem.usage_in_bytes      memory.memsw.usage_in_bytes      memory.stat
+cgroup.procs           memory.kmem.slabinfo                memory.limit_in_bytes           memory.move_charge_at_immigrate  memory.swappiness
+memory.failcnt         memory.kmem.tcp.failcnt             memory.max_usage_in_bytes       memory.numa_stat                 memory.usage_in_bytes
+memory.force_empty     memory.kmem.tcp.limit_in_bytes      memory.memsw.failcnt            memory.oom_control               memory.use_hierarchy
+memory.kmem.failcnt    memory.kmem.tcp.max_usage_in_bytes  memory.memsw.limit_in_bytes     memory.pressure_level            notify_on_release
+
+```
+
+主要配置含义：
+
+cgroup.procs: 使用该组配置的进程列表。
+memory.limit_in_bytes：内存使用限制。
+memory.memsw.limit_in_bytes：内存和交换分区总计限制。
+memory.swappiness: 交换分区使用比例。
+memory.usage_in_bytes： 当前进程内存使用量。
+memory.stat: 内存使用统计信息。
+memory.oom_control: OOM 控制参数。
+
+
+
+
 
 
 
