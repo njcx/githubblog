@@ -1,11 +1,11 @@
-Title: Linux的cgroups在HIDS-Agent资源限制上的应用 
+Title: Linux的Cgroups在HIDS-Agent资源限制上的应用 
 Date: 2018-08-10 20:20
 Modified: 2018-08-10 20:20
 Category: 安全
 Tags: HIDS
 Slug: R10 
 Authors: nJcx
-Summary: Linux的cgroups在HIDS-Agent资源限制上的应用 ~
+Summary: Linux的Cgroups在HIDS-Agent资源限制上的应用 ~
 
 
 #### 介绍
