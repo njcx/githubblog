@@ -1,11 +1,11 @@
-Title: Linux的cgroups在HIDS-Agent 开发上的应用 
+Title: Linux的cgroups在HIDS-Agent资源限制上的应用 
 Date: 2018-07-18 02:20
 Modified: 2018-07-18 02:20
 Category: 安全
 Tags: HIDS
 Slug: R10 
 Authors: nJcx
-Summary: Linux的cgroups在HIDS-Agent 开发上的应用~
+Summary: Linux的cgroups在HIDS-Agent资源限制上的应用 ~
 
 
 #### 介绍
@@ -34,5 +34,34 @@ cgroup分v1和v2两个版本，v1实现较早，最初版本是在 linux kernel 
 
 
 cgroup提供了一个原生接口并通过cgroupfs提供（从这句话我们可以知道cgroupfs就是cgroup的一个接口的封装）。类似于procfs和sysfs，是一种虚拟文件系统。并且cgroupfs是可以挂载的，默认情况下挂载在/sys/fs/cgroup目录。使用 mount 挂载 cgroup 文件系统就可以使用配置这些controller了，系统通常已经挂载好了。Linux 通过虚拟文件系统的方式将功能和配置暴露给用户，这得益于 linux 的虚拟文件系统（vfs），vfs 将具体文件系统的细节隐藏起来，给用户态一个统一的问题件系统 api 接口。systemd也是对于cgroup接口的一个封装。systemd以pid1的形式在系统启动的时候运行，并提供了一套系统管理守护程序、库和实用程序，用来控制、管理linux计算机操作系统资源。通过systemd-cgls命令我们可以看到systemd工作的进程pid是1，而目录/sys/fs/cgroup/systemd是systemd维护的自己使用的非subsystem的cgroups层级结构。也就是说使用cgroup有两种方式，第一种就是 cgroupfs，第二种就是，systemd。
+
+
+#### 使用cgroups限制CPU使用
+
+测试系统： CentOS7 ，内核版本 3.10.0-1062.18.1.el7.x86_64，cgroup v1
+
+首先进入cpu子系统对应的层级路径下：cd /sys/fs/cgroup/cpu
+通过新建文件夹创建一个cpu控制族群：mkdir test1，即新建了一个cpu控制族群：test1
+新建test1之后，可以看到目录下自动建立了相关的文件，这些文件是伪文件。我们的测试示例主要用到cpu.cfs_period_us和cpu.cfs_quota_us 、cgroup.procs 3个文件。
+cgroup.procs  记录受限PID
+cpu.cfs_period_us：cpu分配的周期(微秒），默认为100000。
+cpu.cfs_quota_us：表示该control group限制占用的时间（微秒），默认为-1，表示不限制。
+
+
+如果要限制CPU 使用5% ，cpu.cfs_quota_us 写入5000。
+
+```
+echo 5000 >  /sys/fs/cgroup/cpu/test1/cpu.cfs_quota_us 
+```
+
+然后，把受限进程pid写入cgroup.procs文件中，即可完成对该进程限制CPU 使用5%，当进程退出，cgroup.procs以及tasks会清除相关pid的记录。
+```
+echo 1234  >  /sys/fs/cgroup/cpu/test1/cgroup.procs
+```
+
+
+
+
+
 
 
