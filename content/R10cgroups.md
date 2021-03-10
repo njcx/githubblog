@@ -54,7 +54,8 @@ cpu.cfs_quota_us：表示该control group限制占用的时间（微秒），默
 echo 5000 >  /sys/fs/cgroup/cpu/test1/cpu.cfs_quota_us 
 ```
 
-然后，把受限进程pid写入cgroup.procs文件中，即可完成对该进程限制CPU 使用5%，当进程退出，cgroup.procs以及tasks会清除相关pid的记录。
+然后，把受限进程pid写入cgroup.procs文件中，即可完成对该进程限制CPU 使用5%，当进程CPU使用超过%5就会被系统kill。当进程退出，cgroup.procs以及tasks会清除相关pid的记录。
+
 ```bash
 echo 1234  >  /sys/fs/cgroup/cpu/test1/cgroup.procs
 ```
