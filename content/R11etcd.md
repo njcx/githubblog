@@ -75,9 +75,9 @@ etcd v3的底层采用boltdb做存储，value直接持久化；redis是一个内
 
 CentOS7
 
-- HOST_1=10.240.0.17
-- HOST_2=10.240.0.18
-- HOST_3=10.240.0.19
+- HOST_1=172.19.0.12
+- HOST_2=172.19.0.13
+- HOST_3=172.19.0.14
 
 
 先在所有机器上面执行
@@ -89,9 +89,9 @@ CLUSTER_STATE=new
 NAME_1=machine-1
 NAME_2=machine-2
 NAME_3=machine-3
-HOST_1=10.240.0.17
-HOST_2=10.240.0.18
-HOST_3=10.240.0.19
+HOST_1=172.19.0.12
+HOST_2=172.19.0.13
+HOST_3=172.19.0.14
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
 mkdir -p /var/lib/etcd
 ETCD_DATA=/var/lib/etcd
@@ -146,9 +146,9 @@ etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 
 ```bash
 export ETCDCTL_API=3
-HOST_1=10.240.0.17
-HOST_2=10.240.0.18
-HOST_3=10.240.0.19
+HOST_1=172.19.0.12
+HOST_2=172.19.0.13
+HOST_3=172.19.0.14
 ENDPOINTS=$HOST_1:2379,$HOST_2:2379,$HOST_3:2379
 
 etcdctl --endpoints=$ENDPOINTS member list
