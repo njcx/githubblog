@@ -234,10 +234,25 @@ ok
 
 ```
 查看etcd集群状态
+
 ```bash
 ./etcdctl --write-out=table --endpoints=$ENDPOINTS endpoint status       //查看集群状态
 
-./etcdctl --endpoints=$ENDPOINTS endpoint health                         // 
+./etcdctl --endpoints=$ENDPOINTS endpoint health                         // 查看节点健康状态
+```
+
+备份与恢复
+
+只能从一个etcd节点请求快照，因此--endpoints标志应仅包含一个端点。
+
+```bash
+
+ENDPOINTS=$HOST_1:2379
+
+./etcdctl --endpoints=$ENDPOINTS snapshot save my.db
+
+./etcdctl snapshot restore my.db -data-dir /var/lib/etcd
+
 ```
 
 
