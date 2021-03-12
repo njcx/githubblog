@@ -83,7 +83,6 @@ CentOS7，Etcd-v3.4.14
 先在所有机器上面执行
 
 ```bash
-
 TOKEN=etcd-token-test-njcx
 CLUSTER_STATE=new
 NAME_1=machine-1
@@ -95,13 +94,11 @@ HOST_3=172.19.0.14
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
 mkdir -p /var/lib/etcd
 ETCD_DATA=/var/lib/etcd
-
 ```
 
 然后在HOST_1 执行
 
 ```bash
-
 THIS_NAME=${NAME_1}
 THIS_IP=${HOST_1}
 etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
@@ -109,7 +106,6 @@ etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
 	--initial-cluster ${CLUSTER} \
 	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
-
 ```
 
 
@@ -117,7 +113,6 @@ etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 
 
 ```bash
-
 THIS_NAME=${NAME_2}
 THIS_IP=${HOST_2}
 etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
@@ -131,7 +126,6 @@ etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 
 
 ```bash
-
 THIS_NAME=${NAME_3}
 THIS_IP=${HOST_3}
 etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
@@ -139,7 +133,6 @@ etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
 	--initial-cluster ${CLUSTER} \
 	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
-
 ```
 
 然后，在任何一个机器上面
@@ -155,7 +148,6 @@ ENDPOINTS=$HOST_1:2379,$HOST_2:2379,$HOST_3:2379
 
 ```bash
 ./etcdctl --endpoints=$ENDPOINTS member list
-
 8e9e05c52164694d, started, default, http://localhost:2380, http://0.0.0.0:2379, false
 ```
 
@@ -164,29 +156,22 @@ put 和get操作
 
 
 ```bash
-
 ./etcdctl --endpoints=$ENDPOINTS put web1 value1
 OK
-
 ./etcdctl --endpoints=$ENDPOINTS put web2 value2
 OK
-
 ./etcdctl --endpoints=$ENDPOINTS put web3 value3
 OK
-
 ./etcdctl --endpoints=$ENDPOINTS get web3
 web3
 value3
-
 ./etcdctl --endpoints=$ENDPOINTS get web --prefix
-
 web1
 value1
 web2
 value2
 web3
 value3
-
 ```
 
 删除操作
@@ -209,16 +194,13 @@ OK
 
 ```bash
 ./etcdctl --endpoints=$ENDPOINTS watch stock1
-
 PUT
 stock1
 1000
 
 ./etcdctl --endpoints=$ENDPOINTS put stock1 1000
 ok
-
 ./etcdctl --endpoints=$ENDPOINTS watch stock --prefix
-
 PUT
 stock1
 10
@@ -230,74 +212,57 @@ stock2
 ok
 ./etcdctl --endpoints=$ENDPOINTS put stock2 20
 ok
-
-
 ```
 
 
 TTL
 
 ```bash 
-
 ./etcdctl --endpoints=$ENDPOINTS lease grant 30
 # lease 2be7547fbc6a5afa granted with TTL(30s)
-
 ./etcdctl --endpoints=$ENDPOINTS put sample value --lease=2be7547fbc6a5afa
 ./etcdctl --endpoints=$ENDPOINTS get sample
-
 ./etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #到期自动续期，会阻塞
 ./etcdctl --endpoints=$ENDPOINTS lease revoke 2be7547fbc6a5afa          #直接销毁
-# or after 300 seconds
 ./etcdctl --endpoints=$ENDPOINTS get sample
-
 
 ```
 
 事务写
 
 ```bash
-
 ./etcdctl --endpoints=$ENDPOINTS put user1 bad
 ./etcdctl --endpoints=$ENDPOINTS txn --interactive
-
 compares:
-value("user1") = "bad"      
-
+value("user1") = "bad"  
+    
 success requests (get, put, delete):
 del user1  
 
 failure requests (get, put, delete):
 put user1 good
-
 ```
 
 认证
 
 ```bash
-
-./etcdctl --endpoints=${ENDPOINTS} role add root               #创建角色root
+./etcdctl --endpoints=${ENDPOINTS} role add root                                 #创建角色root
 ./etcdctl --endpoints=${ENDPOINTS} role grant-permission root readwrite  foo     #只给foo读写权限（foo是key）
 ./etcdctl --endpoints=${ENDPOINTS} role get root
-
 ./etcdctl --endpoints=${ENDPOINTS} user add root                                 #创建用户root
 ./etcdctl --endpoints=${ENDPOINTS} user grant-role root root                     #把用户添加到root 角色里面
 ./etcdctl --endpoints=${ENDPOINTS} user get root
-
 ./etcdctl --endpoints=${ENDPOINTS} auth enable                                   #激活认证
-
-
 ./etcdctl --endpoints=${ENDPOINTS} --user=root:123 put foo bar
 ./etcdctl --endpoints=${ENDPOINTS} get foo
 ./etcdctl --endpoints=${ENDPOINTS} --user=root:123 get foo
 ./etcdctl --endpoints=${ENDPOINTS} --user=root:123 get foo1
-
 ```
 
 分布式锁
 
 ```bash
 ./etcdctl --endpoints=$ENDPOINTS lock mutex1
-
 # 启动另一个shell，上面会退出
 ./etcdctl --endpoints=$ENDPOINTS lock mutex1
 ```
@@ -316,13 +281,11 @@ put user1 good
 只能从一个etcd节点请求快照，因此--endpoints标志应仅包含一个端点。
 
 ```bash
-
 ENDPOINTS=$HOST_1:2379
 
 ./etcdctl --endpoints=$ENDPOINTS snapshot save my.db
 
 ./etcdctl snapshot restore my.db -data-dir /var/lib/etcd
-
 ```
 
 
