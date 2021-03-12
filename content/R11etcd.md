@@ -239,21 +239,37 @@ TTL
 
 ```bash 
 
-etcdctl --endpoints=$ENDPOINTS lease grant 30
+./etcdctl --endpoints=$ENDPOINTS lease grant 30
 # lease 2be7547fbc6a5afa granted with TTL(30s)
 
-etcdctl --endpoints=$ENDPOINTS put sample value --lease=2be7547fbc6a5afa
-etcdctl --endpoints=$ENDPOINTS get sample
+./etcdctl --endpoints=$ENDPOINTS put sample value --lease=2be7547fbc6a5afa
+./etcdctl --endpoints=$ENDPOINTS get sample
 
-etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #到期自动续期，会阻塞
-etcdctl --endpoints=$ENDPOINTS lease revoke 2be7547fbc6a5afa          #直接销毁
+./etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #到期自动续期，会阻塞
+./etcdctl --endpoints=$ENDPOINTS lease revoke 2be7547fbc6a5afa          #直接销毁
 # or after 300 seconds
-etcdctl --endpoints=$ENDPOINTS get sample
+./etcdctl --endpoints=$ENDPOINTS get sample
 
 
 ```
 
+事务写
 
+```bash
+
+./etcdctl --endpoints=$ENDPOINTS put user1 bad
+./etcdctl --endpoints=$ENDPOINTS txn --interactive
+
+compares:
+value("user1") = "bad"      
+
+success requests (get, put, delete):
+del user1  
+
+failure requests (get, put, delete):
+put user1 good
+
+```
 
 认证
 
