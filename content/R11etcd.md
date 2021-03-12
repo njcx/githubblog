@@ -275,7 +275,21 @@ put user1 good
 
 ```bash
 
+./etcdctl --endpoints=${ENDPOINTS} role add root               #创建角色root
+./etcdctl --endpoints=${ENDPOINTS} role grant-permission root readwrite  foo     #只给foo读写权限（foo是key）
+./etcdctl --endpoints=${ENDPOINTS} role get root
 
+./etcdctl --endpoints=${ENDPOINTS} user add root                                 #创建用户root
+./etcdctl --endpoints=${ENDPOINTS} user grant-role root root                     #把用户添加到root 角色里面
+./etcdctl --endpoints=${ENDPOINTS} user get root
+
+./etcdctl --endpoints=${ENDPOINTS} auth enable                                   #激活认证
+
+
+./etcdctl --endpoints=${ENDPOINTS} --user=root:123 put foo bar
+./etcdctl --endpoints=${ENDPOINTS} get foo
+./etcdctl --endpoints=${ENDPOINTS} --user=root:123 get foo
+./etcdctl --endpoints=${ENDPOINTS} --user=root:123 get foo1
 
 ```
 
