@@ -93,6 +93,8 @@ HOST_1=10.240.0.17
 HOST_2=10.240.0.18
 HOST_3=10.240.0.19
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
+mkdir -p /var/lib/etcd
+ETCD_DATA=/var/lib/etcd
 
 ```
 
@@ -102,7 +104,7 @@ CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3
 
 THIS_NAME=${NAME_1}
 THIS_IP=${HOST_1}
-etcd --data-dir=data.etcd --name ${THIS_NAME} \
+etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
 	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
 	--initial-cluster ${CLUSTER} \
@@ -118,7 +120,7 @@ etcd --data-dir=data.etcd --name ${THIS_NAME} \
 
 THIS_NAME=${NAME_2}
 THIS_IP=${HOST_2}
-etcd --data-dir=data.etcd --name ${THIS_NAME} \
+etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
 	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
 	--initial-cluster ${CLUSTER} \
@@ -132,12 +134,24 @@ etcd --data-dir=data.etcd --name ${THIS_NAME} \
 
 THIS_NAME=${NAME_3}
 THIS_IP=${HOST_3}
-etcd --data-dir=data.etcd --name ${THIS_NAME} \
+etcd --data-dir=${ETCD_DATA} --name ${THIS_NAME} \
 	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
 	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
 	--initial-cluster ${CLUSTER} \
 	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
 
+```
+
+然后，在任何一个机器上面
+
+```bash
+export ETCDCTL_API=3
+HOST_1=10.240.0.17
+HOST_2=10.240.0.18
+HOST_3=10.240.0.19
+ENDPOINTS=$HOST_1:2379,$HOST_2:2379,$HOST_3:2379
+
+etcdctl --endpoints=$ENDPOINTS member list
 ```
 
 #### Etcd在HIDS-Agent配置管理和健康监测上的应用 
