@@ -30,6 +30,8 @@ namespace。
 
 cgroup和namespace类似，也是将进程进行分组，但它的目的和namespace不一样，namespace是为了隔离进程组之间的资源，而cgroup是为了对一组进程进行统一的资源监控和限制。
 
+![agent](../images/fc4w.jpeg)
+
 cgroup分v1和v2两个版本，v1实现较早，最初版本是在 linux kernel 2.6.24，随着时间的推移，添加了越来越多的controller，而这些controller又各自独立开发，导致了controller之间很大的不一致，功能比较多，但是由于它里面的功能都是零零散散的实现的，所以规划的不是很好，导致了一些使用和维护上的不便，v2的出现就是为了解决v1中这方面的问题，随着v2一起引入内核的还有cgroup namespace。Linux 3.10 提供了作为试验特性的 cgroups v2, 到了 linux kernel 4.5 后 cgroups v2 才成为正式特性。
 
 
