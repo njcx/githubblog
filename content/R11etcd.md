@@ -205,7 +205,40 @@ OK
 1
 ```
 
+监听key的变化
 
+```bash
+./etcdctl --endpoints=$ENDPOINTS watch stock1
+
+PUT
+stock1
+1000
+
+./etcdctl --endpoints=$ENDPOINTS put stock1 1000
+ok
+
+./etcdctl --endpoints=$ENDPOINTS watch stock --prefix
+
+PUT
+stock1
+10
+PUT
+stock2
+20
+
+./etcdctl --endpoints=$ENDPOINTS put stock1 10
+ok
+./etcdctl --endpoints=$ENDPOINTS put stock2 20
+ok
+
+
+```
+查看etcd集群状态
+```bash
+./etcdctl --write-out=table --endpoints=$ENDPOINTS endpoint status       //查看集群状态
+
+./etcdctl --endpoints=$ENDPOINTS endpoint health                         // 
+```
 
 
 #### Etcd在HIDS-Agent配置管理和健康监测上的应用 
