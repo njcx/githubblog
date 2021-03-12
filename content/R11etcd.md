@@ -73,7 +73,7 @@ etcd v3的底层采用boltdb做存储，value直接持久化；redis是一个内
 
 一共3台机器：
 
-CentOS7
+CentOS7，Etcd-v3.4.14
 
 - HOST_1=172.19.0.12
 - HOST_2=172.19.0.13
@@ -160,9 +160,10 @@ ENDPOINTS=$HOST_1:2379,$HOST_2:2379,$HOST_3:2379
 ```
 
 
-```bash
+put 和get操作
 
-put 和get
+
+```bash
 
 ./etcdctl --endpoints=$ENDPOINTS put web1 value1
 OK
@@ -186,6 +187,22 @@ value2
 web3
 value3
 
+```
+
+删除操作
+
+```bash
+
+./etcdctl --endpoints=$ENDPOINTS put key myvalue
+OK
+./etcdctl --endpoints=$ENDPOINTS del key
+1
+./etcdctl --endpoints=$ENDPOINTS put k1 value1
+OK
+./etcdctl --endpoints=$ENDPOINTS put k2 value2
+OK
+./etcdctl --endpoints=$ENDPOINTS del k --prefix
+1
 ```
 
 
