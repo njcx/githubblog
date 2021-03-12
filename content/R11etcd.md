@@ -233,12 +233,42 @@ ok
 
 
 ```
+
+
+TTL
+
+```bash 
+
+etcdctl --endpoints=$ENDPOINTS lease grant 30
+# lease 2be7547fbc6a5afa granted with TTL(30s)
+
+etcdctl --endpoints=$ENDPOINTS put sample value --lease=2be7547fbc6a5afa
+etcdctl --endpoints=$ENDPOINTS get sample
+
+etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #续期
+etcdctl --endpoints=$ENDPOINTS lease revoke 2be7547fbc6a5afa          #直接销毁
+# or after 300 seconds
+etcdctl --endpoints=$ENDPOINTS get sample
+
+
+```
+
+分布式锁
+
+```bash
+./etcdctl --endpoints=$ENDPOINTS lock mutex1
+
+# another client with the same name blocks
+./etcdctl --endpoints=$ENDPOINTS lock mutex1
+```
+
+
 查看etcd集群状态
 
 ```bash
-./etcdctl --write-out=table --endpoints=$ENDPOINTS endpoint status       //查看集群状态
+./etcdctl --write-out=table --endpoints=$ENDPOINTS endpoint status       #查看集群状态
 
-./etcdctl --endpoints=$ENDPOINTS endpoint health                         // 查看节点健康状态
+./etcdctl --endpoints=$ENDPOINTS endpoint health                         #查看节点健康状态
 ```
 
 备份与恢复
