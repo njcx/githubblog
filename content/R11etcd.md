@@ -245,10 +245,20 @@ etcdctl --endpoints=$ENDPOINTS lease grant 30
 etcdctl --endpoints=$ENDPOINTS put sample value --lease=2be7547fbc6a5afa
 etcdctl --endpoints=$ENDPOINTS get sample
 
-etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #续期
+etcdctl --endpoints=$ENDPOINTS lease keep-alive 2be7547fbc6a5afa      #到期自动续期，会阻塞
 etcdctl --endpoints=$ENDPOINTS lease revoke 2be7547fbc6a5afa          #直接销毁
 # or after 300 seconds
 etcdctl --endpoints=$ENDPOINTS get sample
+
+
+```
+
+
+
+认证
+
+```bash
+
 
 
 ```
@@ -258,7 +268,7 @@ etcdctl --endpoints=$ENDPOINTS get sample
 ```bash
 ./etcdctl --endpoints=$ENDPOINTS lock mutex1
 
-# another client with the same name blocks
+# 启动另一个shell，上面会退出
 ./etcdctl --endpoints=$ENDPOINTS lock mutex1
 ```
 
