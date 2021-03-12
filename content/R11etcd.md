@@ -151,8 +151,43 @@ HOST_2=172.19.0.13
 HOST_3=172.19.0.14
 ENDPOINTS=$HOST_1:2379,$HOST_2:2379,$HOST_3:2379
 
-etcdctl --endpoints=$ENDPOINTS member list
 ```
+
+```bash
+./etcdctl --endpoints=$ENDPOINTS member list
+
+8e9e05c52164694d, started, default, http://localhost:2380, http://0.0.0.0:2379, false
+```
+
+
+```bash
+
+put 和get
+
+./etcdctl --endpoints=$ENDPOINTS put web1 value1
+OK
+
+./etcdctl --endpoints=$ENDPOINTS put web2 value2
+OK
+
+./etcdctl --endpoints=$ENDPOINTS put web3 value3
+OK
+
+./etcdctl --endpoints=$ENDPOINTS get web3
+web3
+value3
+
+./etcdctl --endpoints=$ENDPOINTS get web --prefix
+
+web1
+value1
+web2
+value2
+web3
+value3
+
+```
+
 
 
 
