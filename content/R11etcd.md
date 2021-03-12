@@ -67,3 +67,77 @@ etcd的重点是利用raft算法做分布式一致性，强调各个节点之间
 redis也可以做主从同步和读写分离，但节点一致性强调的是数据，不是事务。redis的注册和发现只能通过pub和sub实现，安全性不能保证（断线重连之后不会将历史信息推送给客户端，需要自己做一个定时轮询），延时也比etcd v3高。
 
 etcd v3的底层采用boltdb做存储，value直接持久化；redis是一个内存数据库，它的持久化方案有aof和rdb，在宕机时都或多或少会丢失数据。
+
+
+#### Etcd 集群的搭建
+
+一共3台机器：
+
+CentOS7
+
+- HOST_1=10.240.0.17
+- HOST_2=10.240.0.18
+- HOST_3=10.240.0.19
+
+
+先在所有机器上面执行
+
+```bash
+
+TOKEN=etcd-token-test-njcx
+CLUSTER_STATE=new
+NAME_1=machine-1
+NAME_2=machine-2
+NAME_3=machine-3
+HOST_1=10.240.0.17
+HOST_2=10.240.0.18
+HOST_3=10.240.0.19
+CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
+
+```
+
+然后在HOST_1 执行
+
+```bash
+
+THIS_NAME=${NAME_1}
+THIS_IP=${HOST_1}
+etcd --data-dir=data.etcd --name ${THIS_NAME} \
+	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
+	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
+	--initial-cluster ${CLUSTER} \
+	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
+
+```
+
+
+然后在HOST_2 执行
+
+
+```bash
+
+THIS_NAME=${NAME_2}
+THIS_IP=${HOST_2}
+etcd --data-dir=data.etcd --name ${THIS_NAME} \
+	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
+	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
+	--initial-cluster ${CLUSTER} \
+	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
+```
+
+然后在HOST_3 执行
+
+
+```bash
+
+THIS_NAME=${NAME_3}
+THIS_IP=${HOST_3}
+etcd --data-dir=data.etcd --name ${THIS_NAME} \
+	--initial-advertise-peer-urls http://${THIS_IP}:2380 --listen-peer-urls http://${THIS_IP}:2380 \
+	--advertise-client-urls http://${THIS_IP}:2379 --listen-client-urls http://${THIS_IP}:2379 \
+	--initial-cluster ${CLUSTER} \
+	--initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN}
+
+```
+
+#### Etcd在HIDS-Agent配置管理和健康监测上的应用 
