@@ -47,7 +47,7 @@ etcd比较多的应用场景是用于服务发现，服务发现(Service Discove
 
 提供配置共享和服务发现的系统比较多，其中最为大家熟知的是 Zookeeper，而 etcd 可以算得上是后起之秀了。在项目实现、一致性协议易理解性、运维、安全等多个维度上，etcd 相比 zookeeper 都占据优势。
 
-本文选取 Zookeeper 作为典型代表与 etcd 进行比较，而不考虑 Consul 项目作为比较对象，原因为 Consul 的可靠性和稳定性还需要时间来验证（项目发起方自身服务并未使用Consul，自己都不用)。
+本文选取 Zookeeper 作为典型代表与 etcd 进行比较，而不考虑 Consul 项目作为比较对象，原因为 Consul 的可靠性和稳定性还需要时间来验证。
 
 - 一致性协议： etcd 使用 Raft 协议，Zookeeper 使用 ZAB（类PAXOS协议），前者容易理解，方便工程实现；
 - 运维方面：etcd 方便运维，Zookeeper 难以运维；
@@ -290,3 +290,105 @@ ENDPOINTS=$HOST_1:2379
 
 
 #### Etcd在HIDS-Agent配置管理和健康监测上的应用 
+
+使用 cgroups + etcd + kafka 开发而成的hids的架构，agent 部分使用go 开发而成， 会把采集的数据写入到kafka里面，由后端的规则引擎（go开发而成）消费，配置部分以及agent存活使用etcd。
+
+HIDS-Agent 有如下需求：
+
+- 1， agent 存活检测
+- 2， 配置管理以及动态更新配置
+- 3， 规则下发(比如，恶意程序扫描)
+
+
+获取配置
+
+```go
+
+	cli, err := clientv3.New(clientv3.Config{
+		Endpoints:   etcD,
+		DialTimeout: 5 * time.Second,
+	})
+	if err != nil {
+		a.log("connect failed, err:", err)
+		return
+	}
+
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	resp, err := cli.Get(ctx, "/hids/kafka/host")
+	if err != nil {
+		a.log("get kafka_host failed, err:", err)
+		return
+	}
+
+	resp1, err := cli.Get(ctx, "/hids/kafka/topic")
+	if err != nil {
+		a.log("get kafka_topic failed, err:", err)
+		return
+	}
+
+	ev := resp.Kvs[0]
+	kafkaHost := string(ev.Value)
+
+	ev1 := resp1.Kvs[0]
+	kafkaTopic := string(ev1.Value)
+
+	a.Kafka = kafka.NewKafkaProducer(kafkaHost, kafkaTopic)
+	a.Mutex = new(sync.Mutex)
+
+```
+
+
+单独起一个goroutine，利用ttl做 agent 存活检测，如果key不在了，则认为agent下线了，这里用keep-alive也可以的
+
+```go
+
+go func(cli *clientv3.Client) {
+
+		for {
+			resp, err := cli.Grant(context.TODO(), 60)
+			if err != nil {
+				a.log("etcd client leasegrant failed, err:", err)
+				return
+			}
+			_, err = cli.Put(context.TODO(), "/hids/alivehost/"+host+"--"+LocalIP, time.Now().Format("2006-01-02 15:04:05"),
+				clientv3.WithLease(resp.ID))
+			if err != nil {
+				a.log("etcd client leaseput failed, err:", err)
+				return
+			}
+			time.Sleep(10*time.Second)
+		}
+		cli.Close()
+	}(cli)
+
+```
+
+配置更新以及规则下发可以用 watch 实现
+
+
+```go
+
+go func(cli *clientv3.Client) {
+		for {
+        rch := cli.Watch(context.Background(), "/hids/kafka/host")
+        for wresp := range rch {
+            err = wresp.Err()
+            if err != nil {
+                	a.log("etcd client watch failed, err:", err)
+            }
+            for _, ev := range wresp.Events {
+            if string(ev.Kv.Type)== "PUT" {
+            	a.Kafka = kafka.NewKafkaProducer(string(ev.Kv.Value), kafkaTopic)
+            	}
+                
+            }
+        }
+
+		}
+	}(cli)
+
+```
+
+
+
+
