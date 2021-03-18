@@ -1,11 +1,11 @@
-Title: HIDS-Agent开发之抓取DNS请求和APT分析 
+Title: HIDS-Agent开发之抓取DNS请求和异常分析 
 Date: 2018-08-13 20:20
 Modified: 2018-08-13 20:20
 Category: 安全
 Tags: HIDS
 Slug: R12
 Authors: nJcx
-Summary: HIDS-Agent开发之抓取DNS请求和APT分析 ~
+Summary: HIDS-Agent开发之抓取DNS请求和异常分析 ~
 
 
 #### 介绍
