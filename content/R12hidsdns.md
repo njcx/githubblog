@@ -21,16 +21,7 @@ Summary: HIDS-Agent开发之抓取DNS请求和异常分析 ~
 
 DNS 请求的格式和响应格式差不多，DNS 定义了一个用于查询和响应的报文格式。上图显示这个报文的总体格式。这个报文由 12 字节长的首部和 4 个长度可变的字段组成。DNS 报文 12 字节长的首部格式如下图所示。
 
-![agent](../images/dnsheaderformat.png)
-
-标识字段由客户程序设置并由服务器返回结果。 客户程序通过它来确定响应与查询是否匹配。
-
-16 bit 的标志字段被划分为若干子字段，如下图所示。
-
-![agent](../images/02-DNS-Message-Header-Flags-Codes.png)
-
-
-数据类型	Ethereal 里的名字	说明
+DNS报文里的名字	说明
 
 - Transaction ID	标识符。下文说明
 - Flags	参数。下文说明
@@ -42,6 +33,17 @@ DNS 请求的格式和响应格式差不多，DNS 定义了一个用于查询和
 - Answers	响应数据的正文
 - Authortative name servers	域名管理机构数据
 - Additional records	附加信息数据
+
+
+
+![agent](../images/dnsheaderformat.png)
+
+标识字段由客户程序设置并由服务器返回结果。 客户程序通过它来确定响应与查询是否匹配。
+
+16 bit 的标志字段被划分为若干子字段，如下图所示。
+
+![agent](../images/02-DNS-Message-Header-Flags-Codes.png)
+
 
 Transaction ID：这是由 client 端指定的标识数据，DNS server 会将这个字段原样返回，client 端可以用来区分不同的 DNS 请求
 RR：Resource Record 的缩写
