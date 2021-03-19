@@ -31,16 +31,16 @@ DNS 请求的格式和响应格式差不多，DNS 定义了一个用于查询和
 
 数据类型	Ethereal 里的名字	说明
 
-- uint16_t	Transaction ID	标识符。下文说明
-- uint16_t	Flags	参数。下文说明
-- uint16_t	Questions	询问列表的数目
-- uint16_t	Answer RRs	(直接) 的回答数
-- uint16_t	Authority RRs	认证机构数目（仅响应包里有）
-- uint16_t	Additional RRs	附加信息数目（仅响应包里有）
-- variable	Queries	请求数据的正文。请求包中只有这个。响应包也会附上原本的请求数据
-- variable	Answers	响应数据的正文
-- variable	Authortative name servers	域名管理机构数据
-- variable	Additional records	附加信息数据
+- Transaction ID	标识符。下文说明
+- Flags	参数。下文说明
+- Questions	询问列表的数目
+- Answer RRs	(直接) 的回答数
+- Authority RRs	认证机构数目（仅响应包里有）
+- Additional RRs	附加信息数目（仅响应包里有）
+- Queries	请求数据的正文。请求包中只有这个。响应包也会附上原本的请求数据
+- Answers	响应数据的正文
+- Authortative name servers	域名管理机构数据
+- Additional records	附加信息数据
 
 Transaction ID：这是由 client 端指定的标识数据，DNS server 会将这个字段原样返回，client 端可以用来区分不同的 DNS 请求
 RR：Resource Record 的缩写
