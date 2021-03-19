@@ -160,7 +160,8 @@ DNS 报文中最后的三个字段，回答字段、授权字段和附加信息�
 
 实例代码
 
-抓取dns记录，可以hook udp_recvmsg() udpv6_recvmsg() 函数，也可能直接用libpcap。libpcap的工作原理可以描述为，当一个数据包到达网卡时，通过网络分接口（即旁路机制）将数据包发给BPF过滤器，匹配通过的数据包可以被libpcap利用创建的套接字PF_PACKET从链路层驱动程序中获得。进而在用户空间提供独立于系统的用户级API接口。我们使用谷歌的包github.com/google/gopacket， gopacket构建在libpcap之上。
+抓取dns记录，可以hook udp_recvmsg() udpv6_recvmsg() 函数，也可能直接用libpcap。libpcap的工作原理可以描述为，当一个数据包到达网卡时，通过网络分接口（即旁路机制）将数据包发给BPF过滤器，匹配通过的数据包可以被libpcap利用创建的套接字PF_PACKET从链路层驱动程序中获得。进而在用户空间提供独立于系统的用户级API接口。我们使用谷歌的包github.com/google/gopacket， gopacket构建在libpcap之上。配合 audit 或者hook 相关函数，可以清楚看到对应的uid pid。
+
 
 样例：
 
@@ -261,8 +262,37 @@ func StartDNSNetSniff(resultChan chan map[string]string) {
 	}
 }
 
-
 ```
+
+
+上面给出了一个抓取dns请求的样例，比如，看下面这个DNS隧道：
+
+![agent](../images/WechatIMG26.jpeg)
+
+![agent](../images/WechatIMG21.jpeg)
+
+![agent](../images/WechatIMG23.jpeg)
+
+
+特征很明显：
+
+1， 请求的Type一般都是TXT（为了返回的时候能够加入更多的信息）。】
+
+2， payload部分一般都会编码（可能为base64、2进制或16进制）后放到子域名里面，而且多变，不一致
+
+3， DNS发生频率很高，短时间为了发送大量数据，会产生大量请求
+
+我们也可以联动威胁情报
+
+![agent](../images/WeChatbbbaf08c7e6210a037f98624f609c378.png)
+
+
+去干吧。
+
+
+
+
+
 
 
 
