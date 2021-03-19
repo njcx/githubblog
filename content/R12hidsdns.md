@@ -140,12 +140,12 @@ Bit 3~0, Reply code：响应状态码，是一个 4 bit 的返回码字段。通
 DNS 报文中最后的三个字段，回答字段、授权字段和附加信息字段， 均采用一种称为资源记录RR（Resource Record）的相同格式。 图显示了资源记录的格式。
 
 - Ethereal 里的名字	说明
-- Name	资源的域名——其实前文已经出现了
-- Type	类型。下文说明
-- Class	大多数是 0x0001，代表 IN
-- Time to Live	TTL 秒数
-- Data length	当前 RR 剩余部分的长度
-- variable		RR 主数据
+- Name	           资源的域名
+- Type	           类型。下文说明
+- Class	        大多数是 0x0001，代表 IN
+- Time to Live	 TTL 秒数
+- Data length	    当前 RR 剩余部分的长度
+- variable		 RR 主数据
 
 域名是记录中资源数据对应的名字。它的格式和前面介绍的查询名字段格式相同。
 
@@ -287,7 +287,7 @@ func StartDNSNetSniff(resultChan chan map[string]string) {
 ![agent](../images/WeChatbbbaf08c7e6210a037f98624f609c378.png)
 
 
-去干吧。
+在server 端做流式分析，挖掘 C2 、APT、 botnet 等等。
 
 
 
