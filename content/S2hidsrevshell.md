@@ -304,9 +304,9 @@ or
 ![agent](../images/WechatIMG63.jpeg)
 目标机执行后的结果如下：
 
-创建了bash进程，0和1描述符都指向了pipe，这两个pipe关联到nc进程上。nc创建了socket外联。
+创建了sh进程，0和1描述符都指向了pipe，这两个pipe关联到nc进程上。nc创建了socket外联。
 
-匹配规则：bash进程的0，和1文件描述符指向pipe
+匹配规则：sh进程的0，和1文件描述符指向pipe
 
 
 用openssl 反弹shell
