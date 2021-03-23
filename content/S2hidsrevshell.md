@@ -365,7 +365,9 @@ int main(void){
 
 
 
-Don't forget to check with others shell : sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
+归纳起来，shell环境的进程如果0和1（或某一个）文件描述符都关联到socket或者pipe，就认为它是反弹shell。
+
+ shell 环境包含： sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
 
 
 
