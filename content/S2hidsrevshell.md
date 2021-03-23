@@ -398,6 +398,12 @@ shell 环境包含： sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
 #### HIDS-Agent 开发
 
 
+使用 cgroups + etcd + kafka 开发而成的hids的架构，agent 部分使用go 开发而成， 会把采集的数据写入到kafka里面，由后端的规则引擎（go开发而成）消费，配置部分以及agent存活使用etcd。关于agent 使用cgroups限制资源以及使用etcd做配置管理agent存活等已经在前文介绍了一下。下面介绍一下agent分析反弹shell的部分。
+
+
+代码例子：
+主要是分析 Linux /proc的内容
+
 ```bash
 
 import (
@@ -567,7 +573,7 @@ func dirsFile(dirPath string) ([]string, error) {
 	return ret, nil
 }
 ```
-
+抓取的数据如下
 
 ```bash
 {
@@ -594,6 +600,8 @@ func dirsFile(dirPath string) ([]string, error) {
     "uid":"0"
 }
 ```
+
+对应上面的规则，在server 端做流式分析，很多东西一目了然，不过， 百密总有一疏，绕过的方法大家自主了解，技术在对抗中升华。
 
 
 
