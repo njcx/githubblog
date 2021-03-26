@@ -252,3 +252,37 @@ output.kafka:
 
 ![sysmon](../images/WechatIMG80.jpeg)
 
+
+kafka的流量分流，写es 和 规则引擎消费， 下面是logstash to es的配置
+
+```bash
+input{
+  kafka{
+    bootstrap_servers => "172.21.129.2:9092"
+    topics_pattern  => ".*"
+    consumer_threads => 5
+    decorate_events => true
+    codec => "json"
+    auto_offset_reset => "latest"
+    group_id => "logstash1"
+
+}
+}
+filter {
+
+        mutate {
+        remove_field => ["beat","agent","ecs"]
+    }
+
+}
+
+output {
+   elasticsearch {
+         hosts => ["127.0.0.1:9200"]
+
+         index => "%{[@metadata][kafka][topic]}-%{+YYYY.MM.dd}"
+}
+
+}
+```
+
