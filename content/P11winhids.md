@@ -214,12 +214,14 @@ sysmon64 -c sysmonconfig-export.xml
 exit
 
 ```
+sysmon 安装完成后，可以看到对应的Sysmon服务
 
 
 ![sysmon](../images/WechatIMG74.jpeg)
 
 
-![sysmon](../images/WechatIMG75.jpeg)
+ sysmon 的日志位于，C:\Windows\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx
+ 
 
 ![sysmon](../images/WechatIMG76.jpeg)
 
@@ -231,10 +233,7 @@ https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows
 
 ```
 
-![sysmon](../images/WechatIMG78.jpeg)
-
-![sysmon](../images/WechatIMG79.jpeg)
-
+配置文件的output 改为：
 
 ```
 
@@ -245,6 +244,20 @@ output.kafka:
   
   
 ```
+
+
+接下来就是启动了，用管理员的身份启动wPowerShell 。
+
+输入如下：
+.\install-service-winlogbeat.ps1
+net start winlogbeat
+
+
+
+![sysmon](../images/WechatIMG78.jpeg)
+
+![sysmon](../images/WechatIMG79.jpeg)
+
 
 
 ```bash
