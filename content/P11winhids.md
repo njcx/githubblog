@@ -249,8 +249,13 @@ output.kafka:
 接下来就是启动了，用管理员的身份启动wPowerShell 。
 
 输入如下：
+
+```bash
+
 .\install-service-winlogbeat.ps1
 net start winlogbeat
+
+```
 
 
 
