@@ -243,8 +243,11 @@ output.kafka:
   topic: 'win-hids'
 
 
+```bash
 
 ./kafka-console-consumer.sh --bootstrap-server 172.21.129.2:9092 --topic win-hids 
+
+```
 
 ![sysmon](../images/WechatIMG80.jpeg)
 
