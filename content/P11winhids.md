@@ -215,11 +215,9 @@ exit
 
 ```
 
-![sysmon](../images/WechatIMG3.jpeg)
 
 ![sysmon](../images/WechatIMG74.jpeg)
 
-![sysmon](../images/WechatIMG74.jpeg)
 
 ![sysmon](../images/WechatIMG75.jpeg)
 
