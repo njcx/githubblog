@@ -234,6 +234,7 @@ https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows
 ```
 
 ![sysmon](../images/WechatIMG78.jpeg)
+
 ![sysmon](../images/WechatIMG79.jpeg)
 
 
