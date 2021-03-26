@@ -236,10 +236,15 @@ https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows
 ![sysmon](../images/WechatIMG79.jpeg)
 
 
+```
+
 output.kafka:
   # initial brokers for reading cluster metadata
   hosts: ["172.21.129.2:9092"]
   topic: 'win-hids'
+  
+  
+```
 
 
 ```bash
