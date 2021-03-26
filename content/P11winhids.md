@@ -185,13 +185,13 @@ if "%hour:~0,1%"==" " set hour=0%hour:~1,1%
 if "%hour:~1,1%"=="" set hour=0%hour%
 if "%minute:~1,1%"=="" set minute=0%minute%
 set tasktime=%hour%:%minute%
-mkdir C:\ProgramData\sysmon
-pushd "C:\ProgramData\sysmon\"
+mkdir C:\windows\sysmon
+pushd "C:\windows\sysmon\"
 echo [+] Downloading Sysmon...
-@powershell (new-object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Sysmon64.exe','C:\ProgramData\sysmon\sysmon64.exe')"
+@powershell (new-object System.Net.WebClient).DownloadFile('https://gitee.com/njcx86/sysmon-config/raw/master/Sysmon64.exe','C:\windows\sysmon\sysmon64.exe')"
 echo [+] Downloading Sysmon config...
-@powershell (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/ion-storm/sysmon-config/develop/sysmonconfig-export.xml','C:\ProgramData\sysmon\sysmonconfig-export.xml')"
-@powershell (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/ion-storm/sysmon-config/develop/Auto_Update.bat','C:\ProgramData\sysmon\Auto_Update.bat')"
+@powershell (new-object System.Net.WebClient).DownloadFile('https://gitee.com/njcx86/sysmon-config/raw/master/sysmonconfig-export.xml','C:\windows\sysmon\sysmonconfig-export.xml')"
+@powershell (new-object System.Net.WebClient).DownloadFile('https://gitee.com/njcx86/sysmon-config/raw/master/Auto_Update.bat','C:\windows\sysmon\Auto_Update.bat')"
 sysmon64.exe -accepteula -i sysmonconfig-export.xml
 sc failure Sysmon64 actions= restart/10000/restart/10000// reset= 120
 echo [+] Sysmon Successfully Installed!
@@ -209,7 +209,7 @@ Auto_Update.bat
 
 @echo on
 cd C:\ProgramData\sysmon\
-@powershell (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/ion-storm/sysmon-config/develop/sysmonconfig-export.xml','C:\ProgramData\sysmon\sysmonconfig-export.xml')"
+@powershell (new-object System.Net.WebClient).DownloadFile('https://gitee.com/njcx86/sysmon-config/raw/master/sysmonconfig-export.xml','C:\windows\sysmon\sysmonconfig-export.xml')"
 sysmon64 -c sysmonconfig-export.xml
 exit
 
@@ -217,13 +217,28 @@ exit
 
 ![sysmon](../images/WechatIMG3.jpeg)
 
+![sysmon](../images/WechatIMG74.jpeg)
 
+![sysmon](../images/WechatIMG74.jpeg)
+
+![sysmon](../images/WechatIMG75.jpeg)
+
+![sysmon](../images/WechatIMG76.jpeg)
 
 然后安装 Winlogbeat
 
 
 ```bash
-https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows-x86_64.msi
+https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.8.0-windows-x86_64.zip
 
 ```
+
+![sysmon](../images/WechatIMG78.jpeg)
+![sysmon](../images/WechatIMG79.jpeg)
+
+
+output.kafka:
+  # initial brokers for reading cluster metadata
+  hosts: ["172.21.129.2:9092"]
+  topic: 'win-hids'
 
