@@ -6,7 +6,7 @@ Tags: NIDS
 Slug: R2 
 Authors: nJcx
 Summary: 甲方自研NIDS落地全程实录~
-
+Status: draft
 
 
 #### 汇总
