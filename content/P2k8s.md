@@ -6,6 +6,7 @@ Tags: K8S
 Slug: P2
 Authors: nJcx
 Summary: Kubernetes集群渗透测试~
+Status: draft
 
 #### 安装
 
