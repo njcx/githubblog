@@ -6,7 +6,6 @@ Tags: HIDS
 Slug: P11 
 Authors: nJcx
 Summary: 使用Sysmon和Winlogbeat打造Windows平台的HIDS~
-Status: draft
 
 #### 介绍
 
