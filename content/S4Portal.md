@@ -87,6 +87,31 @@ source /etc/raddb/mods-config/sql/main/mysql/schema.sql
 ```
 
 
+上面的指令，共导入了7个表，分别是：
+radcheck 用户检查信息表
+radreply 用户回复信息表
+radgroupcheck 用户组检查信息表
+radgroupreply 用户组检查信息表
+radusergroup 用户和组关系表
+radacct 计费情况表
+radpostauth 认证后处理信息，可以包括认证请求成功和拒绝的记录。
+
+
+
+```bash
+建立组信息：（在此新建组名称为user）
+insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Auth-Type’,’:=’,’Local’);
+insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Service-Type’,’:=’,’Framed-User’);
+insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Framed-IP-Address’,’:=’,’255.255.255.255′);
+insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Framed-IP-Netmask’,’:=’,’255.255.255.0′);
+
+建立用户信息：（在此新建用户名为test，密码为testpwd）
+insert into radcheck (username,attribute,op,value) values (‘test’,’Cleartext-Password’,’:=’,’testpwd’);
+
+将用户加入组中：
+insert into radusergroup (username,groupname) values (‘test’,’user’);
+
+```
 
 ```bah
 
