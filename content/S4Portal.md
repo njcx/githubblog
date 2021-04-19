@@ -6,7 +6,7 @@ Tags: 企业安全建设
 Slug: S4
 Authors: nJcx
 Summary: 企业安全建设之网络准入Portal认证Web开发 ~
-Status: draft
+
 
 
 #### 介绍
@@ -52,3 +52,114 @@ Portal认证特点：
 	9) Portal Server回应确认收到认证结果的报文。
 	
 	10）Portal Server推送认证结果给用户。
+
+
+
+```bash
+
+docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=208512512 -d mysql:5.7
+
+```
+
+```bash
+yum -y install freeradius freeradius-utils freeradius-mysql
+
+```
+
+```bash 
+pip install mycli
+
+使用 mycli代替mysql
+
+
+1. create database radius default character set utf8 collate utf8_general_ci;  
+
+2. grant all on radius.* to 'radius'@'%' identified by '123456';
+
+3. grant all on radius.* to 'radius'@'localhost' identified by '123456';
+
+4. flush privileges;
+
+use radius
+
+source /etc/raddb/mods-config/sql/main/mysql/schema.sql 
+
+```
+
+
+
+```bah
+
+修改FreeRadius中的mysql认证配置
+
+cd /etc/raddb/mods-enabled
+ln -s ../mods-available/sql
+chgrp -h radiusd /etc/raddb/mods-enabled/sql
+
+vim /etc/raddb/mods-available/sql
+
+找到driver = “rlm_sql_null”这一行，修改为driver = “rlm_sql_mysql”
+
+vim /etc/raddb/radiusd.conf
+
+
+
+        auth = yes
+        auth_badpass = yes
+        auth_goodpass = yes
+
+vim /etc/raddb/sites-available/default
+
+
+取消sql的注释，将-sql的-去掉
+
+vim /etc/raddb/mods-available/sql
+
+
+修改dialect = “sqlite” 为 dialect = “mysql”
+
+server = "10.10.128.235"
+port = 3306
+login = "radius"
+password = "123456"
+
+radius_db = "radius"
+        
+        
+read_clients=yes
+取消注释
+
+```
+
+
+
+
+
+
+```bash
+
+#  cd /etc/raddb/certs
+
+#  ./bootstrap 
+
+#  chown radiusd:radiusd server.pem  ca.pem  dh
+
+```
+
+
+测试radius是否运行正常
+
+```bash
+radiusd -X
+
+```
+
+
+```bash
+
+启动radius和设置为开机启动
+systemctl start radiusd.service
+systemctl enable radiusd.service
+
+
+```
