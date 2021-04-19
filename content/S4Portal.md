@@ -100,16 +100,18 @@ radpostauth 认证后处理信息，可以包括认证请求成功和拒绝的�
 
 ```bash
 建立组信息：（在此新建组名称为user）
-insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Auth-Type’,’:=’,’Local’);
-insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Service-Type’,’:=’,’Framed-User’);
-insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Framed-IP-Address’,’:=’,’255.255.255.255′);
-insert into radgroupreply (groupname,attribute,op,value) values (‘user’,’Framed-IP-Netmask’,’:=’,’255.255.255.0′);
+insert into radgroupreply (groupname,attribute,op,value) values ("user","Auth-Type",":=","Local");
+
+insert into radgroupreply (groupname,attribute,op,value) values ("user","Service-Type",":=","Framed-User");
+
+insert into radgroupreply (groupname,attribute,op,value) values ("user","Framed-IP-Address", ":=","255.255.255.255");
+insert into radgroupreply (groupname,attribute,op,value) values ("user","Framed-IP-Netmask", ":=","255.255.255.0");
 
 建立用户信息：（在此新建用户名为test，密码为testpwd）
-insert into radcheck (username,attribute,op,value) values (‘test’,’Cleartext-Password’,’:=’,’testpwd’);
+insert into radcheck (username,attribute,op,value) values ("test", "Cleartext-Password",":=","testpwd");
 
 将用户加入组中：
-insert into radusergroup (username,groupname) values (‘test’,’user’);
+insert into radusergroup (username,groupname) values ("test","user");
 
 ```
 
@@ -127,14 +129,11 @@ vim /etc/raddb/mods-available/sql
 
 vim /etc/raddb/radiusd.conf
 
-
-
-        auth = yes
-        auth_badpass = yes
-        auth_goodpass = yes
+auth = yes
+auth_badpass = yes
+auth_goodpass = yes
 
 vim /etc/raddb/sites-available/default
-
 
 取消sql的注释，将-sql的-去掉
 
@@ -158,8 +157,19 @@ read_clients=yes
 
 
 
+```bash
+Unable to check file "/etc/raddb/certs/server.pem": No such file or directory
+rlm_eap_tls: Failed initializing SSL context
+rlm_eap (EAP): Failed to initialise rlm_eap_tls
+/etc/raddb/mods-enabled/eap[14]: Instantiation failed for module "eap"
 
+rlm_eap: SSL error error:0200100D:system library:fopen:Permission denied
+rlm_eap_tls: Error reading certificate file /etc/raddb/certs/server.pem
+rlm_eap: Failed to initialize type tls
+/etc/raddb/eap.conf[17]: Instantiation failed for module "eap"
+```
 
+下面一定要操作，不然会报证书错误，读不到或者权限错误(上面的报错)
 
 ```bash
 
@@ -185,6 +195,67 @@ radiusd -X
 启动radius和设置为开机启动
 systemctl start radiusd.service
 systemctl enable radiusd.service
+
+
+```
+
+正常启动
+
+
+```bash
+
+radtest test testpwd localhost 1812 testing123
+
+
+Sent Access-Request Id 222 from 0.0.0.0:19958 to 127.0.0.1:1812 length 74
+        User-Name = "test"
+        User-Password = "testpwd"
+        NAS-IP-Address = 10.10.128.235
+        NAS-Port = 1812
+        Message-Authenticator = 0x00
+        Cleartext-Password = "testpwd"
+Received Access-Accept Id 222 from 127.0.0.1:1812 to 0.0.0.0:0 length 44
+        Service-Type = Framed-User
+        Service-Type = Framed-User
+        Framed-IP-Address = 255.255.255.255
+        Framed-IP-Netmask = 255.255.255.0
+
+
+```
+
+
+
+添加客户端连接设置
+
+```bash
+
+编辑/etc/raddb/clients.conf文件，为允许连接的客户端设置相应的共享秘钥
+例一：本地localhost接入(一般用于测试)，共享秘钥为demoradiussecret:
+client localhost {
+ipaddr = 127.0.0.1
+proto = *
+secret = demo_radius_secret
+}
+\# IPv6 Client
+client localhost_ipv6 { 
+
+ipv6addr        = ::1
+secret          = demo_radius_secret
+}
+例二：允许内网192.168.110网段连接该radius，共享秘钥为demoradiussecret: client my_lan {
+ipaddr = 192.168.110.0/24
+secret = demo_radius_secret
+require_message_authenticator = no
+}
+例三：允许所有客户端连接：
+client all_client {
+ipaddr = 0.0.0.0/0
+secret = demo_radius_secret
+require_message_authenticator = no
+}
+启动服务
+\# systemctl start radiusd.service
+\# systemctl status radiusd.service
 
 
 ```
