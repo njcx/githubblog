@@ -58,8 +58,8 @@ DESCRIPTION = 'Linux重度用户，Python从业人员，个人小博客，欢迎
 
 LINKS = (
     ('知乎', 'https://www.zhihu.com/people/njcxs'),
-    ('FaceBook', 'https://www.facebook.com/nJcx1'),
-    ('Github', 'https://github.com/njcx'),
+    ('安全客', 'https://www.anquanke.com/member/154147'),
+    ('Freebuf', 'https://www.freebuf.com/column/1481'),
 )
 
 ICONS = [
