@@ -102,10 +102,34 @@ Tracepoints是在内核代码中所做的一种静态标记，是开发者在内
 
 ```
 
+
+eBPF程序的主要数据结构是eBPF map，一种key-value数据结构。Maps通过bpf()系统调用创建和操作。
+
+有不同类型的Map：
+
 ```bash
 
-
+BPF_MAP_TYPE_HASH：哈希表
+BPF_MAP_TYPE_ARRAY：数组映射，已针对快速查找速度进行了优化，通常用于计数器
+BPF_MAP_TYPE_PROG_ARRAY：对应eBPF程序的文件描述符数组；用于实现跳转表和子程序以处理特定的数据包协议
+BPF_MAP_TYPE_PERCPU_ARRAY：每个CPU的阵列，用于实现延迟的直方图
+BPF_MAP_TYPE_PERF_EVENT_ARRAY：存储指向struct perf_event的指针，用于读取和存储perf事件计数器
+BPF_MAP_TYPE_CGROUP_ARRAY：存储指向控制组的指针
+BPF_MAP_TYPE_PERCPU_HASH：每个CPU的哈希表
+BPF_MAP_TYPE_LRU_HASH：仅保留最近使用项目的哈希表
+BPF_MAP_TYPE_LRU_PERCPU_HASH：每个CPU的哈希表，仅保留最近使用的项目
+BPF_MAP_TYPE_LPM_TRIE：最长前缀匹配树，适用于将IP地址匹配到某个范围
+BPF_MAP_TYPE_STACK_TRACE：存储堆栈跟踪
+BPF_MAP_TYPE_ARRAY_OF_MAPS：地图中地图数据结构
+BPF_MAP_TYPE_HASH_OF_MAPS：地图中地图数据结构
+BPF_MAP_TYPE_DEVICE_MAP：用于存储和查找网络设备引用
+BPF_MAP_TYPE_SOCKET_MAP：存储和查找套接字，并允许使用BPF辅助函数进行套接字重定向
 
 ```
+
+可以使用bpf_map_lookup_elem（）和 bpf_map_update_elem（）函数从eBPF或用户空间程序访问所有Map.
+
+
+
 
 
