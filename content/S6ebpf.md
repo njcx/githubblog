@@ -63,3 +63,12 @@ perf-event 用于将内核采集的事件实时发送至用户空间，用户空
 
 ![agent](../images/WechatIMG67.jpeg)
 
+
+
+```bash
+
+
+
+```
+
+
