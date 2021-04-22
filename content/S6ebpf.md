@@ -132,4 +132,50 @@ BPF_MAP_TYPE_SOCKET_MAP：存储和查找套接字，并允许使用BPF辅助函
 
 
 
+demo 是在kali Linux 上开发的。环境搭建比较简单，
+
+
+```bash
+
+apt-get install golang clang llvm 
+
+```
+
+
+CentOS 7 可以按下面搭建
+
+```bash
+
+添加yum源 ： c7-clang-x86_64.repo
+
+[c7-devtoolset-8]
+name=c7-devtoolset-8
+baseurl=https://buildlogs.centos.org/c7-devtoolset-8.x86_64/
+gpgcheck=0
+enabled=1
+[c7-llvm-toolset-9]
+name=c7-llvm-toolset-9
+baseurl=https://buildlogs.centos.org/c7-llvm-toolset-9.0.x86_64/
+gpgcheck=0
+enabled=1
+
+
+
+# yum install llvm-toolset-9.0  -y
+# yum install kernel kernel-devel kernel-headers -y  
+
+
+环境变量如下：
+
+export PATH=$PATH:/opt/rh/llvm-toolset-9.0/root/bin
+export PATH=$PATH:/opt/rh/devtoolset-8/root/bin
+
+
+在 /etc/ld.so.conf 添加如下内容，并 ldconfig：
+/opt/rh/llvm-toolset-9.0/root/lib64
+
+
+# reboot 重启一下，应用新的内核
+
+```
 
