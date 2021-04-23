@@ -40,26 +40,31 @@ Netfilter 在 Linux 内核中表现为一系列的hook, 并允许Linux 内核模
 
 Netfilter Hook的意义:
 
+```bash
 	NF_IP_PRE_ROUTING: 位于路由之前，报文一致性检查之后（报文一致性检查包括: 报文版本、报文长度和checksum）。
 	NF_IP_LOCAL_IN: 位于报文经过路由之后，并且目的是本机的。
 	NF_IP_FORWARD：位于在报文路由之后，目的地非本机的。
 	NF_IP_LOCAL_OUT: 由本机发出去的报文，并且在路由之前。
 	NF_IP_POST_ROUTING: 所有即将离开本机的报文。
+```
 	
 Linux 内核模块可以注册到任何的hook，注册的回调函数也必需指定优先级。当一个报文通过hook的时候，hook将会依据优先级调用回调函数。注册的回调函数，可以有五种返回，每种返回代表对报文不同的操作:
 
+```bash
 	NF_ACCEPT: 继续正常处理此报文，即允许报文通过。
 	NF_DROP: 丢弃此报文，不再进行继续处理，即拒绝此报文。
 	NF_STOLEN: 取走这个报文，不再继续处理。
 	NF_QUEUE: 报文进行重新排队，可以将报文发到用户空间的程序，进行修改或者决定是拒绝或者允许。
 	NF_REPEAT: 报文重新调用hook。
-
+```
 
 Iptables 是基于Netfilter框架实现的报文选择系统，其可以用于报文的过滤、网络地址转换和报文修改等功能。Iptables 本质上是包含了5个规则表，而规则表则包含了一些列的报文的匹配规则以及操作目标。以下对每个规则表进行了简单说明：
 
+```bash
 	Filter Table: 是一个默认的规则表，用于报文的过滤。他注册了三个链: INPUT、FORWARD和OUTPUT。
 	NAT Table: 主要用于NAT转换，注册了四个链：PREROUTING、INPUT、OUTPUT和POSTROUTING。
 	Mangle Table: 主要用于报文的修改，一共注册了五个链: PREROUTING、OUTPUT、INPUT、FORWARD和POSTROUTING
 	Raw Table: 可以对报文不进行链路跟踪，其优先级在hook中注册很高，注册了两个链: PREROUTING和OUTPUT
 	Security Table: 用于强制网络接入控制，注册了三个链：INPUT、OUTPUT 和 FORWARD
 	操作目标指的是否允许报文通过，如果允许即为ACCEPT，拒绝则为DROP。
+```
