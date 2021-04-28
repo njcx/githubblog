@@ -90,10 +90,6 @@ Tracepoints是在内核代码中所做的一种静态标记，是开发者在内
 然而，Tracepoints的不足之处在于，这些探针需要开发人员将它们添加到内核中，因此，它们可能不会覆盖内核的所有子系统，只能使用当前版本内核所支持的探测点。
 
 
-
-![agent](../images/WechatIMG67.jpeg)
-
-
 eBPF程序的主要数据结构是eBPF map，一种key-value数据结构。Maps通过bpf()系统调用创建和操作。
 
 有不同类型的Map：
@@ -290,3 +286,7 @@ export PATH=$PATH:/opt/rh/devtoolset-8/root/bin
 
 ```
 
+
+![agent](../images/WechatIMG145.jpeg)
+
+![agent](../images/WechatIMG67.jpeg)
