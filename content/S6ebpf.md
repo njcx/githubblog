@@ -136,6 +136,28 @@ BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关�
 
 
 bpf_attr,第 2 个参数,该参数的类型取决于 cmd 参数的值，本文只分析 cmd=BPF_PROG_LOAD 这种情况，其中 prog_type 指定了 bpf 程序类型，eBPF 程序支持 attach 到不同的 event 上，比如 Kprobe，UProbe，tracepoint，Network packets，perf event 等。
+完整如下：
+
+```bash
+内核支持的当前eBPF程序类型集为：
+
+BPF_PROG_TYPE_SOCKET_FILTER：网络数据包过滤器
+BPF_PROG_TYPE_KPROBE：确定是否应触发kprobe
+BPF_PROG_TYPE_SCHED_CLS：网络流量控制分类器
+BPF_PROG_TYPE_SCHED_ACT：网络流量控制操作
+BPF_PROG_TYPE_TRACEPOINT：确定是否应触发跟踪点
+BPF_PROG_TYPE_XDP：从设备驱动程序接收路径运行的网络数据包过滤器
+BPF_PROG_TYPE_PERF_EVENT：确定是否触发perf事件处理程序
+BPF_PROG_TYPE_CGROUP_SKB：用于cgroups的网络数据包过滤器
+BPF_PROG_TYPE_CGROUP_SOCK：用于cgroups的网络数据包过滤器，允许修改socket选项
+BPF_PROG_TYPE_LWT_ *：用于隧道的网络数据包过滤器
+BPF_PROG_TYPE_SOCK_OPS：用于设置socket参数的程序
+BPF_PROG_TYPE_SK_SKB：网络数据包过滤器，用于在socket之间转发数据包
+BPF_PROG_CGROUP_DEVICE：确定是否允许设备(device)操作
+
+
+```
+
 
 比如,cmd=BPF_PROG_LOAD 使用，如下：
  
