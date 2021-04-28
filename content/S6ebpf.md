@@ -628,7 +628,7 @@ project_root=$(shell pwd)
 uname=$(shell uname -r)
 kernel_src=$(shell rpm -qa kernel-devel | head -1 | sed 's/kernel-devel-//g' | awk '{print "/usr/src/kernels/"$$1""}')
 
-all: build copy
+all: build
 
 build:
         clang \
