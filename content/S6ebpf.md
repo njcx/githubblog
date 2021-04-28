@@ -128,7 +128,44 @@ BPF_MAP_TYPE_SOCKET_MAP：存储和查找套接字，并允许使用BPF辅助函
 可以使用bpf_map_lookup_elem（）和 bpf_map_update_elem（）函数从eBPF或用户空间程序访问所有Map.
 
 
+使用 man bpf 查看 bpf 系统调用，int bpf(int cmd, union bpf_attr *attr, unsigned int size)
 
+```bash
+
+BPF_MAP_CREATE： 创建一个 map，并返回一个 fd，指向这个 map，这个 map 在 bpf 是非常重要的数据结构，用于 bpf 程序在内核态和用户态之间相互通信。
+BPF_MAP_LOOKUP_ELEM： 在给定一个 map 中查询一个元素，并返回其值
+BPF_MAP_UPDATE_ELEM： 在给定的 map 中创建或更新一个元素(关于 key/value 的键值对)
+BPF_MAP_DELETE_ELEM
+BPF_MAP_GET_NEXT_KEY： 在一个特定的 map 中根据 key 值查找到一个元素，并返回这个 key 对应的下一个元素
+BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。本文分析只关注这个 cmd。
+
+```
+bpf_attr：第 2 个参数
+
+该参数的类型取决于 cmd 参数的值，本文只分析 cmd=BPF_PROG_LOAD 这种情况，其中 prog_type 指定了 bpf 程序类型，eBPF 程序支持 attach 到不同的 event 上，比如 Kprobe，UProbe，tracepoint，Network packets，perf event 等。
+
+比如,cmd=BPF_PROG_LOAD 使用，如下：
+ 
+```bash
+ 
+struct {    /* Used by BPF_PROG_LOAD */
+    __u32   prog_type;  //设置为 `BPF_PROG_TYPE_KPROBE`，表示是通过 kprobe 注入到内核函数。
+    __u32   insn_cnt;
+    __aligned_u64 insns;      /* 'const struct bpf_insn *' */
+    __aligned_u64 license;    // 指定 license
+    __u32   log_level;  /* verbosity level of verifier */
+    __u32   log_size;   /* size of user buffer */
+    __aligned_u64 log_buf;    // 用户buff
+ 
+    __u32   kern_version;
+    /* checked when prog_type=kprobe
+    (since Linux 4.1) */
+};
+size：第三个参数
+
+表示上述 bpf_attr 字节大小。
+
+```
 
 demo 是在kali Linux 上开发的。环境搭建比较简单，
 
