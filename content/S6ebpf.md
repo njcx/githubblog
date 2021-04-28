@@ -245,12 +245,12 @@ R10对应rbp，只读栈帧寄存器
 
 
 
-demo 是在Kali Linux 上开发的。环境搭建比较简单，
+demo 是在Kali Linux 上开发的。环境搭建比较简单，由于内核不一样，可能修改部分参数：
 
 
 ```bash
 
-apt-get install golang clang llvm 
+apt-get install golang clang llvm  -y
 
 ```
 
@@ -457,9 +457,7 @@ int kprobe__do_exit(struct pt_regs *ctx)
     return 0;
 }
 
-// Code is licensed under Apache 2.0 which is GPL compatible.
 char _license[] SEC("license") = "GPL";
-
 
 ```
 
@@ -649,6 +647,393 @@ build:
 ```
 
 
+
+go接受数据：
+
+
+```golang
+
+package main
+
+import (
+	"bytes"
+	"encoding/binary"
+	"encoding/json"
+	"fmt"
+	bpf "github.com/iovisor/gobpf/elf"
+	"github.com/pkg/errors"
+	"io/ioutil"
+	"os"
+	"os/signal"
+	"sync"
+	"time"
+	"unsafe"
+)
+
+var (
+	sizeofExecveData = int(unsafe.Sizeof(ExecveData{}))
+	sizeofExecveArg  = int(unsafe.Sizeof(ExecveArg{}))
+	sizeofExecveRtn  = int(unsafe.Sizeof(ExecveRtn{}))
+	sizeofExitData   = int(unsafe.Sizeof(ExitData{}))
+)
+const (
+	execveProbe       = "kprobe/SyS_execve"
+	execveReturnProbe = "kretprobe/SyS_execve"
+	execveMap         = "execve_events"
+	doExitProbe       = "kprobe/do_exit"
+)
+
+
+type ExecveData struct {
+	KTimeNS         time.Duration
+	RealStartTimeNS time.Duration
+	PID             uint32
+	UID             uint32
+	GID             uint32
+	PPID            uint32
+	Comm            [16]byte
+}
+
+type ExecveArg struct {
+	PID uint32
+	_   uint32
+	Arg [256]byte
+}
+
+type ExecveRtn struct {
+	PID        uint32
+	ReturnCode int32
+}
+
+
+type ExitData struct {
+	KTime uint64
+	PID   uint32
+}
+
+
+type processData struct {
+	StartTime time.Time `json:"start_time"`
+
+	PPID       uint32 `json:"ppid"`
+	ParentComm string `json:"parent_comm,omitempty"`
+
+	PID  uint32   `json:"pid"`
+	UID  uint32   `json:"uid"`
+	GID  uint32   `json:"gid"`
+	Comm string   `json:"comm,omitempty"`
+	Exe  string   `json:"exe,omitempty"`
+	Args []string `json:"args,omitempty"`
+}
+
+
+type ProcessStarted struct {
+	Type string `json:"type"`
+	processData
+}
+
+type ProcessExited struct {
+	Type string `json:"type"`
+	processData
+	EndTime     time.Time     `json:"end_time"`
+	RunningTime time.Duration `json:"running_time_ns"`
+}
+
+type ProcessError struct {
+	Type string `json:"type"`
+	processData
+	ErrorCode int32 `json:"error_code"`
+}
+
+
+type ProcessMonitor struct {
+
+	module        *bpf.Module
+	execvePerfMap *bpf.PerfMap
+	bpfEvents     chan []byte
+	lostBPFEvents chan uint64
+	lostCount     uint64
+
+	bootTime     time.Time
+	processTable map[uint32]*process
+	warnOnce     sync.Once
+
+	output chan interface{}
+	done   <-chan struct{}
+}
+
+type eventSource int
+
+const (
+	sourceBPF eventSource = iota + 1
+)
+
+type processState int
+
+const (
+	stateStarted processState = iota + 1
+	stateError
+	stateExited
+)
+
+type process struct {
+	processData
+	State     processState
+	Source    eventSource
+	EndTime   time.Time
+	ErrorCode int32
+}
+
+func NewMonitor() (*ProcessMonitor, error) {
+
+	return &ProcessMonitor{
+		processTable: map[uint32]*process{},
+	}, nil
+}
+
+func (m *ProcessMonitor) Start(done <-chan struct{}) (<-chan interface{}, error) {
+	if err := m.initBPF(); err != nil {
+		return nil, err
+	}
+	m.output = make(chan interface{}, 1)
+
+	go func() {
+		defer close(m.output)
+		defer m.execvePerfMap.PollStop()
+		defer m.module.Close()
+
+		for {
+			select {
+			case data := <-m.bpfEvents:
+				m.handleBPFData(data)
+			case count := <-m.lostBPFEvents:
+				m.lostCount += count
+				fmt.Printf("%v messages from kernel dropped", count)
+			case <-done:
+				return
+			}
+		}
+	}()
+
+	return m.output, nil
+}
+
+func (m *ProcessMonitor) initBPF() error {
+	data, err := ioutil.ReadFile("exec.o")
+
+	if err != nil {
+		return errors.Wrap(err, "failed to load embedded ebpf code")
+	}
+
+	// Load module to kernel.
+	m.module = bpf.NewModuleFromReader(bytes.NewReader(data))
+	if err := m.module.Load(nil); err != nil {
+		return errors.Wrap(err, "failed to load ebpf module to kernel")
+	}
+
+	// Setup our perf event readers.
+	m.bpfEvents = make(chan []byte, 64)
+	m.lostBPFEvents = make(chan uint64, 1)
+	m.execvePerfMap, err = bpf.InitPerfMap(m.module, execveMap, m.bpfEvents, m.lostBPFEvents)
+	if err != nil {
+		m.module.Close()
+		return errors.Wrapf(err, "failed to initialize %v perf map", execveMap)
+	}
+
+	// Enable the kprobes.
+	if err := m.module.EnableKprobe(execveProbe, 0); err != nil {
+		m.module.Close()
+		return errors.Wrapf(err, "failed to enable %v probe", execveProbe)
+	}
+
+	if err := m.module.EnableKprobe(execveReturnProbe, 0); err != nil {
+		m.module.Close()
+		return errors.Wrapf(err, "failed to enable %v probe", execveReturnProbe)
+	}
+
+	if err := m.module.EnableKprobe(doExitProbe, 0); err != nil {
+		m.module.Close()
+		return errors.Wrapf(err, "failed to enable %v probe", doExitProbe)
+	}
+
+	m.execvePerfMap.PollStart()
+	return nil
+}
+
+func (m *ProcessMonitor) handleBPFData(data []byte) {
+	switch len(data) {
+	case sizeofExecveData:
+		event, err := unmarshalData(data)
+		if err != nil {
+			fmt.Println("failed to unmarshal execve data")
+			return
+		}
+
+
+		if _, exists := m.processTable[event.PID]; exists {
+			return
+		}
+
+		m.processTable[event.PID] = &process{
+			State:  stateStarted,
+			Source: sourceBPF,
+			processData: processData{
+				StartTime:  m.bootTime.Add(event.RealStartTimeNS),
+				PPID:       event.PPID,
+				ParentComm: NullTerminatedString(event.Comm[:]),
+				PID:        event.PID,
+				UID:        event.UID,
+				GID:        event.GID,
+			},
+		}
+	case sizeofExecveArg:
+		event, err := unmarshalArg(data)
+		if err != nil {
+			fmt.Println("failed to unmarshal execve arg")
+			return
+		}
+
+		p, found := m.processTable[event.PID]
+		if !found {
+			return
+		}
+
+		// The first argument sent is the exe.
+		arg := NullTerminatedString(event.Arg[:])
+		if len(p.Exe) == 0 {
+			p.Exe = arg
+			return
+		}
+		p.Args = append(p.Args, arg)
+	case sizeofExecveRtn:
+		event, err := unmarshalRtn(data)
+		if err != nil {
+			fmt.Println("failed to unmarshal execve return")
+			return
+		}
+
+		p, found := m.processTable[event.PID]
+		if !found  {
+			return
+		}
+		if event.ReturnCode != 0 {
+			p.State = stateError
+			p.ErrorCode = event.ReturnCode
+		}
+
+		m.publish(p)
+	case sizeofExitData:
+		event, err := unmarshalExitData(data)
+		if err != nil {
+			fmt.Println("failed to unmarshal exit data")
+			return
+		}
+
+		p, found := m.processTable[event.PID]
+		if !found || p.ErrorCode != 0 {
+			return
+		}
+		p.State = stateExited
+		p.EndTime = m.bootTime.Add(time.Duration(event.KTime))
+		delete(m.processTable, event.PID)
+		m.publish(p)
+	}
+}
+
+func (m *ProcessMonitor) publish(p *process) {
+	var event interface{}
+	switch p.State {
+	case stateStarted:
+		event = ProcessStarted{
+			Type:        "started",
+			processData: p.processData,
+		}
+	case stateExited:
+		event = ProcessExited{
+			Type:        "exited",
+			processData: p.processData,
+			EndTime:     p.EndTime,
+			RunningTime: p.EndTime.Sub(p.StartTime),
+		}
+	case stateError:
+		event = ProcessError{
+			Type:        "error",
+			processData: p.processData,
+			ErrorCode:   p.ErrorCode,
+		}
+	default:
+		return
+	}
+
+	select {
+	case <-m.done:
+	case m.output <- event:
+	}
+}
+
+
+func unmarshalData(data []byte) (ExecveData, error) {
+	var event ExecveData
+	err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &event)
+	return event, err
+}
+
+
+func unmarshalArg(data []byte) (ExecveArg, error) {
+	var event ExecveArg
+	err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &event)
+	return event, err
+}
+
+func unmarshalRtn(data []byte) (ExecveRtn, error) {
+	var event ExecveRtn
+	err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &event)
+	return event, err
+}
+
+func unmarshalExitData(data []byte) (ExitData, error) {
+	var event ExitData
+	err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &event)
+	return event, err
+}
+
+func NullTerminatedString(data []byte) string {
+	nullTerm := bytes.IndexByte(data, 0)
+	if nullTerm == -1 {
+		return string(data)
+	}
+	return string(data[:nullTerm])
+}
+
+func main() {
+
+	m, err := NewMonitor()
+	if err != nil {
+		fmt.Println("failed to create exec monitor",err)
+	}
+
+	done := make(chan struct{})
+	events, err := m.Start(done)
+	if err != nil {
+		fmt.Println("failed to start exec monitor",err)
+	}
+
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt, os.Kill)
+	go func() {
+		<-sig
+		close(done)
+		os.Exit(1)
+	}()
+
+	for e := range events {
+		data, _ := json.Marshal(e)
+		fmt.Println(string(data))
+	}
+}
+
+
+```
 
 
 
