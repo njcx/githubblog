@@ -167,7 +167,7 @@ size：第三个参数
 
 ```
 
-demo 是在kali Linux 上开发的。环境搭建比较简单，
+demo 是在Kali Linux 上开发的。环境搭建比较简单，
 
 
 ```bash
