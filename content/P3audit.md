@@ -6,6 +6,7 @@ Tags: HIDS
 Slug: P3 
 Authors: nJcx
 Summary: 通过Go(netlink机制)绑定audit实现HIDS-Agent~
+Status: draft
 
 #### 安装
 
