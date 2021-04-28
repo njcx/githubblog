@@ -457,4 +457,3 @@ char _license[] SEC("license") = "GPL";
 
 ![agent](../images/WechatIMG145.jpeg)
 
-![agent](../images/WechatIMG67.jpeg)
