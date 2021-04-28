@@ -94,13 +94,6 @@ Tracepoints是在内核代码中所做的一种静态标记，是开发者在内
 ![agent](../images/WechatIMG67.jpeg)
 
 
-
-```bash
-
-
-```
-
-
 eBPF程序的主要数据结构是eBPF map，一种key-value数据结构。Maps通过bpf()系统调用创建和操作。
 
 有不同类型的Map：
@@ -137,7 +130,7 @@ BPF_MAP_LOOKUP_ELEM： 在给定一个 map 中查询一个元素，并返回其�
 BPF_MAP_UPDATE_ELEM： 在给定的 map 中创建或更新一个元素(关于 key/value 的键值对)
 BPF_MAP_DELETE_ELEM
 BPF_MAP_GET_NEXT_KEY： 在一个特定的 map 中根据 key 值查找到一个元素，并返回这个 key 对应的下一个元素
-BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。本文分析只关注这个 cmd。
+BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。
 
 ```
 
@@ -168,6 +161,63 @@ struct {    /* Used by BPF_PROG_LOAD */
 size：第三个参数
 
 表示上述 bpf_attr 字节大小。
+
+当加载 bpf 程序时，BPF_PROG_LOAD 表示的是该程序的具体 bpf 指令，对应 SEC宏 下面的函数代码段。
+每条指令的操作码由六部分组成：
+
+	code(操作码)
+	dst_reg(目标寄存器)
+	src_reg(源寄存器)
+	off(偏移)
+	imm(立即数)
+
+详见
+	
+```bash
+
+insns=[
+{code=BPF_LDX|BPF_DW|BPF_MEM, dst_reg=BPF_REG_1, src_reg=BPF_REG_1, off=104, imm=0},
+{code=BPF_STX|BPF_DW|BPF_MEM, dst_reg=BPF_REG_10, src_reg=BPF_REG_1, off=-8, imm=0},
+{code=BPF_ALU64|BPF_X|BPF_MOV, dst_reg=BPF_REG_2, src_reg=BPF_REG_10, off=0, imm=0},
+{code=BPF_ALU64|BPF_K|BPF_ADD, dst_reg=BPF_REG_2, src_reg=BPF_REG_0, off=0, imm=0xfffffff8},
+{code=BPF_LD|BPF_DW|BPF_IMM, dst_reg=BPF_REG_1, src_reg=BPF_REG_1, off=0, imm=0x4},
+{code=BPF_LD|BPF_W|BPF_IMM, dst_reg=BPF_REG_0, src_reg=BPF_REG_0, off=0, imm=0},
+{code=BPF_JMP|BPF_K|BPF_CALL, dst_reg=BPF_REG_0, src_reg=BPF_REG_0, off=0, imm=0x3},
+{code=BPF_ALU64|BPF_K|BPF_MOV, dst_reg=BPF_REG_0, src_reg=BPF_REG_0, off=0, imm=0},
+{code=BPF_JMP|BPF_K|BPF_EXIT, dst_reg=BPF_REG_0, src_reg=BPF_REG_0, off=0, imm=0}
+
+```
+
+ bpf系统调用调用bpf_prog_load来加载ebpf程序。
+ bpf_prog_load大致有以下几步:
+
+```
+1.调用bpf_prog_alloc为prog申请内存，大小为struct bpf_prog大小+ebpf指令总长度
+2.将ebpf指令复制到prog->insns
+3.调用bpf_check对ebpf程序合法性进行检查，这是ebpf的安全性的关键所在，不符ebpf规则的load失败
+4.调用bpf_prog_select_runtime在线jit，编译ebpf指令成x64指令
+5.调用bpf_prog_alloc_id为prog生成id，作为prog的唯一标识的id被很多工具如bpftool用来查找prog
+```
+
+ebpf从bpf的两个32位寄存器扩展到10个64位寄存器R0~R9和一个只读栈帧寄存器，并支持call指令，更加贴近现代64位处理器硬件
+
+```bash
+
+R0对应rax， 函数返回值
+R1对应rdi， 函数参数1
+R2对应rsi， 函数参数2
+R3对应rdx， 函数参数3
+R4对应rcx， 函数参数4
+R5对应r8， 函数参数5
+R6对应rbx， callee保存
+R7对应r13， callee保存
+R8对应r14， callee保存
+R9对应r15， callee保存
+R10对应rbp，只读栈帧寄存器
+
+```
+
+可以看到x64的r9寄存器没有ebpf寄存器对应，所以ebpf函数最多支持5个参数。
 
 
 
