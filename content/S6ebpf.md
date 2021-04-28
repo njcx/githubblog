@@ -288,6 +288,11 @@ export PATH=$PATH:/opt/rh/devtoolset-8/root/bin
 
 
 
+HIDS 开发的核心在于抓取一些高风险 syscall的参数，比如，sys_ptrace() sys_execve(),这些函数被glibc 包装，暴露给用户使用。当用户在glibc调用对应的函数，通过执行CPU指令完成用户态向内核态的转换。32位系统中，通过int $0x80指令触发系统调用。其中EAX寄存器用于传递系统调用号，参数按顺序赋值给EBX、ECX、EDX、ESI、EDI、EBP这6个寄存器。64位系统则是使用syscall指令来触发系统调用，同样使用EAX寄存器传递系统调用号，RDI、RSI、RDX、RCX、R8、R9这6个寄存器则用来传递参数。系统调用逻辑，如下图：
+
+
+![agent](../images/WechatIMG145.jpeg)
+
 
 ```c
 
@@ -451,9 +456,4 @@ char _license[] SEC("license") = "GPL";
 
 ```
 
-
-
-
-
-![agent](../images/WechatIMG145.jpeg)
 
