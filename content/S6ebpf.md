@@ -95,7 +95,6 @@ eBPF程序的主要数据结构是eBPF map，一种key-value数据结构。Maps�
 有不同类型的Map：
 
 ```bash
-
 BPF_MAP_TYPE_HASH：哈希表
 BPF_MAP_TYPE_ARRAY：数组映射，已针对快速查找速度进行了优化，通常用于计数器
 BPF_MAP_TYPE_PROG_ARRAY：对应eBPF程序的文件描述符数组；用于实现跳转表和子程序以处理特定的数据包协议
@@ -119,6 +118,8 @@ BPF_MAP_TYPE_SOCKET_MAP：存储和查找套接字，并允许使用BPF辅助函
 
 使用 man bpf 查看 bpf 系统调用，int bpf(int cmd, union bpf_attr *attr, unsigned int size)
 
+第一个参数cmd，如下
+
 ```bash
 
 BPF_MAP_CREATE： 创建一个 map，并返回一个 fd，指向这个 map，这个 map 在 bpf 是非常重要的数据结构，用于 bpf 程序在内核态和用户态之间相互通信。
@@ -128,6 +129,7 @@ BPF_MAP_DELETE_ELEM： 在给定的 map 中删除一个元素(关于 key/value �
 BPF_MAP_GET_NEXT_KEY： 在一个特定的 map 中根据 key 值查找到一个元素，并返回这个 key 对应的下一个元素
 BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。
 
+...... 等等
 ```
 
 
@@ -136,7 +138,6 @@ bpf_attr,第 2 个参数,该参数的类型取决于 cmd 参数的值，本文�
 
 ```bash
 内核支持的当前eBPF程序类型集为：
-
 BPF_PROG_TYPE_SOCKET_FILTER：网络数据包过滤器
 BPF_PROG_TYPE_KPROBE：确定是否应触发kprobe
 BPF_PROG_TYPE_SCHED_CLS：网络流量控制分类器
@@ -155,7 +156,7 @@ BPF_PROG_CGROUP_DEVICE：确定是否允许设备(device)操作
 ```
 
 
-比如,cmd=BPF_PROG_LOAD 使用，如下：
+比如,cmd=BPF_PROG_LOAD 使用，bpf_attr 字段如下：
  
 ```bash
  
@@ -180,14 +181,19 @@ size：第三个参数
 
 表示上述 bpf_attr 字节大小。
 
-当加载 bpf 程序时，BPF_PROG_LOAD 表示的是该程序的具体 bpf 指令，对应 SEC宏 下面的函数代码段。
-每条指令的操作码由六部分组成：
+当加载 bpf 程序时，BPF_PROG_LOAD 表示的是加载具体 bpf 指令，对应 SEC宏 下面的函数代码段。
+每条指令的操作码由5部分组成：
 
-	code(操作码)
-	dst_reg(目标寄存器)
-	src_reg(源寄存器)
-	off(偏移)
-	imm(立即数)
+```c
+	struct bpf_insn {
+	        __u8    code;           /* opcode(操作码) */
+	        __u8    dst_reg:4;      /* dest register(目标寄存器) */
+	        __u8    src_reg:4;      /* source register (源寄存器)*/
+	        __s16   off;            /* signed offset(偏移)*/
+	        __s32   imm;            /* signed immediate constant(立即数) */
+	};
+
+```
 
 详见
 	
