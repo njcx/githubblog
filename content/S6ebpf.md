@@ -825,13 +825,12 @@ func (m *ProcessMonitor) initBPF() error {
 		return errors.Wrap(err, "failed to load embedded ebpf code")
 	}
 
-	// Load module to kernel.
+
 	m.module = bpf.NewModuleFromReader(bytes.NewReader(data))
 	if err := m.module.Load(nil); err != nil {
 		return errors.Wrap(err, "failed to load ebpf module to kernel")
 	}
 
-	// Setup our perf event readers.
 	m.bpfEvents = make(chan []byte, 64)
 	m.lostBPFEvents = make(chan uint64, 1)
 	m.execvePerfMap, err = bpf.InitPerfMap(m.module, execveMap, m.bpfEvents, m.lostBPFEvents)
@@ -840,7 +839,7 @@ func (m *ProcessMonitor) initBPF() error {
 		return errors.Wrapf(err, "failed to initialize %v perf map", execveMap)
 	}
 
-	// Enable the kprobes.
+
 	if err := m.module.EnableKprobe(execveProbe, 0); err != nil {
 		m.module.Close()
 		return errors.Wrapf(err, "failed to enable %v probe", execveProbe)
@@ -1036,6 +1035,7 @@ func main() {
 ```
 
 
+全文介绍了一下eBPF 的由来，以及ePBF 的技术部分。抓取了sys_execve 以此抛砖引玉，目前，ePBF 还在发展，部分API还不稳定，但是，已经可以低版本的内核有限的使用了。
 
 
 
