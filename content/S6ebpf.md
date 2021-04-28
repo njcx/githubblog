@@ -124,7 +124,7 @@ BPF_MAP_TYPE_SOCKET_MAP：存储和查找套接字，并允许使用BPF辅助函
 BPF_MAP_CREATE： 创建一个 map，并返回一个 fd，指向这个 map，这个 map 在 bpf 是非常重要的数据结构，用于 bpf 程序在内核态和用户态之间相互通信。
 BPF_MAP_LOOKUP_ELEM： 在给定一个 map 中查询一个元素，并返回其值
 BPF_MAP_UPDATE_ELEM： 在给定的 map 中创建或更新一个元素(关于 key/value 的键值对)
-BPF_MAP_DELETE_ELEM
+BPF_MAP_DELETE_ELEM： 在给定的 map 中删除一个元素(关于 key/value 的键值对)
 BPF_MAP_GET_NEXT_KEY： 在一个特定的 map 中根据 key 值查找到一个元素，并返回这个 key 对应的下一个元素
 BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。
 
