@@ -140,9 +140,9 @@ BPF_MAP_GET_NEXT_KEY： 在一个特定的 map 中根据 key 值查找到一个�
 BPF_PROG_LOAD： 验证并加载一个 bpf 程序。并返回与这个程序关联的 fd。本文分析只关注这个 cmd。
 
 ```
-bpf_attr：第 2 个参数
 
-该参数的类型取决于 cmd 参数的值，本文只分析 cmd=BPF_PROG_LOAD 这种情况，其中 prog_type 指定了 bpf 程序类型，eBPF 程序支持 attach 到不同的 event 上，比如 Kprobe，UProbe，tracepoint，Network packets，perf event 等。
+
+bpf_attr,第 2 个参数,该参数的类型取决于 cmd 参数的值，本文只分析 cmd=BPF_PROG_LOAD 这种情况，其中 prog_type 指定了 bpf 程序类型，eBPF 程序支持 attach 到不同的 event 上，比如 Kprobe，UProbe，tracepoint，Network packets，perf event 等。
 
 比如,cmd=BPF_PROG_LOAD 使用，如下：
  
@@ -161,11 +161,15 @@ struct {    /* Used by BPF_PROG_LOAD */
     /* checked when prog_type=kprobe
     (since Linux 4.1) */
 };
+
+
+```
+
 size：第三个参数
 
 表示上述 bpf_attr 字节大小。
 
-```
+
 
 demo 是在Kali Linux 上开发的。环境搭建比较简单，
 
