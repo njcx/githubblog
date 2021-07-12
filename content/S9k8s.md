@@ -152,8 +152,8 @@ http_output:
 https://github.com/falcosecurity/falcosidekick.git
 
 
-```bash
 
+```bash
 
 elasticsearch:
    hostport: "http://10.10.116.177:9201" # http://{domain or ip}:{port}, if not empty, Elasticsearch output is enabled
@@ -166,10 +166,12 @@ elasticsearch:
    username: "" # use this username to authenticate to Elasticsearch if the username is not empty (default: "")
    password: "" # use this password to authenticate to Elasticsearch if the password is not empty (default: "")
 
+
+
 kafka:
   hostport: "" # Apache Kafka Host:Port (ex: localhost:9092). Defaults to port 9092 if no port is specified after the domain, if not empty, Kafka output is enabled
   topic: "" # Name of the topic, if not empty, Kafka output is enabled
   # minimumpriority: "debug" # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|notice|informational|debug or "" (default)
   
   
-  ```
+```
