@@ -77,12 +77,14 @@ k8s环境的安全主要来自3个方向：
 ![agent](../images/15.49.51.png)
 
 
+```bash
+
 /projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/additions/vulnerabilities  
 
 
 curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson/artifacts/1.2.24/additions/vulnerabilities" -H "accept: application/json" -H "X-Request-Id: 111"
 
-
+```
 
 
 
