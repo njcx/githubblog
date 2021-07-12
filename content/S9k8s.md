@@ -55,6 +55,7 @@ k8s环境的安全主要来自3个方向：
 # ./install.sh  --with-trivy  --with-chartmuseum 
  
 ```
+
 ![agent](../images/1501625901938_.pic_hd.jpg)
 
 
@@ -76,10 +77,61 @@ k8s环境的安全主要来自3个方向：
 ![agent](../images/15.49.51.png)
 
 
+/projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/additions/vulnerabilities  
+
+
+curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson/artifacts/1.2.24/additions/vulnerabilities" -H "accept: application/json" -H "X-Request-Id: 111"
+
+
+
+
+
 ![agent](../images/image.png)
 
 
+
+
+
+K8S runtime 的监控
+
+
+
+Falco 由 Sysdig 于 2016 年创建，是第一个作为孵化级项目加入 CNCF 的运行时安全项目。Falco可以对Linux系统调用行为进行监控，主要是用的eBPF技术。Falco的主要功能如下：
+从内核运行时采集Linux系统调用。
+提供了一套强大的规则引擎，用于对Linux系统调用行为进行监控。
+当系统调用违反规则时，会触发相应的告警。
+
+
+```bash
+
+curl -s https://falco.org/repo/falcosecurity-3672BA8F.asc | apt-key add -
+echo "deb https://download.falco.org/packages/deb stable main" | tee -a /etc/apt/sources.list.d/falcosecurity.list
+
+apt-get update -y
+apt-get -y install linux-headers-$(uname -r)
+apt-get install -y falco
+
+
+```
+
+
+```bash
+
+rpm --import https://falco.org/repo/falcosecurity-3672BA8F.asc
+curl -s -o /etc/yum.repos.d/falcosecurity.repo https://falco.org/repo/falcosecurity-rpm.repo
+
+yum -y install kernel-devel-$(uname -r)
+
+yum -y install falco
+
+```
+
+
+https://falco.org/docs/getting-started/installation/
+
+
 ![agent](../images/imag1e.png)
+
 
 
 
