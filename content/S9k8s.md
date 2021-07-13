@@ -131,6 +131,12 @@ kube-bench和kube-hunter是aquasec的开源工具，它们可以在Kubernetes集
 让我们先从kube-bench开始，它会根据CIS的安全性最佳实践检查Kubernetes是否部署。kube-bench可以运行在本地或在你的Kubernetes环境中作为容器。一旦部署完成，kube-bench会根据要执行的测试以及不同的Kubernetes版本，为你提供一些用于master或节点的配置文件。需要注意的是，配置文件会被写入YAML。那意味着你可以对它们进行调整以适应你的测试，或者当CIS或Kubernetes公开更多测试时直接采用它们即可。
 
 
+```bash
+
+pip install kube-hunter
+
+```
+
 
 ![agent](../images/WeChatacd04043ac589270629b297a810ec9d3.png)
 
