@@ -92,6 +92,36 @@ curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson
 
 
 
+k8s 基线
+
+https://github.com/aquasecurity/kube-bench
+
+
+```
+$ kubectl apply -f job.yaml
+job.batch/kube-bench created
+
+$ kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+kube-bench-j76s9   0/1     ContainerCreating   0          3s
+
+# Wait for a few seconds for the job to complete
+$ kubectl get pods
+NAME                      READY   STATUS      RESTARTS   AGE
+kube-bench-j76s9   0/1     Completed   0          11s
+
+# The results are held in the pod's logs
+kubectl logs kube-bench-j76s9
+[INFO] 1 Master Node Security Configuration
+[INFO] 1.1 API Server
+
+```
+
+
+![agent](../images/WechatIMG298.jpeg)
+
+
+![agent](../images/WechatIMG299.jpeg)
 
 
 K8S runtime 的监控
