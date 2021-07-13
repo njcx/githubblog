@@ -124,6 +124,23 @@ kubectl logs kube-bench-j76s9
 ![agent](../images/WechatIMG299.jpeg)
 
 
+
+
+kube-bench和kube-hunter是aquasec的开源工具，它们可以在Kubernetes集群中寻找安全问题。它们在Kubernetes基础架构堆栈中分析安全状况的方法有所区别。kube-bench主要用于让你的实践符合CIS的标准，而kube-hunter则关注你要暴露的漏洞。它们两个结合使用，可以为我们确定合规性提供一个很好的视角。
+
+让我们先从kube-bench开始，它会根据CIS的安全性最佳实践检查Kubernetes是否部署。kube-bench可以运行在本地或在你的Kubernetes环境中作为容器。一旦部署完成，kube-bench会根据要执行的测试以及不同的Kubernetes版本，为你提供一些用于master或节点的配置文件。需要注意的是，配置文件会被写入YAML。那意味着你可以对它们进行调整以适应你的测试，或者当CIS或Kubernetes公开更多测试时直接采用它们即可。
+
+
+
+![agent](../images/WeChatacd04043ac589270629b297a810ec9d3.png)
+
+kube-hunter会在你的环境内部或外部运行扫描功能，以让你了解在你的Kubernetes平台中的安全性漏洞。kube-hunter可以在集群内部或外部、在任何机器上作为一个容器运行。当你进入集群DNS或IP之后，kube-hunter就会开始查看你当前打开的端口、运行测试并查看是否存在任何漏洞。然后，你将会获得大量相关信息，可以帮助你确定下一步应该如何执行。
+
+kube-hunter的默认状态是“passive”，这意味着它将查找诸如Kubernetes SSL证书中的电子邮件地址之类的内容，并检查开放端口、代理服务和dashboard。在“active”状态中，kube-hunter将会查找其他弱点，并利用发现的弱点来进一步探索漏洞，因此它十分强大。虽然kube-hunter不会查看容器镜像内部(有其他工具可以专门查看此处)，但它可以运行可能暴露数据泄露或有危害的电子邮件地址的测试。
+
+
+
+
 K8S runtime 的监控
 
 
