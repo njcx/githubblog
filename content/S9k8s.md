@@ -129,9 +129,9 @@ https://www.cisecurity.org/benchmark/kubernetes/
 
 文件内容一共几大块
 	 
-	master节点的服务 apiserver，controller manager，scheduler，etcd
+	master节点的服务: apiserver，controller manager，scheduler，etcd
     
-    node节点的服务 kubelet, proxy
+    node节点的服务: kubelet, proxy
 	
 	安全控制: RBAC, pod policy, network policy
 
@@ -178,7 +178,7 @@ kube-hunter是也aquasec的开源工具，它们可以在Kubernetes集群中寻�
 
 ```bash
 
-pip install kube-hunter
+pip3 install kube-hunter    //py3 环境
 
 ```
 
