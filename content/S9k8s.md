@@ -60,6 +60,16 @@ Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服�
 
 # wget  https://github.com/goharbor/harbor/releases/download/v2.2.3/harbor-offline-installer-v2.2.3.tgz
 
+```
+
+
+![agent](../images/1521625902561_.pic_hd.jpg)
+
+修改 harbor.yml配置文件，生存环境请用https，这里仅用于测试
+
+
+```bash
+
 # tar xf harbor-offline-installer-v2.2.3.tgz 
 # cp harbor.yml.tmpl harbor.yml
 
@@ -68,13 +78,25 @@ Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服�
  
 ```
 
+安装过程如图：
+
 ![agent](../images/1501625901938_.pic_hd.jpg)
+
+
+
+
 
 
 ![agent](../images/1521625902561_.pic_hd.jpg)
 
 
 ![agent](../images/1541625902778_.pic.jpg)
+
+
+
+然后，我们把images 推到上面去：
+
+
 
 
 ![agent](../images/1561625902819_.pic.jpg)
