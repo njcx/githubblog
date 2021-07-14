@@ -120,6 +120,30 @@ curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson
 
 
 
+当我们发现了大量的安全漏洞怎么办? 我们尝试最小化容器镜像，将不必要的组件从镜像中移除可以减少攻击面、降低安全风险，修正项目的自身的依赖问题。从docker -17.05 开始，docker 引入了多阶段构建的概念，它允许用户在一个 dockerfile 中使用多个 From 语句。每个 From 语句可以指定不同的基础镜像并将开启一个全新的构建流程。您可以选择性地将前一阶段的构建产物复制到另一个阶段，从而只将必要的内容保留在最终的镜像里。同时我们选用  alpine 的基础镜像，就可以大大减少不必要的依赖。
+
+优化后的 dockerfile 如下：
+
+```bash
+
+FROM maven:3.5-jdk-8 AS build
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package
+
+FROM openjdk:8-jre-alpine
+ARG DEPENDENCY=/usr/src/app/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","hello_world.Application"]
+
+```
+
+
+
+
+
 #### k8s 基线
 
 
