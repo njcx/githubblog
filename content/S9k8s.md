@@ -84,22 +84,12 @@ Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服�
 
 
 
-
-
-
-![agent](../images/1521625902561_.pic_hd.jpg)
-
-
 ![agent](../images/1541625902778_.pic.jpg)
 
 
 
 然后，我们把images 推到上面去：
 
-
-
-
-![agent](../images/1561625902819_.pic.jpg)
 
 ![agent](../images/1571625903101_.pic.jpg)
 
