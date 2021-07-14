@@ -100,6 +100,7 @@ Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服�
 ![agent](../images/15.50.15.png)
 
 
+Vmware Harbor 提供了一个API 接口，这样我们就可以与SOC 集成，查看images 的安全情况。
 
 
 ```bash
@@ -111,7 +112,7 @@ curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson
 
 ```
 
-
+结果如下图：
 
 ![agent](../images/image.png)
 
