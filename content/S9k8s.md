@@ -134,11 +134,9 @@ https://www.cisecurity.org/benchmark/kubernetes/
 
 ```bash
 	 
-	master节点的服务: apiserver，controller manager，scheduler，etcd
-    
-    node节点的服务: kubelet, proxy
-	
-	安全控制: RBAC, pod policy, network policy
+	master节点的服务:  apiserver，controller manager，scheduler，etcd
+   node节点的服务:  kubelet, proxy
+   安全控制:  rbac, pod policy, network policy
 	
 	
 ```
@@ -185,9 +183,7 @@ kube-hunter是也aquasec的开源工具，它们可以在Kubernetes集群中寻�
 
 
 ```bash
-
 pip3 install kube-hunter    //py3 环境
-
 ```
 
 
@@ -229,9 +225,7 @@ apt-get install -y falco
 
 rpm --import https://falco.org/repo/falcosecurity-3672BA8F.asc
 curl -s -o /etc/yum.repos.d/falcosecurity.repo https://falco.org/repo/falcosecurity-rpm.repo
-
 yum -y install kernel-devel-$(uname -r)
-
 yum -y install falco
 
 ```
