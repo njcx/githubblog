@@ -211,7 +211,6 @@ https://falco.org/docs/getting-started/installation/
 
 
 
-
 ```bash
 
 json_output: true
@@ -229,15 +228,13 @@ http_output:
 https://github.com/falcosecurity/falcosidekick.git
 
 
-
-![agent](../images/WechatIMG171123.jpeg)
-
+falcosidekick 是一个管道工具，接受 Falco的事件并将它们发送到不同的持久化工具中。我们使用falcosidekick把falco post 过来的数据写入es ，也可以写入kafka。如下图。
 
 
 ```bash
 
 elasticsearch:
-   hostport: "http://10.10.116.177:9201" 
+   hostport: "http://10.10.116.177:9200" 
    index: "falco" 
    type: "event"
    minimumpriority: "" 
@@ -255,3 +252,9 @@ kafka:
   
   
 ```
+
+
+
+![agent](../images/WechatIMG171123.jpeg)
+
+
