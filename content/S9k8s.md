@@ -208,25 +208,28 @@ https://github.com/falcosecurity/falcosidekick.git
 
 
 
+![agent](../images/WechatIMG171123.jpeg)
+
+
+
 ```bash
 
 elasticsearch:
-   hostport: "http://10.10.116.177:9201" # http://{domain or ip}:{port}, if not empty, Elasticsearch output is enabled
-   index: "falco" # index (default: falco)
+   hostport: "http://10.10.116.177:9201" 
+   index: "falco" 
    type: "event"
-   minimumpriority: "" # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|notice|informational|debug or "" (default)
-   suffix: "daily" # date suffix for index rotation : daily (default), monthly, annually, none
-   mutualtls: false # if true, checkcert flag will be ignored (server cert will always be checked)
-   checkcert: true # check if ssl certificate of the output is valid (default: true)
-   username: "" # use this username to authenticate to Elasticsearch if the username is not empty (default: "")
-   password: "" # use this password to authenticate to Elasticsearch if the password is not empty (default: "")
-
+   minimumpriority: "" 
+   suffix: "daily" 
+   mutualtls: false 
+   checkcert: true 
+   username: "" 
+   password: "" 
 
 
 kafka:
-  hostport: "" # Apache Kafka Host:Port (ex: localhost:9092). Defaults to port 9092 if no port is specified after the domain, if not empty, Kafka output is enabled
-  topic: "" # Name of the topic, if not empty, Kafka output is enabled
-  # minimumpriority: "debug" # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|notice|informational|debug or "" (default)
+  hostport: "" 
+  topic: "" 
+  # minimumpriority: "debug" 
   
   
 ```
