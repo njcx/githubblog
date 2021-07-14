@@ -298,14 +298,15 @@ http_output:
 ```
 
 
+启动falco
+
+
 ```bash
 
-systemctl enable falco 
+systemctl enable falco  &&  systemctl start falco
 
 
 ```
-
-
 
 
 
