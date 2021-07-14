@@ -199,7 +199,7 @@ pip3 install kube-hunter    //py3 环境
 
 
 
-Falco 由 Sysdig 于 2016 年创建，是第一个作为孵化级项目加入 CNCF 的运行时安全项目。Falco可以对Linux系统调用行为进行监控，主要是用的eBPF技术。Falco的主要功能如下：
+Falco 由 Sysdig 于 2016 年创建，是第一个作为孵化级项目加入 CNCF 的运行时安全项目。Falco可以对Linux系统调用行为进行监控，提供了lkm 内核模块驱动和eBPF 驱动。Falco的主要功能如下：
 从内核运行时采集Linux系统调用。
 提供了一套强大的规则引擎，用于对Linux系统调用行为进行监控。
 当系统调用违反规则时，会触发相应的告警。
