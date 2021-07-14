@@ -30,6 +30,9 @@ Kubernetes 的服务在正常启动后会开启两个端口：8080，6443。两�
 
 Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源Docker Distribution。作为一个企业级私有Registry服务器，Harbor提供了更好的性能和安全。提升用户使用Registry构建和运行环境传输镜像的效率。Harbor支持安装在多个Registry节点的镜像资源复制，镜像全部保存在私有Registry中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。
 
+在 Harbor 中，集成了开源项目 Trivy(老版本是Clair)的扫描功能，可从公开的 CVE 字典库下载漏洞资料。CVE 是 Common Vulnerabilities and Exposures 的缩写，由一些机构自愿参与维护的软件安全漏洞标识，记录已知的漏洞标准描述及相关信息，公众可以免费获取和使用这些信息。全球共有77个机构参与维护不同软件的 CVE 库，例如：VMware 维护着 VMware 产品的 CVE 库，红帽维护着Linux 上的 CVE 等等。
+
+
 下面演示一下 Vmware Harbo + trivy 的安装：
 
 
