@@ -103,12 +103,10 @@ Vmware Harbor是一个用于存储和分发Docker镜像的企业级Registry服�
 
 ![agent](../images/1571625903101_.pic.jpg)
 
-![agent](../images/1581625903216_.pic.jpg)
 
 ![agent](../images/15.50.15.png)
 
 
-![agent](../images/15.49.51.png)
 
 
 ```bash
