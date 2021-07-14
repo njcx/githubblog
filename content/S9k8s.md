@@ -238,6 +238,53 @@ yum -y install falco
 
 ![agent](../images/imag1e.png)
 
+Falco规则文件是包含三种类型元素的YAML文件：
+
+Rules 、Macros、Lists
+
+Rules就是生成告警的条件以及一下描述性输出字符串。Macros 是可以在规则或者其他宏中重复使用的规则条件片段。Lists 类似Python 列表，定义了一个变量集合。
+
+Falco 使用了Sysdig， 在rule的 condition里面,任何 Sysdig 过滤器都可以在 Falco 中使用。
+
+参考如下：
+
+```bash
+
+https://github.com/draios/sysdig/wiki/sysdig-user-guide#filtering
+
+```
+
+这是一个rule的 condition条件示例，在容器内运行 bash shell 时发出警报：
+
+container.id != host and proc.name = bash
+
+第一个子句检查事件是否发生在容器中（Sysdig 事件有一个container字段，该字段等于"host"事件是否发生在host主机上）。第二个子句检查进程名称是否为bash。
+
+
+
+举个完整的列子
+
+
+```bash
+
+- list: my_programs
+  items: [ls, cat,  bash]
+
+- macro: access_file
+  condition: evt.type=open
+
+- rule: program_accesses_file
+  desc: track whenever a set of programs opens a file
+  condition: proc.name in (my_programs) and (access_file)
+  output: a tracked program opened a file (user=%user.name command=%proc.cmdline file=%fd.name)
+  priority: INFO
+
+```
+
+
+下面，我们修改falco 的配置，/etc/falco/falco.yaml 
+
+
 
 
 ```bash
@@ -247,6 +294,14 @@ json_include_output_property: true
 http_output:
   enabled: true
   url: "http://localhost:2801"
+
+```
+
+
+```bash
+
+systemctl enable falco 
+
 
 ```
 
