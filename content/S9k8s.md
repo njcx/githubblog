@@ -120,6 +120,26 @@ curl -X GET "http://172.16.116.5/api/v2.0/projects/library/repositories/fastjson
 
 k8s 基线
 
+
+互联网安全中心（CIS）是一个非营利性组织，其制定自己的配置策略基准（即CIS基准），使组织可以改善其安全性和合规性计划及态势。
+除了针对操作系统、数据库等，该组织也推出了适用Kubernetes、dockers的Benchmark基准。
+kubernetes CIS基准下载地址，如下
+
+https://www.cisecurity.org/benchmark/kubernetes/
+
+文件内容一共几大块
+	 
+	master节点的服务 apiserver，controller manager，scheduler，etcd
+    
+    node节点的服务 kubelet, proxy
+	
+	安全控制: RBAC, pod policy, network policy
+
+
+该工具是使用Go语言完成，而测试文件则兼容于YAML格式，其测试结果也能支持JSON格式，方便使用者整合其他的自动化工具。在执行完测试任务后，系统除了告诉开发者Kubernetes未通过哪些测试外，也会给予如何改善的建议，例如移除K8s上某个不安全的配置设置建议，或者限制配置文件的权限等。下载地址如下
+
+
+
 https://github.com/aquasecurity/kube-bench
 
 
@@ -152,9 +172,8 @@ kubectl logs kube-bench-j76s9
 
 
 
-kube-bench和kube-hunter是aquasec的开源工具，它们可以在Kubernetes集群中寻找安全问题。kube-bench主要用于让你的实践符合CIS的标准，而kube-hunter则关注你要暴露的漏洞。它们两个结合使用，可以为我们确定合规性提供一个很好的视角。
+kube-hunter是也aquasec的开源工具，它们可以在Kubernetes集群中寻找安全问题。kube-bench主要用于让你的实践符合CIS的标准，而kube-hunter则关注你要暴露的漏洞。它们两个结合使用，可以为我们提供一个很好的发现安全问题的视角。kube-hunter 可以你的环境内部或外部运行扫描，
 
-让我们先从kube-bench开始，它会根据CIS的安全性最佳实践检查Kubernetes。kube-bench可以运行在本地或在你的Kubernetes环境中。
 
 
 ```bash
@@ -166,7 +185,7 @@ pip install kube-hunter
 
 ![agent](../images/WeChatacd04043ac589270629b297a810ec9d3.png)
 
-kube-hunter 可以你的环境内部或外部运行扫描，
+
 
 
 
