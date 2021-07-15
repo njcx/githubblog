@@ -232,6 +232,27 @@ exec_shell_install:
 ```
 
 
+也可以使用ansible 推下去即可.ansible demo 如下：
+
+```bash
+
+[root@server81 work]# ansible servers -m shell -a "mkdir -p /var/falco_sh"
+
+[root@server81 ansible]# ansible servers -m copy -a "src=/root/ansible/falco_install.sh  dest=/var/falco_sh/falco_install.sh mode=0755"
+172.16.5.193 | CHANGED => {
+
+[root@server81 ansible]# ansible servers -m shell -a "/var/falco_sh/falco_install.sh"
+172.16.5.193 | CHANGED | rc=0 >>
+
+
+```
+
+
+
+
+
+
+
 
 
 
