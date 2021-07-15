@@ -161,12 +161,16 @@ kafka:
 
 ####  批量部署&更新规则
 
+
+我们在生产环境中需要批量部署和更新规则需求，所以我们可以使用saltstack 或者 ansible 下发对应shell脚本来完成我们的需求。
+
+
 批量部署
 
 ```bash
 #!/bin/bash
 
-if [  -n "$(uname -a | grep Ubuntu)" ]; then
+if [  -n "$(uname -a | grep Ubuntu)" ]; then       # 按实际情况修改
 		curl -s https://falco.org/repo/falcosecurity-3672BA8F.asc | apt-key add -
 		echo "deb https://download.falco.org/packages/deb stable main" | tee -a /etc/apt/sources.list.d/falcosecurity.list
 		apt-get update -y
@@ -206,7 +210,7 @@ tar -xzvf /etc/falco_bak/falco_update.tar.gz -C /etc && systemctl restart falco
 
 ```
 
-把规则falco_update.tar.gz，提前准备好，使用saltstack 推下去即可.
+把规则falco_update.tar.gz，提前准备好，使用saltstack 推下去即可.saltstack demo 如下：
 
 
 ```bash
@@ -226,6 +230,8 @@ exec_shell_install:
 [root@localhost ~]$ salt '*' state.highstate  
 
 ```
+
+
 
 
 
