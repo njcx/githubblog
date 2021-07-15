@@ -237,6 +237,7 @@ exec_shell_install:
 
 ####   可视化 
 
+因为我们使用了， es 推荐使用kibana 做一下可视化， 也可以使用grafana 做可视化。demo 如下图：
 
 ![agent](../images/kibana11.png)
 
