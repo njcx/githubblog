@@ -200,6 +200,26 @@ tar -xzvf /etc/falco_bak/falco_update.tar.gz -C /etc && systemctl restart falco
 把规则falco_update.tar.gz，提前准备好，使用saltstack 推下去即可.
 
 
+```bash
+
+[root@localhost ~]$ cat /srv/salt/top.sls   
+base:
+  '*':
+    - exec_shell_install
+ 
+[root@localhost ~]$ cat /srv/salt/exec_shell_install.sls   
+
+exec_shell_install:                                      
+  cmd.script:                                
+    - source: salt://falco_install.sh                           
+    - user: root                               
+   
+[root@localhost ~]$ salt '*' state.highstate  
+
+```
+
+
+
 
 ####   可视化
 
