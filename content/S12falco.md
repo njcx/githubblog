@@ -249,13 +249,6 @@ exec_shell_install:
 
 
 
-
-
-
-
-
-
-
 ####   可视化 
 
 Kibana是一个开源的分析与可视化平台，设计出来用于和Elasticsearch一起使用的。你可以用kibana搜索、查看存放在Elasticsearch中的数据。Kibana与Elasticsearch的交互方式是各种不同的图表、表格、地图等，直观的展示数据，从而达到高级的数据分析与可视化的目的。
