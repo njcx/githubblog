@@ -231,6 +231,14 @@ exec_shell_install:
 
 ####   可视化 
 
+```bash
+
+# yum install urw-fonts -y
+# wget https://dl.grafana.com/oss/release/grafana-8.0.5-1.x86_64.rpm
+# rpm -ivh grafana-8.0.5-1.x86_64.rpm 
+# systemctl start grafana-server.service 
+
+```
 
 
 
