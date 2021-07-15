@@ -88,9 +88,18 @@ container.id != host and proc.name = bash
 ```
 
 
+web应用进程java，php，apache，httpd，tomcat 中运行其他进程falco demo，图片来自，字节沙龙
+
+![agent](../images/WeChat75bf2513db53caf1119297cd792517bc.png)
+
+
+web应用进程java，php，apache，httpd，tomcat 中读取查看敏感文件falco demo，图片来自，字节沙龙
+
+![agent](../images/WeChat4321cd4e842d96ac351039ceee990d69.png)
+
+
+
 下面，我们修改falco 的配置，/etc/falco/falco.yaml 
-
-
 
 
 ```bash
@@ -217,7 +226,6 @@ exec_shell_install:
 [root@localhost ~]$ salt '*' state.highstate  
 
 ```
-
 
 
 
