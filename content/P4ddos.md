@@ -79,7 +79,7 @@ BlackNurse攻击基于Type3（Destination Unreachable） Code3（Port Unreachabl
 -  Memcached 反射（放大倍数10,000 to 51,000）
 -  等等（LDAP反射/TFTP反射/SSDP反射/SNMP反射）
 
-#### 防御
+#### 防御策略
 
 
 
@@ -117,4 +117,71 @@ ICMP 防御：
 
 
 上面都是脏活累活，交给专门做防DDoS的厂商去做，一般都直接使用CDN即可，比如，知道创宇的加速乐，腾讯云的大禹等等
+
+
+
+#### 使用DPDK进行DDOS防御
+这里不讨论带宽的问题。
+
+
+
+#### 使用XDP进行DDOS
+
+这里不讨论带宽的问题。
+
+
+在计算机网络中，Hook钩子在操作系统中用于在调用前或执行过程中拦截网络数据包。Linux内核中暴露了多个钩子，BPF程序可以连接到这些钩子上，实现数据收集和自定义事件处理。XDP全称为eXpress Data Path，是Linux内核网络栈的最底层。它只存在于RX路径上，允许在网络设备驱动内部网络堆栈中数据来源最早的地方进行数据包处理，在特定模式下可以在操作系统分配内存（skb）之前就已经完成处理。XDP暴露了一个可以加载BPF程序的网络钩子。在这个钩子中，程序能够对传入的数据包进行任意修改和快速决策，避免了内核内部处理带来的额外开销。基于XDP实现高效的防DDoS攻击，其本质上就是实现尽可能早地实现「丢包」，而不去消耗系统资源创建完整的网络栈链路，即「early drop」。
+
+
+
+![ddos](../images/imag19e.png)
+
+XDP暴露的钩子具有特定的输入上下文，它是单一输入参数。它的类型为 struct xdp_md，在内核头文件bpf.h 中定义，具体字段如下所示：
+
+```bash
+
+ */
+struct xdp_md {
+  __u32 data;
+  __u32 data_end;
+  __u32 data_meta;
+  /* Below access go through struct xdp_rxq_info */
+  __u32 ingress_ifindex; /* rxq->dev->ifindex */
+  __u32 rx_queue_index;  /* rxq->queue_index  */
+};
+
+```
+
+
+程序执行时，data和data_end字段分别是数据包开始和结束的指针，它们是用来获取和解析传来的数据，第三个值是data_meta指针，初始阶段它是一个空闲的内存地址，供XDP程序与其他层交换数据包元数据时使用。最后两个字段分别是接收数据包的接口和对应的RX队列的索引。当访问这两个值时，BPF代码会在内核内部重写，以访问实际持有这些值的内核结构struct xdp_rxq_info。
+
+在处理完一个数据包后，XDP程序会返回一个动作（Action）作为输出，它代表了程序退出后对数据包应该做什么样的最终裁决，也是在内核头文件bpf.h 定义了以下5种动作类型：
+
+```bash
+
+enum xdp_action {
+  XDP_ABORTED = 0, // Drop packet while raising an exception
+  XDP_DROP, // Drop packet silently
+  XDP_PASS, // Allow further processing by the kernel stack
+  XDP_TX, // Transmit from the interface it came from
+  XDP_REDIRECT, // Transmit packet from another interface
+};
+
+```
+
+
+可以看出这个动作的本质是一个int值。前面4个动作是不需要参数的，最后一个动作需要额外指定一个NIC网络设备名称，作为转发这个数据包的目的地。
+
+启用XDP后，网络包传输路径是这样的：
+
+![ddos](../images/ima123ge.png)
+
+
+可以看到多了3个红色方框圈起来的新链路，我们来一一介绍：
+offload模式，XDP程序直接hook到可编程网卡硬件设备上，与其他两种模式相比，它的处理性能最强；由于处于数据链路的最前端，过滤效率也是最高的。如果需要使用这种模式，需要在加载程序时明确声明。目前支持这种模式的网卡设备不多，有一家叫netronome。
+native模式，XDP程序hook到网络设备的驱动上，它是XDP最原始的模式，因为还是先于操作系统进行数据处理，它的执行性能还是很高的，当然你的网络驱动需要支持，目前已知的有i40e, nfp, mlx系列和ixgbe系列。
+generic模式，这是操作系统内核提供的通用 XDP兼容模式，它可以在没有硬件或驱动程序支持的主机上执行XDP程序。在这种模式下，XDP的执行是由操作系统本身来完成的，以模拟native模式执行。好处是，只要内核够高，人人都能玩XDP；缺点是由于是仿真执行，需要分配额外的套接字缓冲区（SKB），导致处理性能下降，跟native模式在10倍左右的差距。
+当前主流内核版本的Linux系统在加载XDP BPF程序时，会自动在native和generic这两种模式选择，完成加载后，可以使用ip命令行工具来查看选择的模式。
+
+
 
