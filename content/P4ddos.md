@@ -161,8 +161,33 @@ write back造成的性能损失。
 
 
 
+```c
 
-开源的抗D工具：
+
+int packetcapture(struct pconfig* config) {
+    uint16_t nb_rx;
+    uint16_t nb_rx_enqueued;
+    struct rte_mbuf *buffer[DPDKCAP_CAPTURE_BURST_SIZE];
+	 config->isRunning = true;
+	for(;;){
+
+		if(unlikely(!config->isRunning)){
+			break;
+		}
+		nb_rx = rte_eth_rx_burst(config->port, config->queue, buffer, DPDKCAP_CAPTURE_BURST_SIZE);
+		if(likely(nb_rx > 0)){
+			nb_rx_enqueued = rte_ring_enqueue_burst(config->ring, (void*)buffer, nb_rx, NULL);
+		}
+	}
+	free(buffer);
+	return 0;
+}
+
+
+```
+
+
+开源的基于DPDK的 抗D工具：
 
 ```bash
 
