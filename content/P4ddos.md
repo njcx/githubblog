@@ -185,3 +185,47 @@ generic模式，这是操作系统内核提供的通用 XDP兼容模式，它可
 
 
 
+```bash
+
+struct bpf_map_def SEC("maps") c_map = {
+	.type = BPF_MAP_TYP_PERCPU_ARRAY,
+	.key_size = sizeof(int),
+	.value_size = sizeof(long),
+	.max_entries = 256,
+};
+
+void sample_packet(void *data, void *data_end) {
+	// mark the packet to be sampled
+}
+
+static inline void update_rule_counters(int rule_id) {
+	long *value =
+	bpf_map_lookup_elem(&c_map, &rule_id);
+	if (value)
+	*value += 1;
+}
+static inline int rule_1(void *data, void *data_end) {
+	// if any of the rule conditions is not met
+	// return XDP_PASS;
+	update_rule_counters(1);
+	sample_packet(data, data_end);
+	return XDP_DROP;
+}
+// static inline int rule_2(..)
+SEC("xdp1")
+int xdp_prog(struct xdp_md *ctx) {
+	void *data = (void *)(long)ctx->data;
+	void *data_end = (void *)(long)ctx->data_end;
+	int ret;
+	ret = rule_1(data, data_end);
+	if (ret != XDP_PASS)
+	return ret;
+	ret = rule_2(data, data_end);
+	if (ret != XDP_PASS)
+	return ret;
+	//..
+	return XDP_PASS;
+}
+
+```
+
