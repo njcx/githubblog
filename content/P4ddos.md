@@ -127,7 +127,7 @@ STACK tweaking：管理员可以调整TCP堆栈以减缓SYN泛洪攻击的影响
 
 
 
-#### 使用DPDK进行DDOS防御
+#### 使用DPDK进行DDOS检测
 
 DPDK全称Intel Data Plane Development Kit，是intel提供的数据平面开发工具集，为Intel architecture（IA）处理器架构下用户空间高效的数据包处理提供库函数和驱动的支持。通俗地说，就是一个用来进行包数据处理加速的软件库。
 
@@ -160,29 +160,32 @@ DPDK利用线程的CPU亲和绑定机制使得特定任务能够被指定在某�
 write back造成的性能损失。
 
 
+检测是否为 slow header 攻击的demo，通过是否包含连续的两个 \r\n 来进行判断
 
 ```c
-
-
-int packetcapture(struct pconfig* config) {
-    uint16_t nb_rx;
-    uint16_t nb_rx_enqueued;
-    struct rte_mbuf *buffer[DPDKCAP_CAPTURE_BURST_SIZE];
-	 config->isRunning = true;
-	for(;;){
-
-		if(unlikely(!config->isRunning)){
+int process_http_pkt(
+	struct FeatureExtractCoreConfig* config, uint32_t src_ip, uint16_t http_payload_len,uint8_t* http_payload){
+	uint8_t atk_type = -1;
+	char* find = strstr(http_payload, "\r\n\r\n");
+	if(find == NULL){
+		atk_type = ATK_TYPE_HTTP_POST;
+	}else{
+		switch (http_payload[0]){
+		case 'G':
+			atk_type = ATK_TYPE_HTTP_GET;
+			break;
+		case 'P':
+			atk_type = ATK_TYPE_HTTP_POST;
+			break;
+		default:
 			break;
 		}
-		nb_rx = rte_eth_rx_burst(config->port, config->queue, buffer, DPDKCAP_CAPTURE_BURST_SIZE);
-		if(likely(nb_rx > 0)){
-			nb_rx_enqueued = rte_ring_enqueue_burst(config->ring, (void*)buffer, nb_rx, NULL);
-		}
 	}
-	free(buffer);
+	if(atk_type != -1){
+		update_feature(config->featureTableList[atk_type], src_ip, http_payload_len);
+	}
 	return 0;
 }
-
 
 ```
 
@@ -197,7 +200,7 @@ https://github.com/AltraMayor/gatekeeper
 
 
 
-#### 使用XDP进行DDOS
+#### 使用XDP进行DDOS拦截
 
 
 在计算机网络中，Hook钩子在操作系统中用于在调用前或执行过程中拦截网络数据包。Linux内核中暴露了多个钩子，BPF程序可以连接到这些钩子上，实现数据收集和自定义事件处理。XDP全称为eXpress Data Path，是Linux内核网络栈的最底层。它只存在于RX路径上，允许在网络设备驱动内部网络堆栈中数据来源最早的地方进行数据包处理，在特定模式下可以在操作系统分配内存（skb）之前就已经完成处理。XDP暴露了一个可以加载BPF程序的网络钩子。在这个钩子中，程序能够对传入的数据包进行任意修改和快速决策，避免了内核内部处理带来的额外开销。基于XDP实现高效的防DDoS攻击，其本质上就是实现尽可能早地实现「丢包」，而不去消耗系统资源创建完整的网络栈链路，即「early drop」。
