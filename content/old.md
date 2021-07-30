@@ -3,7 +3,7 @@ Date: 2018-02-15 10:20
 Modified: 2018-02-15 10:20
 Category: sec
 Tags: sec
-Slug: sec_resume1
+Slug: sec_resume
 Authors: nJcx
 Summary:简历
 Status: draft
@@ -14,29 +14,28 @@ Status: draft
 
 - 手机：18855999143 
 - Email：njcx86@gmail.com 
+- QQ：1666276469
 - 微信号: cxwin512
-- ID ：nJcx86
-- 微信公众号： 西部老枪
 
 ---
 
 # 个人信息
 
- - 刘少华/男/1994 
+ - 刘少华/男/1995 
  - 本科/黄山学院计算机系 
- - 工作年限：4年
+ - 工作年限：1.5年
  - [技术博客](https://www.njcx.bid )：https://www.njcx.bid 
  - [Github](http://github.com/njcx)：http://github.com/njcx 
- - [FreeBUF专栏](https://www.freebuf.com/column/1481)： https://www.freebuf.com/column/1481
- - [安全客](https://www.anquanke.com/member/154147)：https://www.anquanke.com/member/154147
- - Freebuf核心作者/安全客认证作者
- - 职位：高级安全开发工程师
-
+ - [知乎]( https://www.zhihu.com/people/njcxs)： https://www.zhihu.com/people/njcxs
+ - [知乎专栏](https://zhuanlan.zhihu.com/pythons)：https://zhuanlan.zhihu.com/pythons
+ - 期望职位：安全开发工程师
+ - 期望薪资：税前月薪20k~25k
+ - 期望城市：上海
 
 ---
 
 ## 自我简介
-熟悉甲方的安全建设流程，熟悉大型互联网架构，日常工作主要负责安全工具维护、安全工具开发、应急响应等，有WAF、NIDS、HIDS、SOC开发经验，日常关注安全事件、威胁情报，业余偶尔挖挖SRC，对网络安全充满热爱，熟悉项目开发流程和团队协同工作，有很好的团队合作意识，对新技术比较敏感，兴趣面和技术面比较广泛，希望能在日后通过继续学习更进一步
+在点融网安全应急响应中心工作1.5年，收获颇丰，熟悉甲方的安全建设流程，熟悉企业安全建设，日常工作主要负责安全运维工作、安全工具维护、安全工具开发、渗透测试、应急响应，日常喜欢关注安全事件、威胁情报，业余偶尔挖挖SRC，对网络安全充满热爱，熟悉项目开发流程和团队协同工作，有很好的团队合作意识，能很好利用baidu、google解决问题，有良好的逻辑思维能力，喜好新事物，对新技术比较敏感，兴趣面和技术面比较广泛，希望能在日后通过继续学习更进一步
 
 ---
 
@@ -119,80 +118,29 @@ Status: draft
 ---
 
 ## 开源项目
-
-- [BlackIPS](https://github.com/njcx/BlackIPS)：https://github.com/njcx/BlackIPS
-
-	开源威胁情报，包含3个组件，2个查询API，1个前端，400万+恶意IP，Go +Redis开发的威胁情报查询API性能良好。
-
-- [RuleCat](https://github.com/njcx/RuleCat)：https://github.com/njcx/RuleCat
-
-	GO开发而成，用于NIDS HIDS 分析的规则引擎，使用WorkerPool 高性能检测，使用yml作为规则，支持正则、子串、等于，支持多字段 "和" "或" 检测， 支持频率检测, 支持自定义函数检测,自定义函数可以满足几乎所有数据类型的检测
-
-- [flink_sec](https://github.com/njcx/flink_sec)：https://github.com/njcx/flink_sec
-
-	使用flink java 开发的规则引擎，使用json作为规则，支持正则、子串、等于，支持多字段 "和" "或" 检测
-    
-
-- [pyspark_nids](https://github.com/njcx/pyspark_nids)：https://github.com/njcx/pyspark_nids 
-
-    使用pyspark 开发的规则引擎，使用py字典作为规则，支持正则、子串、等于，支持多字段 "和" "或" 检测
-
-- [iprestful](https://github.com/njcx/iprestful)：https://github.com/njcx/iprestful
-
-	用于IP地址查询，使用spring boot 开发而成，性能良好，配合风控使用，有idc出口标记
-	
-- [py3finger](https://github.com/njcx/py3finger)：https://github.com/njcx/py3finger
-
-	py3finger是一个HTTP指纹识别类库,用于HTTP资产识别、扫描器等
-
-- [nginx_dump](https://github.com/njcx/nginx_dump)：https://github.com/njcx/nginx_dump
-
-	该工具用于把Openresty(Nginx+Lua) 请求参数和响应 dump出来，用于旁路HTTP流量分析、风控、资产识别、API数据泄露分析等等
-	
-- [packetbeat](https://github.com/njcx/packetbeat)：https://github.com/njcx/packetbeat
-
- 	魔改的packetbeat，支持icmp data字段解码，用于检测icmp隧道，添加了ssh协议，支持ssh 部分字段解析，用于检测扫描
- 	
-- [Artemis_HIDS](https://github.com/njcx/Artemis_HIDS)：https://github.com/njcx/Artemis_HIDS
-
-    使用 cgroups + etcd + kafka + netlink-connector 开发而成的hids的架构，agent 部分使用go 开发而成， 会把采集的数据写入到kafka里面，由后端的规则引擎（go开发而成）消费，配置部分以及agent存活使用etcd。
-
-
-- [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)：https://github.com/njcx/pocsuite_poc_collect
+ - [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)：https://github.com/njcx/pocsuite_poc_collect
  
-  自己写的一些poc和收集的一些POC
+  收集的POC
   
-- [peppa_gitscan](https://github.com/njcx/peppa_gitscan.git):  https://github.com/njcx/peppa_gitscan.git 
+ - [peppa_gitscan](https://github.com/njcx/peppa_gitscan.git):  https://github.com/njcx/peppa_gitscan.git 
  
  Github 扫描器
-- [gocmd](https://github.com/njcx/gocmd)：https://github.com/njcx/gocmd
 
-	一个 HTTP隧道的 C&C ，可以用 CDN 隐藏， 免杀，流量加密，用于学习，研究使用
-
-- [gomoon](https://github.com/njcx/gomoon)：https://github.com/njcx/gomoon
-
-	一个WebShell管理工具，支持JSP、PHP，免杀，过WAF，过NIDS，用于学习，研究使用
-
-- [Linux Basics for Hackers](https://github.com/OpenCyberTranslationProject/TP1):  https://github.com/OpenCyberTranslationProject/TP1 
+ - [Linux Basics for Hackers](https://github.com/OpenCyberTranslationProject/TP1):  https://github.com/OpenCyberTranslationProject/TP1 
  
  参与翻译的书，Linux Basics for Hackers，第5、6、7章节
  
 ---
 
 ## 技术文章
-- [NIDS(suricata)中的ICMP隐蔽隧道检测](https://www.freebuf.com/articles/es/243486.html)
-- [NIDS（suricata）中的DNS隐蔽隧道检测](https://www.freebuf.com/articles/network/244094.html)
-- [甲方自研分布式WAF落地全程实录](https://www.freebuf.com/articles/es/245977.html)
-- [C2的一些隐藏策略与防丢失](https://www.freebuf.com/articles/system/245567.html)
-- [Etcd在HIDS-Agent配置管理和健康监测上的应用](https://www.freebuf.com/articles/system/266118.html)
-- [Linux的Cgroups在HIDS-Agent资源限制上的应用](https://www.freebuf.com/articles/system/265733.html)
-- [HIDS-Agent开发之抓取DNS请求和异常分析](https://www.anquanke.com/post/id/235715)
-- [HIDS-Agent开发之检测反弹shell](https://www.anquanke.com/post/id/235717)
-- [使用Sysmon和Winlogbeat打造Windows平台的HIDS](https://www.anquanke.com/post/id/236222)
-- [Linux HIDS开发之eBPF的应用](https://www.anquanke.com/post/id/239870)
-- [DDoS介绍与防御](https://www.anquanke.com/post/id/247595)
-- [使用Falco做K8S环境的HIDS](https://www.njcx.bid/posts/S12.html)
-- [K8S安全建设经验试分享](https://www.njcx.bid/posts/S9.html)
+- [反弹shell总结](https://www.njcx.bid/posts/K4.html)
+- [抓包和nids规则编写](https://www.njcx.bid/posts/H1.html)
+- [rootkit的检测工具使用介绍](https://www.njcx.bid/posts/K3.html)
+- [ossec 搭建与简单用法](https://www.njcx.bid/posts/H14.html)
+- [机器学习简介](https://www.njcx.bid/posts/G6.html)
+- [K-means算法简介](https://www.njcx.bid/posts/G9.html)
+- [使用PyPy性能调优](https://www.njcx.bid/posts/C3.html)
+- [kafka 集群搭建实践笔记](https://www.njcx.bid/posts/L12.html)
 
 ---
 
@@ -201,12 +149,43 @@ Status: draft
 以下均为我用过或正在使用的编程语言、工具或者库：
 
 - 编程语言：C/Python/JAVA/Golang/Bash/Lua/JavaScript
-- Web框架：Django/Flask/Gin/SpringBoot
-- 数据库相关：MySQL/Redis/Mongodb/Etcd
-- 常用组件： ELK/Kafka/OpenResty/Flink/Spark
-- 常用工具： Burp Suite/AWVS/Nessus/Zeek/Suricata/Wireshark
+- Web框架：Django/Flask
+- 数据库相关：MySQL/Redis
+- 系统平台： Centos7.3/Debian 9.0/Ubuntu Server 18.04/KALI Linux2.0
+- Http服务器：Nginx/Apache/uwsgi
+- 常用组件： ELK/Kafka/Zookeeper/Splunk/Syslog
+- 常用工具：Burp Suite/AWVS/Nessus/Bro/OSSEC/Snort/Suricata/Wireshark
+
+---
+
+## 漏洞挖掘经验
+
+- 某在线借贷平台的ssrf 引起的xss打cookie
+- 某OA 任意文件上传拿webshell
+- 某OA 平台存在字符型SQL注入
+- 某在线视频的json挟持
+- 某在线视频的vip限制绕过
+- 某在线教育平台发短信验证绕过
+- 某在线商城的扣一次金币多次订单提交
+- 某在线商城的任意订单查询
+- 某在线教育平台发短信验证绕过
+
+......
+
+---
+
+## 参考技能关键字
+
+- Linux运维
+- 前端开发
+- web后端开发
+- 渗透测试
+- 安全开发
+- 数据分析
 
 ---
 
 ## 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
+
+
