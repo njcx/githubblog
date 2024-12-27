@@ -6,7 +6,7 @@ Tags: K-means
 Slug: P6
 Authors: nJcx
 Summary: 流量日志审计中常用的聚类算法（K-Means）~
-
+Status: draft
 
 
 #### 算法介绍

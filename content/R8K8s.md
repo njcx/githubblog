@@ -6,7 +6,7 @@ Tags: K8S
 Slug: R8 
 Authors: nJcx
 Summary: Kubernetes集群安装~
-
+Status: draft
 
 #### 介绍
 

@@ -6,6 +6,7 @@ Tags: PF_RING
 Slug: N12
 Authors: nJcx
 Summary: 高版本Packetbeat借Pcap兼容PF_RING~
+Status: draft
 
 #### 安装
 
