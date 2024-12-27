@@ -6,6 +6,8 @@ Tags: Python
 Slug: D12
 Authors: nJcx
 Summary: Centos6.9 编译安装 Python2.7.13
+Status: draft
+
 
 centos6.9自带的Python版本是2.6.6,版本太老了，目前Python的2.x版本最新是Python2.7.13，最好的方法是下载Python2.7.13的源码自己编译。先搞定centos的编译环境搭建以及相关依赖的处理：
 

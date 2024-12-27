@@ -5,7 +5,12 @@ Category: Linux
 Tags: 集群，HA
 Slug: A1
 Authors: nJcx
-Summary: 介绍一下linux下lvs+keepalived　搭建过程，记录一下学习过程
+Summary: 介绍一下linux下lvs+keepalived　搭建过程，记录一下
+Status: draft
+
+
+
+学习过程
 ##安装
 - yum install -y keepalived 
 - yum install -y ipvsadm
