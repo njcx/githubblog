@@ -6,6 +6,7 @@ Tags: thinkphp 0day
 Slug: L6
 Authors: nJcx
 Summary: thinkphp 0day合集
+Status: draft
 
 - Thinkphp 5.0.x 远程代码执行漏洞
 	- https://www.seebug.org/vuldb/ssvid-97767

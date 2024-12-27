@@ -6,6 +6,7 @@ Tags: Snort
 Slug: K1
 Authors: nJcx
 Summary: Snort 学习记录
+Status: draft
 
 #### 介绍
 在1998年，Marty Roesch先生用C语言开发了开放源代码(Open Source)的入侵检测系统Snort.直至今天，Snort已发展成为一个多平台(Multi-Platform),实时(Real-Time)流量分析，网络IP数据包(Pocket)记录等特性的强大的网络入侵检测/防御系统(Network Intrusion Detection/Prevention System),即NIDS/NIPS.Snort符合通用公共许可(GPL——GNU General Pubic License),在网上可以通过免费下载获得Snort,并且只需要几分钟就可以安装并开始使用它。snort基于libpcap。

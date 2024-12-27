@@ -6,7 +6,7 @@ Tags: Discuz、WordPress 0day
 Slug: L8
 Authors: nJcx
 Summary: Discuz、WordPress 0day合集
-
+Status: draft
 
 - DiscuzX 两处 SSRF 挖掘及利用
 	- https://www.seebug.org/vuldb/ssvid-97709

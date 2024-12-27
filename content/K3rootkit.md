@@ -6,6 +6,8 @@ Tags: rootkit
 Slug: K3
 Authors: nJcx
 Summary: rootkit的检测工具使用介绍
+Status: draft
+
 
 #### 介绍
 chkrootkit和rootkit hunter

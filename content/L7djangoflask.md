@@ -6,7 +6,7 @@ Tags: django、flask 0day
 Slug: L7
 Authors: nJcx
 Summary: Django、Flask 0day合集
-
+Status: draft
 
 - Django任意代码执行漏洞 
  	- django < 1.6

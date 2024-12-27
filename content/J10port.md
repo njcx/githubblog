@@ -6,7 +6,7 @@ Tags: 端口
 Slug: J10
 Authors: nJcx
 Summary: 常见服务端口对照表
-
+Status: draft
 
 
 ```bash
