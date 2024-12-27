@@ -6,7 +6,7 @@ Tags: 环境变量和软件包名
 Slug: J11
 Authors: nJcx
 Summary: 环境变量和软件包名以及依赖（方便粘贴）
-
+Status: draft
 
 ####  环境变量
 
