@@ -6,6 +6,8 @@ Tags: 安全
 Slug: O12
 Authors: nJcx
 Summary: 内网横向移动技术细节总结~
+Status: draft
+
 
 #### 信息收集
 
