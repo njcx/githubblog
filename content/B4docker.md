@@ -6,6 +6,9 @@ Tags: docker
 Slug: B4
 Authors: nJcx
 Summary: 介绍一下Docker常用命令，记录一下学习过程
+Status: draft
+
+
 #### 查看docker信息（version、info）
 
 - 查看docker版本  

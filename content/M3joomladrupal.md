@@ -6,7 +6,7 @@ Tags:  Drupal、Joomla 0day
 Slug: M3
 Authors: nJcx
 Summary: Drupal、Joomla 0day合集
-
+Status: draft
 
 - Drupal core Remote Code Execution(CVE-2018-7602)
 	- https://www.seebug.org/vuldb/ssvid-97246
