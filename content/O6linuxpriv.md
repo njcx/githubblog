@@ -6,6 +6,7 @@ Tags: Linux
 Slug: O6
 Authors: nJcx
 Summary: Linux环境的下提权方式总结~
+Status: draft
 
 #### 工具
 

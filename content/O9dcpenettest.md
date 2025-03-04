@@ -6,6 +6,7 @@ Tags: Windows
 Slug: O9
 Authors: nJcx
 Summary: Windows 域环境下的渗透测试~
+Status: draft
 
 #### 
 

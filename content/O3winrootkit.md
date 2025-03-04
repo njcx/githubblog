@@ -6,6 +6,7 @@ Tags: Windows
 Slug: O3
 Authors: nJcx
 Summary: Windows环境下的Rootkit技术细节~
+Status: draft
 
 #### 安装
 

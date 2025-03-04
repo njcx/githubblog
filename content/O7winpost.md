@@ -6,6 +6,7 @@ Tags: Windows
 Slug: O7
 Authors: nJcx
 Summary: Windows环境下的后渗透测试与权限维持~
+Status: draft
 
 #### 安装
 

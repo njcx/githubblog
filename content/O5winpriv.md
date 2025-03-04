@@ -6,6 +6,7 @@ Tags: Windows
 Slug: O5
 Authors: nJcx
 Summary: Windows环境的下提权方式总结~
+Status: draft
 
 #### 安装
 

@@ -6,6 +6,8 @@ Tags: Linux
 Slug: O8
 Authors: nJcx
 Summary: Linux环境下的后渗透测试与权限维持~
+Status: draft
+
 
 #### 安装
 
