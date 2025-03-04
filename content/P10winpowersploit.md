@@ -6,6 +6,7 @@ Tags: Windows
 Slug: P10
 Authors: nJcx
 Summary: Windows环境渗透工具-NiShang、Empire、Powersploit~
+Status: draft
 
 #### 介绍
 
