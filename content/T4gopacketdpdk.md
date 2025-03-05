@@ -39,10 +39,11 @@ DPDK被广泛应用于需要高吞吐量、低延迟的网络环境中，通过�
 #### DPDK的安装 
 
  
- ```bash
  
  
- CentOS
+```bash
+
+CentOS
 #  yum install -y libpcap-devel gcc gcc-c++ make meson ninja  numactl-devel  numactl  net-tools pciutils
 #  yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
 

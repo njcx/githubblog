@@ -26,10 +26,10 @@ Packetbeat非常适合用于需要对网络流量进行深度分析的环境，�
 #### DPDK的安装 
 
  
- ```bash
  
- 
- CentOS
+```bash
+
+CentOS
 #  yum install -y libpcap-devel gcc gcc-c++ make meson ninja  numactl-devel  numactl  net-tools pciutils
 #  yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
 
