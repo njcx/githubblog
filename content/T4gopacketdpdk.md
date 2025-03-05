@@ -73,6 +73,9 @@ Debian + Ubuntu
 #  ifconfig ens38 down   ## 填写实际网卡
 #  dpdk-devbind.py -b igb_uio 0000:03:00.0(pci-addr)  ## 根据实际填写
 
+#  echo "vm.nr_hugepages=1024" | tee -a /etc/sysctl.conf
+#  sysctl -p
+
 ```
 
 
@@ -124,6 +127,9 @@ C.some_function((*C.int)(unsafe.Pointer(&slice[0])), C.int(len(slice)))
 
 
 #### DPDK 的初始化
+
+
+
 
 
 
