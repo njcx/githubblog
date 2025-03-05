@@ -150,6 +150,16 @@ int init_dpdk(int argc, char **argv) {
 
 ```
 
+初始化指定的DPDK端口。主要步骤如下：
+
+- 检查可用端口数量，若无可用端口则返回错误。
+- 验证端口ID是否有效，无效则返回错误。
+- 创建内存缓冲池（mbuf pool），失败则返回错误。
+- 配置端口、设置接收队列和发送队列，任一步骤失败则返回错误。
+
+
+
+
 
 ```bash
 
@@ -208,6 +218,25 @@ int init_port(uint16_t port_id) {
 
 ```
 
+特别要注意的是：EAL 初始化和 DPDK端口初始化，要在主线程初始化。不然会报错如下：
+
+
+```bash
+EAL: Detected 40 lcore(s)
+EAL: Detected 2 NUMA nodes
+EAL: Error creating '/var/run/dpdk': Operation not permitted
+EAL: Cannot create runtime directory
+EAL: FATAL: Invalid 'command line' arguments.
+EAL: Invalid 'command line' arguments.
+
+```
+![dpdk](../images/linuxapp_launch.svg)
+
+启动指定端口的网络设备。具体步骤如下：
+
+- 调用 rte_eth_dev_start 启动端口，若失败则返回错误码。
+- 启用端口的混杂模式。
+- receive_packets 函数从指定端口接收数据包并存储到 rx_pkts 数组中，返回实际接收到的数据包数量
 
 ```bash
 
@@ -221,12 +250,6 @@ int start_port(uint16_t port_id) {
     return 0;
 }
 
-```
-
-
-
-```bash
-
 
 uint16_t receive_packets(uint16_t port_id, struct rte_mbuf **rx_pkts, uint16_t nb_pkts) {
     return rte_eth_rx_burst(port_id, 0, rx_pkts, nb_pkts);
@@ -236,7 +259,10 @@ uint16_t receive_packets(uint16_t port_id, struct rte_mbuf **rx_pkts, uint16_t n
 ```
 
 
+DPDK的初始化和端口处理。用cgo调用的c，主要功能如下：
 
+- InitDPDK：初始化DPDK环境，设置参数并调用C函数完成初始化。
+- NewDPDKHandle：创建一个DPDK端口处理对象，初始化并启动指定端口。
 
 ```bash
 
@@ -303,6 +329,17 @@ func NewDPDKHandle(portID uint16) (*DPDKHandle, error) {
 ```
 
 
+
+DPDK接口读取数据包并返回其内容和捕获信息。主要步骤如下：
+
+- 获取锁，确保线程安全。
+- 检查当前索引是否超出接收缓冲区大小，若超出则重新接收一批数据包。
+- 检查当前索引是否越界，若越界则返回错误。
+- 获取当前数据包的内容和长度，并构建捕获信息。
+- 应用BPF过滤器（如果有），过滤掉不符合条件的数据包。
+- 释放内存并更新索引，返回数据包及其捕获信息。
+
+
 ```bash
 
 
@@ -357,7 +394,6 @@ func (h *DPDKHandle) ReadPacketData() ([]byte, gopacket_dpdk.CaptureInfo, error)
 
 
 ```
-
 
 
 
