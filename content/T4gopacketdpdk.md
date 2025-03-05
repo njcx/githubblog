@@ -60,7 +60,7 @@ Debian + Ubuntu
 #  make
 #  modprobe uio  &&  insmod igb_uio.ko
 #  dpdk-devbind.py --status
-#  # ifconfig ens38 down   ## 填写实际网卡
+#  ifconfig ens38 down   ## 填写实际网卡
 #  dpdk-devbind.py -b igb_uio 0000:03:00.0(pci-addr)  ## 根据实际填写
 
 ```
