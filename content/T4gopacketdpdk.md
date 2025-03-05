@@ -128,6 +128,229 @@ C.some_function((*C.int)(unsafe.Pointer(&slice[0])), C.int(len(slice)))
 
 #### DPDK 的初始化
 
+```bash 
+
+int init_dpdk(int argc, char **argv) {
+
+    int ret;
+    ret = rte_eal_init(argc, argv);
+    printf("DPDK Version: %s\n", rte_version());
+    if (ret < 0) {
+        printf("Error: Cannot init EAL: %s\n", rte_strerror(rte_errno));
+        return -1;
+    }
+     return ret;
+}
+
+```
+
+
+```
+
+int init_port(uint16_t port_id) {
+    int ret;
+    unsigned nb_ports;
+    uint16_t i;
+    struct rte_eth_conf port_conf = port_conf_default;
+
+    nb_ports = rte_eth_dev_count_avail();
+    printf("Number of available ports: %u\n", nb_ports);
+    if (nb_ports < 1) {
+        printf("Warning: No Ethernet ports available\n");
+        return -1;
+    }
+    printf("Configuring port %u...\n", port_id);
+
+    if (!rte_eth_dev_is_valid_port(port_id)) {
+        printf("Invalid port ID %u\n", port_id);
+        return -1;
+    }
+
+    mbuf_pool = rte_pktmbuf_pool_create("MBUF_POOL", NUM_MBUFS,
+                                        MBUF_CACHE_SIZE, 0,
+                                        RTE_MBUF_DEFAULT_BUF_SIZE,
+                                        rte_socket_id());
+    if (mbuf_pool == NULL) {
+        printf("Error: Cannot create mbuf pool\n");
+        return -1;
+    }
+
+    ret = rte_eth_dev_configure(port_id, 1, 1, &port_conf);
+    if (ret < 0) {
+        printf("Warning: Cannot configure port %u\n", port_id);
+        return -1;
+    }
+
+    ret = rte_eth_rx_queue_setup(port_id, 0, RX_RING_SIZE,
+                                 rte_eth_dev_socket_id(port_id),
+                                 NULL, mbuf_pool);
+    if (ret < 0) {
+        printf("Warning: Cannot setup RX queue for port %u\n", port_id);
+        return -1;
+    }
+
+    ret = rte_eth_tx_queue_setup(port_id, 0, TX_RING_SIZE,
+                                 rte_eth_dev_socket_id(port_id),
+                                 NULL);
+    if (ret < 0) {
+        printf("Warning: Cannot setup TX queue for port %u\n", port_id);
+        return -1;
+    }
+
+    return 0;
+}
+
+```
+
+
+```bash
+
+int start_port(uint16_t port_id) {
+    int ret = rte_eth_dev_start(port_id);
+    if (ret < 0) {
+        return ret;
+    }
+    rte_eth_promiscuous_enable(port_id);
+    printf("Port %u started successfully\n", port_id);
+    return 0;
+}
+
+```
+
+
+
+```bash
+
+
+uint16_t receive_packets(uint16_t port_id, struct rte_mbuf **rx_pkts, uint16_t nb_pkts) {
+    return rte_eth_rx_burst(port_id, 0, rx_pkts, nb_pkts);
+}
+
+
+```
+
+
+
+
+```bash
+
+
+type DPDKHandle struct {
+	portID        uint16
+	bpfFilter     *C.dpdk_bpf_filter
+	Initialized   bool
+	mbufs         []*C.struct_rte_mbuf
+	currentIdx    int
+	nbRx          int
+	mu            sync.Mutex
+	lastStats     *C.struct_rte_eth_stats
+	lastStatsTime time.Time
+}
+
+func InitDPDK(args []string) error {
+
+	var initErr error
+	initializedOnce.Do(func() {
+		dpdkMutex.Lock()
+		defer dpdkMutex.Unlock()
+
+		now := time.Now().UTC().Format("2006-01-02 15:04:05")
+		fmt.Printf("[%s] Initializing DPDK...\n", now)
+
+		if len(args) == 0 {
+			args = []string{"gopacket_dpdk"}
+		}
+		argc := C.int(len(args))
+		cargs := make([]*C.char, len(args))
+		for i, arg := range args {
+			cargs[i] = C.CString(arg)
+			defer C.free(unsafe.Pointer(cargs[i]))
+		}
+		ret := C.init_dpdk(argc, (**C.char)(&cargs[0]))
+		if ret < 0 {
+			initErr = fmt.Errorf("DPDK initialization failed: %d", ret)
+			return
+		}
+		fmt.Printf("[%s] DPDK initialization successful\n", now)
+	})
+
+	return initErr
+
+}
+
+func NewDPDKHandle(portID uint16) (*DPDKHandle, error) {
+	handle := &DPDKHandle{
+		portID:    portID,
+		mbufs:     make([]*C.struct_rte_mbuf, BURST_SIZE),
+		bpfFilter: &C.dpdk_bpf_filter{},
+	}
+
+	if ret := C.init_port(C.uint16_t(portID)); ret != 0 {
+		return nil, fmt.Errorf("port initialization failed: %d", ret)
+	}
+	if ret := C.start_port(C.uint16_t(portID)); ret != 0 {
+		return nil, fmt.Errorf("port start failed: %d", ret)
+	}
+	handle.Initialized = true
+	return handle, nil
+}
+```
+
+
+```bash
+
+
+func (h *DPDKHandle) ReadPacketData() ([]byte, gopacket_dpdk.CaptureInfo, error) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	if h.currentIdx >= h.nbRx {
+		h.nbRx = int(C.receive_packets(C.uint16_t(h.portID),
+			(**C.struct_rte_mbuf)(unsafe.Pointer(&h.mbufs[0])),
+			C.uint16_t(BURST_SIZE)))
+
+		h.currentIdx = 0
+
+		if h.nbRx == 0 {
+			return nil, gopacket_dpdk.CaptureInfo{}, nil
+		}
+	}
+
+	if h.currentIdx < 0 || h.currentIdx >= len(h.mbufs) {
+		return nil, gopacket_dpdk.CaptureInfo{}, fmt.Errorf("currentIdx out of bounds: %d", h.currentIdx)
+	}
+
+	mbuf := h.mbufs[h.currentIdx]
+	data := C.get_mbuf_data(mbuf)
+	length := C.get_mbuf_data_len(mbuf)
+
+	packet := C.GoBytes(unsafe.Pointer(data), C.int(length))
+	totalLength := int(C.get_mbuf_pkt_len(mbuf))
+
+	captureInfo := gopacket_dpdk.CaptureInfo{
+		Timestamp:     time.Now(), // Current timestamp when packet is captured
+		CaptureLength: len(packet),
+		Length:        totalLength,
+	}
+
+	if h.bpfFilter != nil {
+		if C.apply_bpf_filter(h.bpfFilter,
+			(*C.uchar)(unsafe.Pointer(data)),
+			C.uint32_t(length)) == 0 {
+			C.free_mbuf(mbuf)
+			h.currentIdx++
+			return nil, gopacket_dpdk.CaptureInfo{}, nil
+		}
+	}
+
+	C.free_mbuf(mbuf)
+	h.currentIdx++
+
+	return packet, captureInfo, nil
+}
+
+
+```
 
 
 
