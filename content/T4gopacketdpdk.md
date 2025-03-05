@@ -95,3 +95,131 @@ func main() {
 ```
 
 
+Go的int类型对应于C的int类型。但需要注意的是，Go中的int大小是平台相关的（32位或64位），而C的int通常是32位。如果需要明确指定大小，可以使用固定宽度的类型如int32或int64来匹配C的int32_t或int64_t。Go的float64可以直接转换为C的double，float32转换为C的float。
+
+```bash
+var y float64 = 3.14
+C.some_function(C.double(y))
+
+```
+
+Go的字符串需要通过C.CString()函数转换为C风格的字符串(char*)，并且记得用C.free()释放由C.CString()分配的内存。
+
+```bash
+
+str := "Hello, C!"
+cstr := C.CString(str)
+defer C.free(unsafe.Pointer(cstr))
+C.some_function(cstr)
+
+```
+
+使用unsafe.Pointer可以在Go指针和C指针之间进行转换。例如，将一个Go切片传递给C函数时，可以通过(*C.type)(unsafe.Pointer(&slice[0]))这样的方式转换。
+
+```bash
+slice := []int{1, 2, 3}
+C.some_function((*C.int)(unsafe.Pointer(&slice[0])), C.int(len(slice)))
+
+```
+
+
+#### DPDK 的初始化
+
+
+
+
+#### Demo
+
+
+```bash
+
+package main
+
+import (
+	"fmt"
+	"github.com/njcx/gopacket_dpdk"
+	"github.com/njcx/gopacket_dpdk/dpdk"
+	"github.com/njcx/gopacket_dpdk/layers"
+	"log"
+	"os"
+)
+
+func processPacket(data []byte) {
+	packet := gopacket_dpdk.NewPacket(data, layers.LayerTypeEthernet, gopacket_dpdk.Default)
+	ethernetLayer := packet.Layer(layers.LayerTypeEthernet)
+	if ethernetLayer != nil {
+		eth, _ := ethernetLayer.(*layers.Ethernet)
+		fmt.Printf("Source MAC: %s, Destination MAC: %s\n", eth.SrcMAC, eth.DstMAC)
+	}
+	// Parse IP layer
+	ipLayer := packet.Layer(layers.LayerTypeIPv4)
+	if ipLayer != nil {
+		ip, ok := ipLayer.(*layers.IPv4)
+		if !ok {
+			fmt.Println("Failed to parse IPv4 layer")
+			return
+		}
+		fmt.Printf("Source IP: %s, Destination IP: %s\n", ip.SrcIP, ip.DstIP)
+	}
+
+	var resultDataList []map[string]string
+	// 解析DNS层
+	dnsLayer := packet.Layer(layers.LayerTypeDNS)
+	if dnsLayer != nil {
+		dns, ok := dnsLayer.(*layers.DNS)
+		if !ok {
+			fmt.Println("Failed to parse DNS layer")
+			return
+		}
+		if !dns.QR {
+			for _, dnsQuestion := range dns.Questions {
+				if len(dns.Questions) == 0 {
+					continue
+				}
+				resultdata := make(map[string]string)
+				resultdata["source"] = "dns"
+				resultdata["domain"] = string(dnsQuestion.Name)
+				resultdata["type"] = string(dnsQuestion.Type)
+				resultdata["class"] = string(dnsQuestion.Class)
+				resultDataList = append(resultDataList, resultdata)
+			}
+			for _, data := range resultDataList {
+				fmt.Printf("%+v\n", data)
+			}
+		}
+	}
+}
+
+func main() {
+	// Initialize DPDK
+	if os.Geteuid() != 0 {
+		log.Fatal("Root permission is required to execute")
+	}
+
+	args := []string{
+		"dpdk_app_dns",
+		"-l", "0-3",
+		"-n", "4",
+		"--proc-type=auto",
+		"--file-prefix=dpdk_dns_",
+		"--huge-dir", "/dev/hugepages",
+	}
+
+	if err := dpdk.InitDPDK(args); err != nil {
+		log.Fatalf("Failed to initialize DPDK: %v", err)
+	}
+	handle, err := dpdk.NewDPDKHandle(0)
+
+	handle.SetBPFFilter("udp and port 53")
+	if err != nil {
+		log.Fatalf("Failed to create DPDK handler: %v", err)
+	}
+	defer handle.Close()
+	// Start receiving and processing packets
+	handle.ReceivePacketsCallBack(processPacket)
+}
+
+```
+
+代码在这里  https://github.com/njcx/gopacket_dpdk 。
+
