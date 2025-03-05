@@ -35,3 +35,31 @@ DPDK的设计初衷正是为了解决x86架构在处理网络高吞吐量任务�
 
 DPDK被广泛应用于需要高吞吐量、低延迟的网络环境中，通过使用DPDK，开发者可以构建出比传统方法更快、更高效的网络应用程序，这对于满足日益增长的数据流量需求至关重要。
 
+
+#### DPDK的安装 
+
+ 
+ ```bash
+ 
+ 
+ CentOS
+#  yum install -y libpcap-devel gcc gcc-c++ make meson ninja  numactl-devel  numactl  net-tools pciutils
+#  yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+
+Debian + Ubuntu
+# apt install -y libpcap-dev gcc g++ make meson ninja-build libnuma-dev numactl net-tools pciutils
+# apt install -y linux-headers-$(uname -r)
+
+
+#  wget http://fast.dpdk.org/rel/dpdk-20.11.10.tar.xz
+#  tar -Jxvf dpdk-20.11.10.tar.xz
+#  cd dpdk-stable-20.11.10 && meson build && cd build && ninja && ninja install
+#  export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+#  git clone git://dpdk.org/dpdk-kmods && cd  dpdk-kmods/linux/igb_uio
+#  make
+#  modprobe uio  &&  insmod igb_uio.ko
+#  dpdk-devbind.py --status
+#  # ifconfig ens38 down   ## 填写实际网卡
+#  dpdk-devbind.py -b igb_uio 0000:03:00.0(pci-addr)  ## 根据实际填写
+
+```

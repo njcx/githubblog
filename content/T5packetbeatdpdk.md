@@ -20,3 +20,33 @@ Packetbeat的工作原理
 
 
 Packetbeat非常适合用于需要对网络流量进行深度分析的环境，例如企业内部网、云服务提供商、以及任何希望提升其应用性能和安全性的地方。结合Elastic Stack的其他组件（如Kibana），用户可以创建强大的可视化面板，以便更好地理解和管理他们的网络数据。早期的Packetbeat 支持Pf-ring，后来就不再支持了。为Packetbeat添加DPDK（Data Plane Development Kit）支持，可以显著提高其网络数据包处理能力，特别是对于高吞吐量和低延迟要求的场景。DPDK是一个优化了的数据包处理框架，它绕过了操作系统内核协议栈，直接在用户空间处理网络数据包，从而实现了高效的数据传输。
+
+
+
+#### DPDK的安装 
+
+ 
+ ```bash
+ 
+ 
+ CentOS
+#  yum install -y libpcap-devel gcc gcc-c++ make meson ninja  numactl-devel  numactl  net-tools pciutils
+#  yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+
+Debian + Ubuntu
+# apt install -y libpcap-dev gcc g++ make meson ninja-build libnuma-dev numactl net-tools pciutils
+# apt install -y linux-headers-$(uname -r)
+
+
+#  wget http://fast.dpdk.org/rel/dpdk-20.11.10.tar.xz
+#  tar -Jxvf dpdk-20.11.10.tar.xz
+#  cd dpdk-stable-20.11.10 && meson build && cd build && ninja && ninja install
+#  export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+#  git clone git://dpdk.org/dpdk-kmods && cd  dpdk-kmods/linux/igb_uio
+#  make
+#  modprobe uio  &&  insmod igb_uio.ko
+#  dpdk-devbind.py --status
+#  # ifconfig ens38 down   ## 填写实际网卡
+#  dpdk-devbind.py -b igb_uio 0000:03:00.0(pci-addr)  ## 根据实际填写
+
+```
