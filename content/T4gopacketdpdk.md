@@ -128,6 +128,12 @@ C.some_function((*C.int)(unsafe.Pointer(&slice[0])), C.int(len(slice)))
 
 #### DPDK 的初始化
 
+
+DPDK（Data Plane Development Kit）初始化过程涉及多个步骤，主要是为了准备环境以便高效处理网络数据包。以下是DPDK初始化过程中的一些关键步骤和内容：
+
+- EAL（Environment Abstraction Layer）初始化：这是DPDK初始化的核心部分。EAL提供了对底层硬件资源的抽象，包括内存管理、CPU核心分配、设备识别与初始化等。通过调用rte_eal_init()函数来完成，此过程会解析命令行参数，并设置好运行时环境。
+- 内存分配：DPDK需要大量的连续物理内存来存储数据包和执行高效的数据传输。在EAL初始化阶段，会预留一块大页内存（hugepage），用于后续的数据包处理操作。
+
 ```bash 
 
 int init_dpdk(int argc, char **argv) {
@@ -145,7 +151,7 @@ int init_dpdk(int argc, char **argv) {
 ```
 
 
-```
+```bash
 
 int init_port(uint16_t port_id) {
     int ret;
