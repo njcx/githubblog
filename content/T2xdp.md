@@ -155,9 +155,9 @@ func ipToUint32(ipStr string) (uint32, error) {
 
 - 获取Redis中的IP和端口列表。
 - 遍历IP和端口列表，解析每个IP和端口。
-- 将解析后的IP和端口存入eBPF映射中。
+- 将解析后的IP和端口存入eBPF MAP中。
 
-eBPF 的key ，可以是一个结构体。
+eBPF MAP 的key ，可以是一个结构体。
 
 
 ```bash
