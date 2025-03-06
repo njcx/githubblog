@@ -66,7 +66,7 @@ Summary:  NIDS 中的 ICMP隐蔽隧道检测 ~
 
 2，ICMP Data字段 形成一个白名单，不在白名单内的告警
 
-```
+```bash
 pass icmp any any -> any any (msg:"Whitecap: OSX or Linux ICMP Echo Request"; icode:0; itype:8; dsize:56; content:"!\"#$%&'()*+,-./01234567"; classtype:misc-activity; sid:5110001; rev:1;)
 pass icmp any any -> any any (msg:"Whitecap: OSX or Linux ICMP Echo Reply"; icode:0; itype:0; dsize:56; content:"!\"#$%&'()*+,-./01234567"; classtype:misc-activity; sid:5110002; rev:1;)
 pass icmp any any -> any any (msg:"Whitecap: Windows XP/7/8 ICMP Echo Request"; icode:0; itype:8; dsize:32; content:"abcdefghijklmnopqrstuvwabcdefghi"; classtype:misc-activity; sid:5110003; rev:1; nocase;)
@@ -106,13 +106,13 @@ pass icmp any any -> [$ICMP_DST_HOSTS_IGNORE] any (msg:"ICMP Pass: Ignore Hosts"
 3,检测包大于多少，或者发送频率高于某个数，报警
 
 
-```
+```bash
 alert icmp any any -> any any (msg:"Whitecap Echo Request Payload > 100 bytes"; icode:0; itype:8; dsize:>100; classtype:misc-activity; sid:5113000; rev:1;)
 alert icmp any any -> any any (msg:"Whitecap Echo Reply Payload > 100 bytes"; icode:0; itype:0; dsize:>100; classtype:misc-activity; sid:5113001; rev:1;)
 ```
 
 4, 检测 Data里面包含的特殊字段报警（例子是检测base64）
 
-```
+```bash
 drop icmp any any -> any any (msg:"LOCAL ICMP Large ICMP Packet (Base64)"; dsize:>800; content:"="; pcre:"/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/"; reference:url,www.notsosecure.com/2015/10/15/icmp-tunnels-a-case-study/; classtype:bad-unknown; sid:1000028; rev:1;)
 ```

