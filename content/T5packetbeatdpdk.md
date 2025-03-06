@@ -206,6 +206,178 @@ func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
 
 
 
+#### 让Packetbeat 支持DPDK
+
+DPDK（Data Plane Development Kit）初始化过程涉及多个步骤，主要是为了准备环境以便高效处理网络数据包。以下是DPDK初始化过程中的一些关键步骤和内容：
+
+- EAL（Environment Abstraction Layer）初始化：这是DPDK初始化的核心部分。EAL提供了对底层硬件资源的抽象，包括内存管理、CPU核心分配、设备识别与初始化等。通过调用rte_eal_init()函数来完成，此过程会解析命令行参数，并设置好运行时环境。
+- 内存分配：DPDK需要大量的连续物理内存来存储数据包和执行高效的数据传输。在EAL初始化阶段，会预留一块大页内存（hugepage），用于后续的数据包处理操作。
+
+
+特别要注意的是：EAL 初始化和 DPDK端口初始化，要在主线程初始化。不然会报错如下：
+
+
+```bash
+EAL: Detected 40 lcore(s)
+EAL: Detected 2 NUMA nodes
+EAL: Error creating '/var/run/dpdk': Operation not permitted
+EAL: Cannot create runtime directory
+EAL: FATAL: Invalid 'command line' arguments.
+EAL: Invalid 'command line' arguments.
+
+```
+
+由于 Packetbeat 使用了 Cobra, 并且初始化的操作都是在 Cobra的子命令里面完成的, Cobra 的子命令都是非主线程, 如果把DPDK的初始化放到package sniffer 里面, 则会报错如上。所以修改main.go, 把DPDK 的初始化放到  Cobra 的子命令初始化之前.
+
+
+```bash
+
+package main
+
+import (
+	"github.com/njcx/packetbeat7_dpdk/cmd"
+	"github.com/njcx/packetbeat7_dpdk/dpdkinit"
+	"os"
+)
+
+var Name = "packetbeat"
+
+func main() {
+	dpdkinit.DpdkInit()
+	if err := cmd.RootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
+}
+
+
+```
+
+
+由于,我们把DPDK 的初始化放到  Cobra 的子命令初始化之前, 导致我们无法读取 Cobra的命令, 也无法利用后续的配置文件初始化. 所以, 我们可以在里面添加一些命令行参数, 用于DPDK 的初始化, 不能用spf13/pflag 和 标准库flag, 会和后续初始化产生冲突. 简单实现一个命令行参数提取代码 : 
+
+
+```bash
+package dpdkinit
+
+import (
+	"fmt"
+	"os"
+	"strings"
+)
+
+func Parse(key string) (string, error) {
+	args := os.Args[1:]
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		if strings.HasPrefix(arg, "--") {
+			name := strings.TrimPrefix(arg, "--")
+			if i+1 >= len(args) {
+				return "", fmt.Errorf("no value provided for flag: %s", name)
+			}
+			return args[i+1], nil
+		}
+
+		if strings.HasPrefix(arg, "-") {
+			shorthand := strings.TrimPrefix(arg, "-")
+			if i+1 >= len(args) {
+				return "", fmt.Errorf("no value provided for flag: %s", shorthand)
+			}
+			return args[i+1], nil
+		}
+	}
+
+	return "", fmt.Errorf("cant find this key: %s", key)
+}
+
+
+```
+
+
+DPDK 初始化：
+
+```bash
+
+
+var DPdk *dpdk.DPDKHandle
+
+func DpdkInit() error {
+
+	dpdkPort, _ := Parse("dpdk_port")
+	dpdkStatus, _ := Parse("dpdk_status")
+	if dpdkStatus == "enable" {
+		err := dpdk.InitDPDK([]string{})
+		if err != nil {
+			return err
+		}
+		num16, _ := strconv.ParseUint(dpdkPort, 10, 16)
+		port := uint16(num16)
+
+		h, err := dpdk.NewDPDKHandle(port)
+		if err != nil {
+			h.Close()
+			return err
+		}
+		DPdk = h
+	}
+	return nil
+}
+
+
+
+```
+
+DPDKHandle 已经实现了 snifferHandle的接口，直接赋值：
+
+
+```bash
+
+
+func openDpdk(filter string) (snifferHandle, error) {
+
+	h := dpdkinit.DPdk
+	err := h.SetBPFFilter(filter)
+	if err != nil {
+		h.Close()
+		return nil, err
+	}
+	return h, nil
+}
+
+
+
+```
+
+构建：
+
+```bash
+
+CGO_CFLAGS="-msse4.2 -fno-strict-aliasing " CGO_LDFLAGS=" -lrte_eal -lrte_mbuf -lrte_mempool -lrte_ethdev -lpcap" go build
+
+```
+
+执行：
+
+
+```bash
+./packetbeat8_dpdk --dpdk_status enable --dpdk_port 0 -c ~/go/packetbeat.dpdk.yml 
+
+```
+
+在配置文件里面标记输入源， 用于后续初始化：
+
+
+```bash
+
+packetbeat.interfaces.device: 0
+packetbeat.interfaces.snaplen: 1514
+packetbeat.interfaces.type: dpdk
+packetbeat.interfaces.buffer_size_mb: 100
+
+```
+
+运行正常，全文完。
+
+![dpdk](../images/WechatIMG1166.jpg)
 
 
 
