@@ -75,18 +75,22 @@ getdents(3, /* 0 entries */, 32768)     = 0
 不使用系统调用表。这是一个最好的方案，如果我们不在系统调用表上Hook，我们还可以将Hook放在Handler上。
 针对这个简单的模块，我们会选择上面的第3种方式。不使用系统调用表的方式也比较有趣，我将会在后续另写一篇文章进行讲解。对于第3种方式，我们只需要读取并分析/boot/System.map-$(uname -r)文件即可。我们的这一操作，可以在将自身添加到内核的同时进行，由此就确保会得到正确的地址。在我的代码中，build_and_install.sh进行了这项工作。我生成了一个将使用可装载内核模块（LKM）编译的头文件。
 
+```bash
+
 smap="/boot/System.map-$(uname -r)"
 echo -e "#pragma once" &gt; ./sysgen.h
 echo -e "#include <linux/fs.h>" >> ./sysgen.h
 symbline=$(cat $smap | grep '\Wsys_call_table$')
 set $symbline
 echo -e "void** sys_call_table = (void**)0x$1;" >> ./sysgen.h
+
+```
  
 
 关于Hook
 系统调用表是只读的，但当我们在内核中的时候，这并不会成为较大的阻碍因素。在内核中，CR0是一个控制寄存器，可以修改处理器的操作方式。其中的第16位是写保护标志所在的位置，如果该标志为0，CPU就可以让内核写入只读页。Linux为我们提供了两个很有帮助的函数，可以用于修改CR0寄存器，分别是write_cr0和read_cr0。
 
-在我的代码中，我通过 write_cr0(read_cr0() & (~WRITE_PROTECT_FLAG)); 关闭了写保护机制，随后在 #define WRITE_PROTECT_FLAG (1<<16)通过 write_cr0(read_cr0() | WRITE_PROTECT_FLAG)；将其重新打开。
+在代码中，我通过 write_cr0(read_cr0() & (~WRITE_PROTECT_FLAG)); 关闭了写保护机制，随后在 #define WRITE_PROTECT_FLAG (1<<16)通过 write_cr0(read_cr0() | WRITE_PROTECT_FLAG)；将其重新打开。
 
 随后，将当前getdents Handler的入口保存，这样我就可以在删除模块时恢复原样。之后，我们使用 sys_call_table[GETDENTS_SYSCALL_NUM] = sys_getdents_new;写了一个新的Handler。
 
@@ -97,7 +101,7 @@ echo -e "void** sys_call_table = (void**)0x$1;" >> ./sysgen.h
 从/proc/modules实现隐藏
 在Linux系统中，/proc/文件系统作为用户空间与内核之间的接口。它们并不是传统意义上的文件，在打开、写入或读取proc文件时，它会调用内核中的处理程序，动态地得到所需信息并进行相应操作。通过Hook /proc/modules文件的Read Handler，我们可以筛选出任何引用到我们模块的相应行。为了实现这一点，首先需要知道/proc/modules在内核中注册的位置。
 
-我在Github上搜索了“proc_create(“modules”)“的源代码，并找到了以下几行：
+在Github上搜索了“proc_create(“modules”)“的源代码，并找到了以下几行：
 
 static int __init proc_modules_init(void){
 
@@ -116,6 +120,7 @@ return 0;
 至此，我们就拥有了第一个Linux rootkit。此后，我们还可以通过在系统调用表之外进行Hook，以及通过在内核中隐藏模块来改进。
 
 希望上述内容已经讲解得足够清楚明白，如果大家有任何问题，或者发现我的代码中存在任何Bug，请随时提出。我也期待能有更多人提出Rootkit方面的更深入分析并相互学习。
+
 
 
 
