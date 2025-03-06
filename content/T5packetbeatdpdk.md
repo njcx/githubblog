@@ -375,7 +375,13 @@ packetbeat.interfaces.buffer_size_mb: 100
 
 ```
 
-运行正常，全文完。
+运行正常，代码repo 如下， 全文完。
+
+```bash
+https://github.com/njcx/packetbeat8_dpdk
+https://github.com/njcx/packetbeat7_dpdk
+https://github.com/njcx/packetbeat6_dpdk
+```
 
 ![dpdk](../images/WechatIMG1166.jpg)
 
