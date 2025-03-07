@@ -14,12 +14,11 @@ https://github.com/f0rb1dd3n/Reptile.git
 https://github.com/yaoyumeng/adore-ng.git
 https://github.com/citypw/suterusu.git
 https://github.com/m0nad/Diamorphine.git
-https://github.com/unix-thrust/beurk.git
-https://github.com/mempodippy/vlany.git
 https://github.com/hanj4096/wukong.git
 https://github.com/ldpreload/Medusa.git
 https://github.com/mav8557/Father.git
 https://github.com/imlk0/yark.git
+https://github.com/veo/vbackdoor.git
 
 ```
 
