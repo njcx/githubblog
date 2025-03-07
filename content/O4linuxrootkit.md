@@ -17,6 +17,9 @@ https://github.com/m0nad/Diamorphine.git
 https://github.com/unix-thrust/beurk.git
 https://github.com/mempodippy/vlany.git
 https://github.com/hanj4096/wukong.git
+https://github.com/ldpreload/Medusa.git
+https://github.com/mav8557/Father.git
+https://github.com/imlk0/yark.git
 
 ```
 
