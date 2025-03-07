@@ -11,17 +11,46 @@ Summary: Linux环境下的Rootkit技术细节~
 
 ```bash
 https://github.com/f0rb1dd3n/Reptile.git
-https://github.com/naworkcaj/bdvl.git
 https://github.com/yaoyumeng/adore-ng.git
 https://github.com/citypw/suterusu.git
-https://github.com/jgamblin/Mirai-Source-Code.git
 https://github.com/m0nad/Diamorphine.git
-https://raw.githubusercontent.com/yzimhao/godpock/master/Rootkit/mafix.tar.gz
+https://github.com/unix-thrust/beurk.git
+https://github.com/mempodippy/vlany.git
+https://github.com/hanj4096/wukong.git
+
 ```
 
-linux rootkit 主要分为两种，一种是用户态的rootkit，一种是内核态的rootkit. rootkit的主要目的是为了隐蔽地获取对操作系统的控制权或访问权限，同时尽量避免被检测到。用户态的rootkit主要是动态链接库（LD_PRELOAD）注入，通过设置环境变量 LD_PRELOAD 来加载恶意的共享库。这种方法可以拦截并修改标准库函数的行为，例如文件操作、网络通信等，从而隐蔽地执行某些操作，还有替换相关命令完成(通过替换ps、top、ls、ss、netstat等系统工具)。内核态的rootkit主要是可装载内核模块（LKM）实现， 主要是修改操作系统的核心部分，修改内部的数据结构或者进行系统函数HOOK，以此来隐藏其存在，例如隐藏特定的文件、进程和网络连接等。
+linux rootkit 主要分为两种，一种是用户态的rootkit，一种是内核态的rootkit。rootkit的主要目的是为了隐蔽地获取对操作系统的控制权或访问权限，同时尽量避免被检测到。用户态的rootkit主要是动态链接库（LD_PRELOAD）注入，通过设置环境变量 LD_PRELOAD 来加载恶意的共享库。这种方法可以拦截并修改标准库函数的行为，例如文件操作、网络通信等，从而隐蔽地执行某些操作，还有替换相关系统命令完成(通过替换ps、top、ls、ss、netstat等系统工具)。内核态的rootkit主要是可装载内核模块（LKM）实现， 主要是修改操作系统的核心部分，修改内部的数据结构或者进行系统函数HOOK，以此来隐藏其存在，例如隐藏特定的文件、进程和网络连接等。
 
-当某个程序需要借助网络、文件系统或其他系统特定活动进行工作时，它就必须经过内核。也就是说，在此时它将使用系统调用。我们使用了一个名为Strace的工具。Strace将会列出程序所使用的系统调用。
+
+无论是用户态rootkit还是内核的rootkit，都会把隐藏自己，作为核心功能存在， 都会有下面4个核心功能点，只是实现的方法，各有不同。
+ 
+-  隐藏文件
+
+-  隐藏进程
+
+-  隐藏网络连接状态
+
+-  隐藏rootkit模块本身。
+
+
+#### 用户态动态链接库（LD_PRELOAD）注入
+
+
+
+#### 内核态可装载内核模块（LKM）
+
+
+内核态的rootkit主要是可装载内核模块（LKM）实现， 主要是修改操作系统的核心部分，修改内部的数据结构或者进行系统函数HOOK。那么我们就聚焦关注两个点：修改哪些数据结构， 怎么HOOK与HOOK哪些函数。
+
+
+##### 修改哪些数据结构
+
+
+
+##### 怎么HOOK与HOOK哪些函数
+
+当某个程序需要借助网络、文件系统或其他系统特定活动进行工作时，它就必须经过内核。也就是说，在此时它将使用系统调用。我们可以使用一个名为Strace的工具。Strace将会列出程序所使用的系统调用。
 
 ```bash
 # yum -y install strace
@@ -48,26 +77,5 @@ getdents(3, /* 0 entries */, 32768)     = 0
 
 
 在内核之中，存在一个系统调用表。其中的系统调用编号（系统调用发生时rax的值）是其Handler在其表中的偏移量。
-系统调用表位于sys_call_table，它是系统内核的一块区间，其作用是将调用号和服务连接起来，当系统调用某一个进程时，就会通过sys_call_table查找到该程序。
-
-
-
-
-
-
-
-
-
-   
-1. 隐藏文件
-
-2. 隐藏进程
-
-3. 隐藏网络连接状态
-
-4. 隐藏rootkit模块本身
-  1) 隐藏lkm本身
-  一个优秀的lkm程序必须很好地隐藏它自己。系统里的lkm是用单向链表连接起来的, 为了隐藏lkm本身我们必须把它从链表中移走以至于lsmod这样的命令不能把它显示出来。 
-  2) 隐藏符号表
-  通常的lkm中的函数将会被导出以至于其他模块可以使用它。因为我们是入侵者, 所以隐藏这些符号是必须的。幸运的是, 有一个宏可以供我们使用："EXPORT_NO_SYMBOLS"。 把这个宏放在lkm的最后可以防止任何符号的输出
-  
+系统调用表位于sys_call_table，它是系统内核的一块区间，其作用是将调用号和服务函数连接起来，当系统调用某一个syscall，就会通过sys_call_table查找到该服务函数。
+ 
