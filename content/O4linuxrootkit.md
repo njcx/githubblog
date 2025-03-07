@@ -47,6 +47,75 @@ LD_PRELOAD 是 Linux 环境下的一个环境变量，它允许用户指定在�
 
 运行程序：当程序运行时，动态链接器将首先加载你指定的库，从而覆盖或添加原有函数的行为。
 
+一个简单的例子来展示如何使用 LD_PRELOAD 来 hook 标准库中的 puts 函数。这个例子将拦截对 puts 的调用，并在实际调用之前打印一条自定义消息。
+
+```bash
+
+#define _GNU_SOURCE
+#include <dlfcn.h>
+#include <stdio.h>
+
+// 原始的 puts 函数指针
+static int (*original_puts)(const char*) = NULL;
+
+int puts(const char *s) {
+    // 如果这是第一次调用，则获取原始的 puts 函数地址
+    if (!original_puts) {
+        original_puts = dlsym(RTLD_NEXT, "puts");
+    }
+
+    printf("Intercepted call to puts with argument: %s\n", s);
+    
+    // 调用原始的 puts 函数
+    return original_puts(s);
+}
+
+
+```
+
+```bash
+gcc -shared -fPIC -o demo.so demo.c -ldl
+
+-shared 表示生成共享库。
+-fPIC 生成与位置无关的代码，这对于共享库是必需的。
+-ldl 链接 libdl 库，用于动态加载符号。
+
+```
+
+测试程序 test_program.c 如下：
+
+```bash
+
+#include <stdio.h>
+
+int main() {
+    puts("Hello, World!");
+    return 0;
+}
+
+
+gcc -o test_program test_program.c
+
+
+export LD_PRELOAD=$PWD/demo.so
+./test_program
+
+
+```
+
+
+```bash
+
+Intercepted call to puts with argument: Hello, World!
+Hello, World!
+
+```
+
+
+
+
+
+
 
 
 #### 内核态可装载内核模块（LKM）
