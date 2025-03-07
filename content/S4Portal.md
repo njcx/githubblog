@@ -31,7 +31,7 @@ Portal认证特点：
 
 ![ac](../images/WechatIMG123.jpeg)
 
-
+```bash
 
 	1）用户访问任意网站，经过AC判断该用户未完成认证，发送HTTP 302请求到用户端，要求重定向到Portal Server的URL；
 
@@ -53,6 +53,7 @@ Portal认证特点：
 	
 	10）Portal Server推送认证结果给用户。
 
+```
 
 
 ```bash
