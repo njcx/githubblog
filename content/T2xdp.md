@@ -1,4 +1,4 @@
-Title: 用ebpf的xdp 快速丢包，避免too late
+Title: 用eBPF的XDP快速丢包，避免too late
 Date: 2022-08-29 20:20
 Modified: 2022-08-29 20:20
 Category: 安全
