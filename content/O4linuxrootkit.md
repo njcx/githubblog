@@ -304,6 +304,7 @@ void module_hide(void)
 
 
 这段代码的功能主要是找到sys_call_table的地址，由于内核版本不用，新版本内核用到了kprobe：
+
 - 获取kallsyms_lookup_name函数的地址，用于后续查找内核符号。
 - 查找并获取sys_call_table的地址，用于系统调用表的修改。
 
