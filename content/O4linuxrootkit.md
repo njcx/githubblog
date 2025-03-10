@@ -348,6 +348,7 @@ int sys_call_table_init(void) {
 - 恢复CR0寄存器值。
 
 
+
 ```bash
 static inline void write_cr0_forced(unsigned long val) {
     unsigned long __force_order;
@@ -373,4 +374,50 @@ void hook_sys_call_table(long int sysno, t_syscall hook_fn,
 ```
  
  
+下面完整展示了， HOOK __NR_kill指向的函数，防止特定进程被SIGKILL或SIGTERM信号终止：
+
+- protect_proccess：检查是否阻止对指定PID发送SIGKILL或SIGTERM信号。
+- hook_sys_kill：钩住系统调用sys_kill，先调用protect_proccess，若返回1则不执行原系统调用并返回0；否则执行原系统调用。
+- protect_proc_init：初始化时将sys_kill替换为hook_sys_kill。
  
+```bash
+
+static int protect_proccess(pid_t pid,int sig){
+    if (sig == SIGKILL || sig == SIGTERM){
+        struct protect_proc_info *pos;
+        list_for_each_entry(pos,&protect_proc_info_list,list) {
+            if (pos->pid == pid){
+                pr_info(LOG_PREFIX "prevent user kill pid %d,QWQ...\n",pid);
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+static asmlinkage long (*orig_sys_kill)(const struct pt_regs *);
+
+asmlinkage long hook_sys_kill(const struct pt_regs *regs)
+{
+    pid_t pid = regs->di;
+    int sig = regs->si;
+    if (protect_proccess(pid,sig)){
+        return 0;
+    }
+    return orig_sys_kill(regs);
+}
+
+
+
+int protect_proc_init() {
+    pr_info(LOG_PREFIX "call protect_proc_init()\n");
+    hook_sys_call_table(__NR_kill, hook_sys_kill, &orig_sys_kill);
+    return 0;
+}
+
+
+```
+ 
+ 
+ 
+
