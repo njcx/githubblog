@@ -303,7 +303,7 @@ void module_hide(void)
 系统调用表是只读的，在内核中，CR0是一个控制寄存器，可以修改处理器的操作方式。其中的第16位是写保护标志所在的位置，如果该标志为0，CPU就可以让内核写入只读区域。Linux为我们提供了两个很有帮助的函数，可以用于修改CR0寄存器，分别是write_cr0和read_cr0。
 
 
-这段代码的功能主要是找到sys_call_table的地址，由于内核版本不用，新版本内核用到了kprobe：
+这段代码的功能主要是找到sys_call_table的地址，由于内核版本不同，新版本内核用到了kprobe：
 
 - 获取kallsyms_lookup_name函数的地址，用于后续查找内核符号。
 - 查找并获取sys_call_table的地址，用于系统调用表的修改。
@@ -374,7 +374,7 @@ void hook_sys_call_table(long int sysno, t_syscall hook_fn,
 ```
  
  
-下面完整展示了， HOOK __NR_kill指向的函数，防止特定进程被SIGKILL或SIGTERM信号终止：
+下面完整展示了， HOOK __NR_kill(62)指向的函数，防止特定进程被SIGKILL或SIGTERM信号终止：
 
 - protect_proccess：检查是否阻止对指定PID发送SIGKILL或SIGTERM信号。
 - hook_sys_kill：钩住系统调用sys_kill，先调用protect_proccess，若返回1则不执行原系统调用并返回0；否则执行原系统调用。
@@ -419,5 +419,38 @@ int protect_proc_init() {
 ```
  
  
- 
+常用被HOOK的syscall 有如下：  
 
+
+```bash
+open：打开文件。
+宏定义：__NR_open
+调用号示例（x86_64）：2
+
+read：从文件读取数据。
+宏定义：__NR_read
+调用号示例（x86_64）：0
+
+unlink：删除文件。
+宏定义：__NR_unlink
+调用号示例（x86_64）: 87
+
+getdents64：读取目录内容（64位版本）。
+宏定义：__NR_getdents64
+调用号示例（x86_64）: 78
+
+kill：发送信号给进程。
+宏定义：__NR_kill
+调用号示例（x86_64）：62
+
+connect：发起连接请求。
+宏定义：__NR_connect
+调用号示例（x86_64）: 42
+
+execve：执行新程序。
+宏定义：__NR_execve
+调用号示例（x86_64）：59
+
+```
+ 
+HOOK 的方法，跟上面大同小异， 就不在赘述。
