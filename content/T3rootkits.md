@@ -301,8 +301,6 @@ void module_hide(void)
 - 替换系统调用表中的指定系统调用为新函数。
 - 恢复CR0寄存器值。
 
-
-
 ```bash
 static inline void write_cr0_forced(unsigned long val) {
     unsigned long __force_order;
@@ -327,39 +325,69 @@ void hook_sys_call_table(long int sysno, t_syscall hook_fn,
 
 ```
 
+下面我们了解一下怎么检测：
 
+
+先查找内核中的特定符号地址，比如系统调用表（sys_call_table）和核心内核文本函数（core_kernel_text)，由于内核版本不一样，lookup_name 实现的方法不一样，做了条件编译：
 
 ```bash
-void analyze_modules(void){
-	struct kset *mod_kset;
-	struct kobject *cur, *tmp;
-	struct module_kobject *kobj;
 
-	INFO("Analyzing Module List\n");
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0)
 
-	mod_kset = (void *)lookup_name("module_kset");
-	if (!mod_kset)
-		return;
+#include <linux/kprobes.h>
 
-	list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry){
-		if (!kobject_name(tmp))
-			break;
+static struct kprobe kp;
 
-		kobj = container_of(tmp, struct module_kobject, kobj);
+unsigned long lookup_name(const char *name){
+	kp.symbol_name = name;
 
-		if (kobj && kobj->mod && kobj->mod->name){
-			mutex_lock(&module_mutex);
-			if(!find_module(kobj->mod->name))
-				ALERT("Module [%s] hidden.\n", kobj->mod->name);
-			mutex_unlock(&module_mutex);
-		}
-	}
+	if (register_kprobe(&kp) < 0)
+		return 0;
+
+	unregister_kprobe(&kp);
+
+	return (unsigned long)kp.addr;
 }
 
+#else
+
+unsigned long lookup_name(const char *name){
+	return kallsyms_lookup_name(name);
+}
+
+#endif
+
+
+unsigned long *sct = NULL; /* Syscall Table */
+int (*ckt)(unsigned long addr) = NULL; /* core_kernel_text */  检查某个地址是否为核心内核文本段的一部分
+struct kset *mod_kset = NUll;  /* mod_kset */  包含所有已加载模块的集合
+
+static int init_kernel_syms(void){
+	sct = (void *)lookup_name("sys_call_table");
+	ckt = (void *)lookup_name("core_kernel_text");
+   mod_kset = (void *)lookup_name("module_kset");
+	if (!sct || !ckt || !mod_kset)
+		return -1;
+
+	return 0;
+}
 
 ```
 
+
+
+检测sys_call_table HOOK 思路 ：
+
+- 使用 for 循环遍历所有的系统调用（NR_syscalls 是系统调用的数量）。
+- 获取每个系统调用的地址 addr。
+- 检查是否为内核核心文本段：
+- 使用 ckt(addr) 函数检查给定地址是否属于核心内核文本段。如果 ckt(addr) 返回 false，则表示该地址不属于核心内核文本段，可能是被某个模块挂钩了。
+
 ```bash
+
+struct module *get_module_from_addr(unsigned long addr){
+	return  __module_address(addr);
+}
 
 void analyze_syscalls(void){
 	int i;
@@ -390,6 +418,43 @@ void analyze_syscalls(void){
 }
 
 ```
+
+
+
+
+```bash
+void analyze_modules(void){
+	struct kset *mod_kset;
+	struct kobject *cur, *tmp;
+	struct module_kobject *kobj;
+
+	INFO("Analyzing Module List\n");
+
+	if (!mod_kset)
+		return;
+
+	list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry){
+		if (!kobject_name(tmp))
+			break;
+
+		kobj = container_of(tmp, struct module_kobject, kobj);
+
+		if (kobj && kobj->mod && kobj->mod->name){
+			mutex_lock(&module_mutex);
+			if(!find_module(kobj->mod->name))
+				ALERT("Module [%s] hidden.\n", kobj->mod->name);
+			mutex_unlock(&module_mutex);
+		}
+	}
+}
+
+
+```
+
+
+
+
+
 
 
 
