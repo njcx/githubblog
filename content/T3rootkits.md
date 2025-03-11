@@ -420,44 +420,57 @@ void analyze_syscalls(void){
 ```
 
 
+lkm模块隐藏检测思路， 遍历模块链表并检查隐藏模块和检查内核符号表 ：
+
+- 遍历模块链表并检查隐藏模块，确保其在系统中存在。如果发现模块不存在，则输出警告信息。
+- 遍历内核符号表，检查每个地址所属的模块。如果发现某个模块存在于符号表中但不在模块链表中，则输出警告信息。
+
 
 
 ```bash
-void analyze_modules(void){
-	struct kset *mod_kset;
-	struct kobject *cur, *tmp;
-	struct module_kobject *kobj;
+extern struct module *(*find_module)(const char *name);
+extern unsigned long *module_addr;
 
-	INFO("Analyzing Module List\n");
+void analyze_modules(void) {
+    struct kset *mod_kset;
+    struct kobject *cur, *tmp;
+    struct module_kobject *kobj;
+    struct module *mod;
+    unsigned long addr;
 
-	if (!mod_kset)
-		return;
+    printk(KERN_INFO "Analyzing Module List\n");
 
-	list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry){
-		if (!kobject_name(tmp))
-			break;
 
-		kobj = container_of(tmp, struct module_kobject, kobj);
+    mutex_lock(&module_mutex);
 
-		if (kobj && kobj->mod && kobj->mod->name){
-			mutex_lock(&module_mutex);
-			if(!find_module(kobj->mod->name))
-				ALERT("Module [%s] hidden.\n", kobj->mod->name);
-			mutex_unlock(&module_mutex);
-		}
-	}
+    list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry) {
+        if (!kobject_name(cur)) {
+            continue;
+        }
+
+        kobj = container_of(cur, struct module_kobject, kobj);
+        if (!kobj || !kobj->mod || !kobj->mod->name) {
+            continue;
+        }
+
+        mod = find_module(kobj->mod->name);
+        if (!mod) {
+            ALERT("Hidden module detected: [%s]\n", kobj->mod->name);
+        }
+    }
+
+    for (addr = (unsigned long)_stext; addr < (unsigned long)_etext; addr++) {
+        struct module *owner = module_text_address(addr);
+        if (owner && !find_module(owner->name)) {
+            ALERT("Hidden module detected via symbol table: [%s]\n", owner->name);
+        }
+    }
+
+    mutex_unlock(&module_mutex);
 }
 
 
 ```
-
-
-
-
-
-
-
-
 
 
 全文完，代码在这里。
