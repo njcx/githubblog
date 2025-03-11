@@ -262,7 +262,7 @@ func getPsProcesses(minAge time.Duration) (*ProcessMap, error) {
 Linux 内核态 rootkit 通过编写自定义的内核模块并将其加载到运行中的内核中，rootkit 可以获得更高的权限和更大的灵活性 。这类 rootkit 通常比用户态的更难检测和移除，因为它们在系统层次上运作，能够绕过大多数用户空间的安全机制。内核态 rootkit主要是修改内核的数据结构或者进行系统函数HOOK来实现隐藏和操控系统的行为, 那么我们内核态rootkit检测就聚焦关注两个点：检测内核特定数据结构有没有被修改，系统函数有没有被替换 。
 
 
-这个是rootkit 隐藏lkm模块。具体功能如下：
+这个是rootkit 隐藏lkm模块。具体实现如下：
 
 - 记录当前模块的链表前驱节点。
 - 从模块链表中删除当前模块。
@@ -293,7 +293,7 @@ void module_hide(void)
 ```
 
 
-这个是rootkit HOOK  sys_call_table:
+这个是rootkit 将系统调用表中的某个系统调用替换为自定义的函数。具体实现如下:
 
 - 读取并保存当前CR0寄存器值。
 - 将原系统调用保存到orig_fn。
