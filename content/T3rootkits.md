@@ -432,10 +432,8 @@ extern struct module *(*find_module)(const char *name);
 extern unsigned long *module_addr;
 
 void analyze_modules(void) {
-    struct kset *mod_kset;
     struct kobject *cur, *tmp;
     struct module_kobject *kobj;
-    struct module *mod;
     unsigned long addr;
 
     printk(KERN_INFO "Analyzing Module List\n");
@@ -443,21 +441,19 @@ void analyze_modules(void) {
 
     mutex_lock(&module_mutex);
 
-    list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry) {
-        if (!kobject_name(cur)) {
-            continue;
-        }
+	list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry){
+		if (!kobject_name(tmp))
+			break;
 
-        kobj = container_of(cur, struct module_kobject, kobj);
-        if (!kobj || !kobj->mod || !kobj->mod->name) {
-            continue;
-        }
+		kobj = container_of(tmp, struct module_kobject, kobj);
 
-        mod = find_module(kobj->mod->name);
-        if (!mod) {
-            ALERT("Hidden module detected: [%s]\n", kobj->mod->name);
-        }
-    }
+		if (kobj && kobj->mod && kobj->mod->name){
+			mutex_lock(&module_mutex);
+			if(!find_module(kobj->mod->name))
+				ALERT("Module [%s] hidden.\n", kobj->mod->name);
+			mutex_unlock(&module_mutex);
+		}
+	}
 
     for (addr = (unsigned long)_stext; addr < (unsigned long)_etext; addr++) {
         struct module *owner = module_text_address(addr);
