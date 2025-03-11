@@ -259,10 +259,10 @@ func getPsProcesses(minAge time.Duration) (*ProcessMap, error) {
 
 
 
-Linux 内核态 rootkit 通过编写自定义的内核模块并将其加载到运行中的内核中，rootkit 可以获得更高的权限和更大的灵活性 。这类 rootkit 通常比用户态的更难检测和移除，因为它们在系统层次上运作，能够绕过大多数用户空间的安全机制。内核态 rootkit主要是修改内核的数据结构或者进行系统函数HOOK来实现隐藏和操控系统的行为, 那么我们就聚焦关注两个点：修改哪些数据结构， 怎么HOOK与HOOK哪些函数。
+Linux 内核态 rootkit 通过编写自定义的内核模块并将其加载到运行中的内核中，rootkit 可以获得更高的权限和更大的灵活性 。这类 rootkit 通常比用户态的更难检测和移除，因为它们在系统层次上运作，能够绕过大多数用户空间的安全机制。内核态 rootkit主要是修改内核的数据结构或者进行系统函数HOOK来实现隐藏和操控系统的行为, 那么我们内核态rootkit检测就聚焦关注两个点：检测内核特定数据结构有没有被修改，系统函数有没有被替换 。
 
 
-隐藏模块。具体功能如下：
+这个是rootkit 隐藏lkm模块。具体功能如下：
 
 - 记录当前模块的链表前驱节点。
 - 从模块链表中删除当前模块。
@@ -293,7 +293,7 @@ void module_hide(void)
 ```
 
 
-这段代码的功能是将系统调用表中的某个系统调用替换为自定义的函数:
+这个是rootkit HOOK  sys_call_table:
 
 - 读取并保存当前CR0寄存器值。
 - 将原系统调用保存到orig_fn。
@@ -326,4 +326,77 @@ void hook_sys_call_table(long int sysno, t_syscall hook_fn,
 }
 
 ```
+
+
+
+```bash
+void analyze_modules(void){
+	struct kset *mod_kset;
+	struct kobject *cur, *tmp;
+	struct module_kobject *kobj;
+
+	INFO("Analyzing Module List\n");
+
+	mod_kset = (void *)lookup_name("module_kset");
+	if (!mod_kset)
+		return;
+
+	list_for_each_entry_safe(cur, tmp, &mod_kset->list, entry){
+		if (!kobject_name(tmp))
+			break;
+
+		kobj = container_of(tmp, struct module_kobject, kobj);
+
+		if (kobj && kobj->mod && kobj->mod->name){
+			mutex_lock(&module_mutex);
+			if(!find_module(kobj->mod->name))
+				ALERT("Module [%s] hidden.\n", kobj->mod->name);
+			mutex_unlock(&module_mutex);
+		}
+	}
+}
+
+
+```
+
+```bash
+
+void analyze_syscalls(void){
+	int i;
+	const char *mod_name;
+	unsigned long addr;
+	struct module *mod;
+
+	INFO("Analyzing Syscall Hooks\n");
+
+	if (!sct || !ckt)
+		return;
+
+	for (i = 0; i < NR_syscalls; i++){
+		addr = sct[i];
+		if (!ckt(addr)){
+			mutex_lock(&module_mutex);
+			mod = get_module_from_addr(addr);
+			if (mod){
+				ALERT("Module [%s] hooked syscall [%d].\n", mod->name, i);
+			} else {
+				mod_name = find_hidden_module(addr);
+				if (mod_name)
+					ALERT("Hidden module [%s] hooked syscall [%d].\n", mod_name, i);
+			}
+			mutex_unlock(&module_mutex);
+		}
+	}
+}
+
+```
+
+
+
+
+
+全文完，代码在这里。
+
+https://github.com/njcx/rootkit_scanner
+
 
