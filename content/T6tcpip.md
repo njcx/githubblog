@@ -9,7 +9,7 @@ Summary: NIDS开发之IP分片重组和TCP段重组 ~
 
 #### 介绍
 
-NIDS（Network Intrusion Detection System，网络入侵检测系统）开发过程中，主要拆解成两个部分开发， 第一的DPI深度包解析，第二就是规则引擎。DPI深度包解析是指NIDS通过监听网络流量来捕捉数据包、协议识别、拆解成字段过程。这些数据包包含了从网络的一个点传输到另一个点的信息。DPI是NIDS分析网络活动以检测潜在入侵行为的基础步骤， 捕捉数据包的工具有 libpcap 、PF_RING、DPDK等等。DPI深度包解析工具有PacketBeat、NDPI、Zeek等等。
+NIDS（Network Intrusion Detection System，网络入侵检测系统）开发过程中，主要拆解成两个部分开发， 第一的DPI深度包解析，第二就是规则引擎。DPI深度包解析是指NIDS通过监听网络流量来捕捉数据包、协议识别、拆解成字段过程。这些数据包包含了从网络的一个点传输到另一个点的信息。DPI是NIDS分析网络活动以检测潜在入侵行为的基础步骤， 捕捉数据包的工具有 libpcap 、PF_RING、DPDK等等。DPI深度包解析工具有PacketBeat、NDPI、Zeek、Suricata等等。
 
 
 在TCP/IP协议栈中，数据包的重组主要涉及两个方面：IP分片重组和TCP段重组。
@@ -261,3 +261,162 @@ void DecodeIPV6FragHeader(Packet *p, const uint8_t *pkt, uint16_t hdrextlen,
 
 
 ####  TCP段重组 
+
+
+Zeek 中 TCP 分段重组的实现:
+
+1.核心数据结构
+
+```bash
+
+// src/analyzer/protocol/tcp/TCP_Reassembler.h
+// TCP_Reassembler 类
+class TCP_Reassembler final : public Reassembler {
+    enum Type {
+        Direct,  // 直接传递到目标分析器 
+        Forward  // 转发到目标分析器的子节点
+    }; 
+    
+    TCP_Endpoint* endp;        // TCP 端点
+    bool had_gap;             // 是否有数据空洞
+    bool deliver_tcp_contents; // 是否传递TCP内容
+    uint64_t seq_to_skip;     // 要跳过的序列号
+    FilePtr record_contents_file; // 记录内容的文件
+};
+
+// src/packet_analysis/protocol/tcp/TCPSessionAdapter.h
+// TCPSessionAdapter 类
+class TCPSessionAdapter {
+    TCP_Endpoint* orig;         // 发起方端点
+    TCP_Endpoint* resp;         // 响应方端点
+    bool reassembling;          // 是否正在重组
+    bool is_partial;            // 是否部分连接
+    uint64_t rel_data_seq;      // 相对数据序列号
+};
+
+
+
+```
+
+2, 重组流程
+
+```bash
+
+// 启用重组:
+void TCPSessionAdapter::EnableReassembly() {
+    SetReassembler(
+        new TCP_Reassembler(this, TCP_Reassembler::Forward, orig),
+        new TCP_Reassembler(this, TCP_Reassembler::Forward, resp)
+    );
+}
+
+// 数据到达处理:
+// src/analyzer/protocol/tcp/TCP_Reassembler.cc - TCP 重组器实现
+
+void TCP_Reassembler::DataSent(double t, uint64_t seq, int len, 
+                              const u_char* data) {
+    
+    // 检查是否需要跳过
+    if (IsSkippedContents(seq, len)) 
+        return;
+    
+    // 处理数据空洞
+    if (seq > last_reassem_seq) {
+        Gap(last_reassem_seq, seq - last_reassem_seq);
+        had_gap = true;
+    }
+    
+    // 交付数据
+    DeliverBlock(seq, len, data);
+}
+
+// src/packet_analysis/protocol/tcp/TCPSessionAdapter.cc
+void TCPSessionAdapter::Process(bool is_orig, const struct tcphdr* tp,
+                              int len, const IP_Hdr* ip) {
+    // 获取序列号    
+    uint32_t base_seq = ntohl(tp->th_seq);
+    
+    // 处理标志位
+    TCP_Flags flags(tp);
+    
+    // 分析状态
+    UpdateStateMachine(t, endpoint, peer, base_seq, flags); 
+    
+    // 数据重组
+    if (len > 0 && !flags.RST())
+        endpoint->DataSent(t, base_seq, len, data);
+}
+
+
+
+//  空洞处理:
+void TCP_Reassembler::Gap(uint64_t seq, uint64_t len) {
+    // 报告空洞
+    if (report_gap(endp, endp->peer))
+        dst_analyzer->EnqueueConnEvent(content_gap, ...);
+    
+    // 更新状态
+    had_gap = true;
+}
+
+
+// 跟踪 TCP 状态:
+void TCPSessionAdapter::UpdateStateMachine(TCP_Endpoint* endpoint,
+    TCP_Endpoint* peer, uint32_t seq, TCP_Flags flags)
+{
+    // SYN 处理
+    if (flags.SYN()) {
+        if (is_orig) {
+            endpoint->SetState(TCP_ENDPOINT_SYN_SENT);
+        } else {
+            endpoint->SetState(TCP_ENDPOINT_ESTABLISHED); 
+        }
+    }
+
+    // FIN 处理  
+    if (flags.FIN()) {
+        endpoint->SetState(TCP_ENDPOINT_CLOSED);
+    }
+
+    // RST 处理
+    if (flags.RST()) {
+        endpoint->SetState(TCP_ENDPOINT_RESET);
+    }
+}
+
+
+```
+
+
+Zeek 使用两个主要组件来处理 TCP 分段重组:
+
+	TCP_Reassembler: 专门负责重组的核心组件
+	TCPSessionAdapter: 管理整个 TCP 会话的组件
+
+就像是一个拼图游戏,TCP_Reassembler 负责把所有碎片(TCP分段)拼在一起,而 TCPSessionAdapter 则像是一个总管理员,负责监督整个拼图过程。
+
+当一个 TCP 包到达时,处理流程是:
+
+	数据排序
+	检查序列号是否连续
+	如果是期望的下一个序列号,直接处理
+	如果不是,放入缓存等待处理
+	空洞处理
+	当发现序列号不连续时,记录为"空洞"
+	继续接收后续数据,等待空洞被填补
+
+
+Zeek 使用几个关键机制来管理数据:
+
+	序列号跟踪
+	记录已处理的最后序列号
+	检查新数据的序列号是否符合预期
+	缓存管理
+	对乱序到达的数据进行缓存
+	定期清理过期的缓存数据
+	状态跟踪
+	跟踪连接状态(SYN, FIN, RST等)
+	根据状态决定如何处理数据
+
+
+
