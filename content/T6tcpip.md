@@ -434,3 +434,85 @@ Zeek 使用几个关键机制来管理数据:
 Zeek 就是在做类似的工作,但是它同时在处理两个方向的"明信片集",而且速度要快得多。
 这种实现方式既保证了数据的完整性和正确性,又提供了足够的灵活性和性能,使得 Zeek 能够有效地分析网络流量。
 
+
+
+
+
+#### Demo
+
+
+```bash
+
+// TCP 流结构
+typedef struct {
+    uint32_t src_ip;
+    uint32_t dst_ip;
+    uint16_t src_port;
+    uint16_t dst_port;
+    uint32_t next_seq;    // 关键字段：下一个期望的序列号
+    uint32_t init_seq;    // 初始序列号
+    time_t last_seen;
+    unsigned char *stream;  // 存储重组数据的缓冲区
+    int stream_size;       // 当前已重组的数据大小
+    flow_state state;
+    char src_ip_str[INET_ADDRSTRLEN];
+    char dst_ip_str[INET_ADDRSTRLEN];
+} tcp_flow_t;
+
+// 全局变量
+tcp_flow_t flows[MAX_FLOWS];
+int flow_count = 0;
+
+```
+
+```bash
+
+void handle_tcp_packet(const struct ip *ip_header, const struct tcphdr *tcp_header,
+                       const unsigned char *payload, int payload_len) {
+    tcp_flow_t *flow = find_or_create_flow(ip_header, tcp_header);
+    if (!flow) return;
+
+    if (tcp_header->th_flags & TH_SYN) {
+        if (flow->state == FLOW_NEW) {
+            flow->state = FLOW_ESTABLISHED;
+            flow->next_seq = ntohl(tcp_header->th_seq) + 1;  // SYN包，序列号+1
+            print_flow_info(flow, "SYN");
+        }
+    }
+    else if (tcp_header->th_flags & TH_FIN || tcp_header->th_flags & TH_RST) {
+        flow->state = FLOW_CLOSED;
+        print_flow_info(flow, tcp_header->th_flags & TH_FIN ? "FIN" : "RST");
+        process_stream_data(flow);
+    }
+    else if (payload_len > 0) {
+        uint32_t seq = ntohl(tcp_header->th_seq);
+        if (seq == flow->next_seq) {  // 关键重组逻辑：检查序列号是否符合预期
+            // 确保不会超出缓冲区
+            int copy_len = payload_len;
+            if (flow->stream_size + copy_len > MAX_STREAM_SIZE) {
+                copy_len = MAX_STREAM_SIZE - flow->stream_size;
+            }
+
+            if (copy_len > 0) {
+                // 按序复制数据到重组缓冲区
+                memcpy(flow->stream + flow->stream_size, payload, copy_len);
+                flow->stream_size += copy_len;
+                flow->next_seq = seq + copy_len;  // 更新下一个期望的序列号
+                flow->state = FLOW_DATA;
+                print_flow_info(flow, "DATA");
+            }
+        }
+    }
+}
+
+
+```
+
+实现了基本的流跟踪功能, 序列号检查, 按序重组数据, 状态跟踪（SYN, FIN, RST等）
+
+代码在这里:
+
+https://github.com/njcx/pcap_tcp_reassemble
+
+
+
