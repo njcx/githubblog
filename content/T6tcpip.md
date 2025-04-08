@@ -9,7 +9,7 @@ Summary: NIDS开发之IP分片重组和TCP段重组 ~
 
 #### 介绍
 
-NIDS（Network Intrusion Detection System，网络入侵检测系统）开发过程中，主要拆解成两个部分开发， 第一的DPI深度包解析，第二就是规则引擎。DPI深度包解析是指NIDS通过监听网络流量来捕捉数据包、协议识别、拆解成字段过程。这些数据包包含了从网络的一个点传输到另一个点的信息。DPI是NIDS分析网络活动以检测潜在入侵行为的基础步骤， 捕捉数据包的工具有 libpcap 、PF_RING、DPDK等等。DPI深度包解析工具有PacketBeat、NDPI、Zeek等等
+NIDS（Network Intrusion Detection System，网络入侵检测系统）开发过程中，主要拆解成两个部分开发， 第一的DPI深度包解析，第二就是规则引擎。DPI深度包解析是指NIDS通过监听网络流量来捕捉数据包、协议识别、拆解成字段过程。这些数据包包含了从网络的一个点传输到另一个点的信息。DPI是NIDS分析网络活动以检测潜在入侵行为的基础步骤， 捕捉数据包的工具有 libpcap 、PF_RING、DPDK等等。DPI深度包解析工具有PacketBeat、NDPI、Zeek等等。
 
 
 在TCP/IP协议栈中，数据包的重组主要涉及两个方面：IP分片重组和TCP段重组。
@@ -20,7 +20,7 @@ TCP段重组：TCP（传输控制协议）是面向连接的，并提供可靠�
 
 
 为什么NIDS 涉及到IP分片重组和TCP段重组 ？ 这些不是TCP/IP协议栈的事情吗？
-因为NIDS使用 libpcap 或者 DPDK， 抓取的都是一帧， 一个IP分片通常被封装成一帧进行传输。 当数据比较大的时候，比如 http post 一个稍大的json，  经过TCP段重组，才能看到完整的 json。在TCP/IP协议栈中， 每一层对上都是透明的， 而在NIDS 中，每一层都需要自己重组。
+因为NIDS使用 libpcap 或者 DPDK， 抓取的都是一帧， 一个IP分片通常被封装成一帧进行传输。 当数据比较大的时候，比如 http post 一个稍大的json， 经过TCP段重组，才能看到完整的 json。在TCP/IP协议栈中， 每一层对上都是透明的， 而在NIDS 中，每一层都需要自己重组。
 
 
 
