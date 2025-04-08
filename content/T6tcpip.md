@@ -390,8 +390,10 @@ void TCPSessionAdapter::UpdateStateMachine(TCP_Endpoint* endpoint,
 
 Zeek 使用两个主要组件来处理 TCP 分段重组:
 
+```
 	TCP_Reassembler: 专门负责重组的核心组件
 	TCPSessionAdapter: 管理整个 TCP 会话的组件
+```
 
 就像是一个拼图游戏,TCP_Reassembler 负责把所有碎片(TCP分段)拼在一起,而 TCPSessionAdapter 则像是一个总管理员,负责监督整个拼图过程。
 
