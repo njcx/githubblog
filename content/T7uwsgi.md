@@ -375,7 +375,7 @@ int main() {
 
 1. 初始状态
 
-```
+```bash
 	Master Process (PID: 1000)
 	├── Worker 1 (PID: 1001) - 处理请求中
 	├── Worker 2 (PID: 1002) - 空闲
@@ -388,7 +388,7 @@ int main() {
 
 2, 接收重启信号
 
-```
+```bash
 
 // Master 进程接收信号
 void signal_handler(int signum) {
@@ -411,7 +411,7 @@ while (1) {
 3, 创建新 Worker（关键步骤）
 
 
-```
+```bash
 void do_graceful_reload() {
     // 步骤 1: 标记旧进程
     for (int i = 0; i < num_workers; i++) {
@@ -447,7 +447,7 @@ void do_graceful_reload() {
 此时状态：
 
 
-```
+```bash
 Master Process (PID: 1000)
 
 旧 Workers (正在停止):
@@ -472,7 +472,7 @@ Master Process (PID: 1000)
 
 关键点：Socket 文件描述符通过 fork() 继承给子进程！
 
-```
+```bash
 // Master 进程启动时创建 Socket
 int listen_fd;
 
@@ -519,7 +519,7 @@ void worker_loop() {
 Linux 内核的 SO_REUSEPORT 或传统的 accept 锁机制：
 
 
-```
+```bash
 // 方式 1: SO_REUSEPORT (现代 Linux)
 void master_init() {
     int reuse = 1;
@@ -549,7 +549,7 @@ void worker_loop() {
 6, 旧进程优雅退出
 
 
-```
+```bash
 // 旧 Worker 的退出逻辑
 void old_worker_shutdown() {
     // 1. 停止接受新请求
@@ -601,7 +601,7 @@ void monitor_old_workers() {
 
 时间线演示
 
-```
+```bash
 时间 | 事件
 -----|-----------------------------------------------------
 T0   | Master 收到 SIGHUP 信号
@@ -646,7 +646,7 @@ T4   | 所有旧 Workers 已退出
 
 问题场景
 
-```
+```bash
 // 多个 Worker 同时监听同一个 Socket
 Master Process (listen_fd = 3)
 ├── Worker 1: accept(fd=3)  ← 都在等待
@@ -665,7 +665,7 @@ Master Process (listen_fd = 3)
 老版本 Linux (2.6 之前)
 
 
-```
+```bash
 // 所有进程在 accept() 上阻塞
 Worker 1: accept(listen_fd) → 阻塞中...
 Worker 2: accept(listen_fd) → 阻塞中...
@@ -692,7 +692,7 @@ Worker 4: 被唤醒，尝试 accept() → 返回 EAGAIN ✗
 
 Linux accept() 的原子性保证
 
-```
+```bash
 // 现代 Linux 内核已经解决了 accept 惊群
 // 只会唤醒一个进程
 
@@ -727,7 +727,7 @@ void worker_loop() {
 
 更高级的负载均衡
 
-```
+```bash
 // 每个 Worker 创建自己的 Socket，但绑定到同一个端口
 void worker_process() {
     // 每个 Worker 独立创建 Socket
@@ -770,7 +770,7 @@ int main() {
 
 内核如何分配连接？
 
-```
+```bash
 // Linux 内核实现（简化）
 // net/ipv4/inet_hashtables.c
 
@@ -803,7 +803,7 @@ struct sock *inet_lookup_listener(struct net *net, ...) {
 用户态加锁控制
 
 
-```
+```bash
 // uWSGI 的锁实现
 struct uwsgi_lock {
     pthread_mutex_t lock;
@@ -845,7 +845,7 @@ void worker_loop() {
 
 事件驱动模式
 
-```
+```bash
 // 使用 epoll 监听同一个 listen_fd
 void worker_loop() {
     int epfd = epoll_create1(0);
@@ -877,7 +877,7 @@ void worker_loop() {
 
 uWSGI 实际实现
 
-```
+```bash
 // uwsgi.c (简化)
 
 void uwsgi_accept_loop() {
