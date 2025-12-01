@@ -141,7 +141,7 @@ prompt,tag
 	MAX_LENGTH：最大序列长度
 	
 
-```
+```bash
 def train_epoch(model, dataloader, optimizer, scheduler, device):
     model.train()
     total_loss = 0
@@ -191,7 +191,7 @@ def train_epoch(model, dataloader, optimizer, scheduler, device):
 第三步，通过RESTful API提供服务(推理)
 
 
-```
+```bash
 
 def predict_injection(text, threshold=CONFIDENCE_THRESHOLD):
     """
