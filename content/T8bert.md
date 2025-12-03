@@ -57,7 +57,7 @@ BERT 在海量文本（维基百科等）上通过两个“游戏”进行预训
 | 特性 | BERT | GPT (Generative Pre-trained Transformer) |
 | :--- | :--- | :--- |
 | 核心架构 | Transformer Encoder (编码器) | Transformer Decoder(解码器) |
-| 阅读方向 | 双向** (Bidirectional) | 单向 (从左到右) |
+| 阅读方向 | 双向 (Bidirectional) | 单向 (从左到右) |
 | 参数量 | 	_base: 110M，_large: 340M | 数十亿到千亿级 |
 | 擅长领域 | 理解任务：<br>文本分类、情感分析、实体识别、问答 | 生成任务：<br>写作、聊天、翻译、代码生成 |
 | 本质区别 | 用来**懂**你在说什么 | 用来**接**你的下一句话 |
