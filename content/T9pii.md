@@ -91,6 +91,8 @@ spacy_pkuseg==1.0.1
 # zh_core_web_lg==3.8.0    https://github.com/explosion/spacy-models/releases/download/zh_core_web_lg-3.8.0/zh_core_web_lg-3.8.0-py3-none-any.whl
 # zh_core_web_sm==3.8.0    https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.8.0/zh_core_web_sm-3.8.0-py3-none-any.whl
 
+
+## 这两个是模型， wget下来， 然后 pip install xxx.whl
 ```
  
 
