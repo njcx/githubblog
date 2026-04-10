@@ -25,11 +25,59 @@ Summary: LLM安全围栏之个人隐私信息PII检测 ~
 
 
 
-Presidio 是微软开源的一套 PII（个人隐私信息）检测与匿名化框架，专为企业级数据隐私保护设计。下面从架构到核心技术逐层展开。
-
-
+Presidio 是微软开源的一套 PII（个人隐私信息）检测与匿名化框架，专为企业级数据隐私保护设计。Presidio 由两个核心模块组成：Analyzer（检测 PII）和 Anonymizer（对检测结果执行匿名化操作）。二者解耦，可以独立使用。
 
 ![AnalyzerEngine](../images/AnalyzerEngine.png)
+
+一， Analyzer Engine — PII 识别核心
+ 
+ - 1. NLP 引擎
+ 
+Presidio 本身不做 NLP，而是通过适配层对接主流框架：
+ 
+- spaCy（默认）：轻量、快，适合生产环境
+- Stanza：斯坦福 NLP，精度更高
+- Hugging Face Transformers：支持 BERT/RoBERTa 等预训练模型做 NER
+ 
+NLP 引擎负责分词、词性标注、命名实体识别（NER），为下游识别器提供语言学特征。
+ 
+  - 2. 三类识别器
+ 
+| 识别器类型 | 原理 | 典型用途 |
+|---|---|---|
+| Pattern Recognizer | 正则 + Checksum 校验 | 手机号、信用卡、身份证、邮箱 |
+| NER Recognizer | 基于 NLP 模型的命名实体 | 人名、组织、地址、日期 |
+| ML/Custom Recognizer | 自定义规则或微调分类器 | 行业特定 PII（病历号、合同编号） |
+ 
+每个识别器返回一个 `RecognizerResult`，包含：
+ 
+- `entity_type`：PII 类型（如 `PHONE_NUMBER`、`EMAIL_ADDRESS`）
+- `score`：置信度 0~1
+- `start / end`：在原文中的字符偏移量
+ 
+ 3. 内置 PII 类型（50+）
+ 
+常见的有：`PERSON`、`EMAIL_ADDRESS`、`PHONE_NUMBER`、`CREDIT_CARD`、`IBAN_CODE`、`IP_ADDRESS`、`LOCATION`、`DATE_TIME`、`NRP`（国籍/宗教/政治观点）等，并支持多国本地化（中、美、英、德、法等）。
+ 
+ 
+ 二、Anonymizer Engine — 脱敏操作
+ 
+检测到 PII 后，Anonymizer 支持五种操作符：
+ 
+| 操作符 | 说明 |
+|---|---|
+| Replace | 将 PII 替换为类型占位符，如 `<PHONE_NUMBER>` |
+| Redact | 直接删除 |
+| Hash | MD5 / SHA256 / SHA512 单向哈希 |
+| Encrypt / Decrypt | AES 128 CBC 可逆加密（用于需要还原的场景） |
+| Custom| 传入自定义函数，灵活处理 |
+ 
+
+ 
+
+
+
+
 
 
 ![guard](../images/e0fd9ad6c548543c4107e8b70c671d06.png)
