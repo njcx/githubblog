@@ -6,6 +6,7 @@ Tags: 安全
 Slug: O11
 Authors: nJcx
 Summary: Windows&Linux环境的痕迹清理~
+Status: draft
 
 
 渗透使用跳板已经是默认的了，那么最小化攻击日志，也是必须的。你是VPN也好，3389也罢，ssh中转，代理都行。直接连接攻击目标并且留下大量日志，是愚蠢的

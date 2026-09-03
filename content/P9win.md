@@ -6,7 +6,7 @@ Tags: Windows
 Slug: P9
 Authors: nJcx
 Summary: Windows环境渗透测试常用的命令总结~
-
+Status: draft
 
 #### 介绍
 
