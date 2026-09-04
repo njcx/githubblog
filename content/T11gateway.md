@@ -23,7 +23,7 @@ Kimi-k3：能力强，但贵、慢
 
 DeepSeek-v4-flash：便宜、快，但复杂任务可能不够好
 
-Claude 4.5 Sonnet：代码能力强，价格中等
+Qwen3.7-MAX ：能力可以，价格中等
 
 本地小模型（如 Qwen 3.5 9B）：几乎免费、极快，但只能处理简单任务
 
@@ -293,6 +293,7 @@ def _fallback_rules(self, query: str) -> str:
 ##### 基于BERT模型 的分类器实践  
 
 
+ 在 LLM 路由场景中，基于 BERT 的分类器属于“基于 ML 分类器的路由”路线，其核心思路是：用 BERT 作为编码器提取语义特征，加一个分类头，直接输出路由决策。BERT（Bidirectional Encoder Representations from Transformers）是 Google 于 2018 年发布的预训练语言模型，其核心突破在于“双向理解”——能同时参考上下文来理解一个词的含义，彻底改变了此前语言模型只能“单向阅读”的局限。
 
 
 
