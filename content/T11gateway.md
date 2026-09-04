@@ -293,13 +293,181 @@ def _fallback_rules(self, query: str) -> str:
 ##### 基于BERT模型 的分类器实践  
 
 
- 在 LLM 路由场景中，基于 BERT 的分类器属于“基于 ML 分类器的路由”路线，其核心思路是：用 BERT 作为编码器提取语义特征，加一个分类头，直接输出路由决策。BERT（Bidirectional Encoder Representations from Transformers）是 Google 于 2018 年发布的预训练语言模型，其核心突破在于“双向理解”——能同时参考上下文来理解一个词的含义，彻底改变了此前语言模型只能“单向阅读”的局限。
+ 在 LLM 路由场景中，基于 BERT 的分类器属于“基于 ML 分类器的路由”路线，其核心思路是：用 BERT 作为编码器提取语义特征，加一个分类头，直接输出路由决策。BERT（Bidirectional Encoder Representations from Transformers）是 Google 于 2018 年发布的预训练语言模型，其核心突破在于“双向理解”——能同时参考上下文来理解一个词的含义，彻底改变了此前语言模型只能“单向阅读”的局限。它特别擅长理解文本含义，但不擅长生成文本。在大模型网关里，我们正是利用它"理解"的能力来做路由分类。
+
+ 
+ 为什么 BERT 在路由场景中特别合适？
+ 
+	速度快：1.1 亿参数，推理只需几毫秒，远快于大模型
+	输出确定：直接输出类别概率，不会"幻觉"
+	可微调：用几百条标注数据就能适配你的业务场景
+	部署轻：CPU 就能跑，不需要 GPU 集群
+
+
+现代升级版：ModernBERT
+传统 BERT 的上下文长度只有 512 tokens，而现代 LLM 请求动辄几千 tokens。因此业界已经转向 ModernBERT——BERT 的现代化升级版：
+
+	上下文长度：8192 tokens（传统 BERT 的 16 倍）
+	参数量：Base 版 1.39 亿，Large 版 3.95 亿
+	速度：比传统编码器快 2~4 倍
+	训练数据：2 万亿 tokens（网页、代码、科学文章），比只基于维基百科训练的传统 BERT 更稳健
+	
+已有实际案例使用 ModernBERT 作为统一基座，在其上训练多个 LoRA 分类头，分别处理意图分类、安全拦截、复杂度判断等路由任务。
+
+
+以下是基于 Hugging Face 的 BERT 路由分类器完整实践流程：
+
+1. 准备训练数据
 
 
 
+```python
+
+from datasets import load_dataset
+
+# 方案A：使用现成的路由数据集
+# DevQuasar/llm_router_dataset-synth 包含约 15000 条用户提示
+# 标签：1 = large_llm（复杂任务），0 = small_llm（简单任务）
+dataset = load_dataset("DevQuasar/llm_router_dataset-synth")
+
+# 方案B：自建数据集（更贴合实际业务）
+# 格式：{"prompt": "帮我重构这个模块", "label": 1}
+#        {"prompt": "今天天气怎么样", "label": 0}
+
+
+```
+
+2. 加载模型与分词器
+
+
+```python
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+# 推荐用 ModernBERT，传统 BERT 也行
+model_id = "answerdotai/ModernBERT-base"
+# model_id = "google-bert/bert-base-uncased"  # 传统 BERT
+
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer.model_max_length = 512
+
+# 加载预训练模型 + 分类头（2 类：简单/复杂）
+model = AutoModelForSequenceClassification.from_pretrained(
+    model_id,
+    num_labels=2,
+    label2id={"small_llm": 0, "large_llm": 1},
+    id2label={0: "small_llm", 1: "large_llm"},
+)
+
+```
+
+3. 微调训练
+
+```python
+
+from transformers import TrainingArguments, Trainer
+
+def tokenize(batch):
+    return tokenizer(batch['prompt'], padding='max_length', 
+                     truncation=True, max_length=512)
+
+tokenized_dataset = dataset.map(tokenize, batched=True)
+
+training_args = TrainingArguments(
+    output_dir="./bert-router",
+    num_train_epochs=3,
+    per_device_train_batch_size=32,
+    learning_rate=2e-5,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    eval_dataset=tokenized_dataset["test"],
+)
+
+trainer.train()
+
+
+```
+
+
+4. 推理部署（集成到网关）
+
+
+```python
+
+import torch
+
+class BERTRouter:
+    def __init__(self, model_path="./bert-router"):
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
+        self.model.eval()
+    
+    def route(self, user_query: str, threshold=0.7) -> dict:
+        """
+        返回路由决策
+        - threshold: 置信度阈值，低于此值走兜底策略
+        """
+        inputs = self.tokenizer(user_query, return_tensors="pt", 
+                                truncation=True, max_length=512)
+        
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+            probs = torch.softmax(outputs.logits, dim=-1)[0]
+        
+        predicted_label = torch.argmax(probs).item()
+        confidence = probs[predicted_label].item()
+        
+        if confidence < threshold:
+            # 不确定时走默认安全模型
+            return {"model": "default_safe_model", "reason": "low_confidence"}
+        
+        model_map = {0: "gpt-3.5-turbo", 1: "gpt-4o"}
+        return {
+            "model": model_map[predicted_label],
+            "reason": "bert_classifier",
+            "confidence": confidence
+        }
+
+# 使用示例
+router = BERTRouter()
+result = router.route("帮我设计一个微服务架构方案")
+# → {"model": "gpt-4o", "reason": "bert_classifier", "confidence": 0.94}
+
+result = router.route("你好")
+# → {"model": "gpt-3.5-turbo", "reason": "bert_classifier", "confidence": 0.97}
+
+```
+
+
+
+
+BERT 分类器 vs Embedding 分类器
+
+| 维度 | BERT 分类器 | Embedding 分类器 |
+|------|------------|-----------------|
+| 原理 | 端到端训练，直接输出类别 | 计算与样本库的余弦相似度 |
+| 训练方式 | 需要标注数据微调 | 无需训练，只需构建样本库 |
+| 准确率 | 通常更高（学到了判别边界） | 依赖样本质量和阈值设置 |
+| 冷启动 | 需要标注数据 | 手写几条样本即可 |
+| 扩展性 | 新增类别需重新训练 | 新增样本即可 |
+| 延迟 | 5~20ms | 50~200ms（需调 Embedding API） |
+
+
+
+实际生产系统中，常见做法是分层混合使用：
+
+	第一层（BERT 分类器）：快速判断粗粒度类别（简单/复杂/代码/安全拦截）
+	第二层（Embedding 或规则）：在粗分类内部做细粒度路由
+	兜底层（规则）或者 LLM （比如用一个Qwen3.5 9B）：处理 BERT 不确定的边界情况
+	这种架构兼顾了速度和准确性，是目前大模型网关智能路由的主流工程实践。
 
 
 ##### 六、总结
-智能路由的本质是在多个模型之间做权衡决策，它结合了传统软件工程中的负载均衡、成本优化和机器学习中的预测与在线学习。从简单的规则到复杂的强化学习，你可以根据实际需求选择合适的复杂度。对于学习而言，建议从规则和启发式评分入手，理解基本框架后，再尝试引入 ML 或 MAB 来提升自适应性。IDE 中的 “Auto” 选项正是智能路由的一个轻量级应用，它的背后通常也是基于任务类型和成本/延迟的简单判断，但深入下去就是一套完整的系统工程。
+智能路由的本质是在多个模型之间做权衡决策，它结合了传统软件工程中的负载均衡、成本优化和机器学习中的预测与在线学习。从简单的规则到复杂的强化学习，你可以根据实际需求选择合适的复杂度。IDE 中的 “Auto” 选项正是智能路由的一个轻量级应用，它的背后通常也是基于任务类型和成本/延迟的简单判断，但深入下去就是一套完整的系统工程。
 
 
