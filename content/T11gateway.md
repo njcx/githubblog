@@ -19,13 +19,13 @@ Summary: 大模型网关里面的智能路由拆解 ~
 
 假设你有一个大模型网关，后面接入了多个模型：
 
-GPT-4o：能力强，但贵、慢
+Kimi-k3：能力强，但贵、慢
 
-GPT-4o-mini：便宜、快，但复杂任务可能不够好
+DeepSeek-v4-flash：便宜、快，但复杂任务可能不够好
 
 Claude 4.5 Sonnet：代码能力强，价格中等
 
-本地小模型（如 Llama 3 8B）：几乎免费、极快，但只能处理简单任务
+本地小模型（如 Qwen 3.5 9B）：几乎免费、极快，但只能处理简单任务
 
 用户的请求是多样的：有的只是问“今天天气怎么样”，有的是“帮我重构这段 500 行的 Python 代码”。如果所有请求都发给最贵的模型，成本会爆炸；如果都发给小模型，复杂任务质量很差。
 
@@ -86,7 +86,211 @@ Claude 4.5 Sonnet：代码能力强，价格中等
 
 
 
+##### 基于 Embedding 的分类器实践
 
+
+基于 Embedding 的分类器实践核心流程为：构建标注样本库 → 向量化存储 → 实时请求 Embedding → 余弦相似度计算 → 阈值判定 → 模型分发。 其本质是将路由问题转化为“语义最近邻搜索”问题，通过比较用户请求与预置样本的向量距离来自动选择模型。
+
+```bash
+
+用户请求 (model="auto")
+    ↓
+① Embedding 模型将请求文本 → 转为向量 (如 1536 维)
+    ↓
+② 与样本库中预标注的向量做余弦相似度计算
+    ↓
+③ 取 TopK 最相似样本，看它们属于哪个标签
+    ↓
+④ 最高相似度 ≥ 阈值 → 采纳样本标签；否则 → 退回走规则兜底
+    ↓
+⑤ 根据标签选择对应模型组，转发请求
+
+
+```
+
+
+第一步：构建样本库（离线阶段）
+这是整个系统的“弹药库”。你需要为每个路由类别准备若干代表性样本。
+
+```bash
+
+# 样本库结构示意
+sample_library = {
+    "simple": [
+        "你好",
+        "今天天气怎么样",
+        "帮我翻译这句话",
+        "这段代码什么意思",
+        "写一个 Hello World",
+        # ... 每个类别 5~20 条即可
+    ],
+    "complex": [
+        "帮我设计一个微服务架构方案",
+        "分析这段代码的性能瓶颈并给出优化建议",
+        "重构这个模块，要求支持插件化扩展",
+        "帮我写一个完整的用户认证系统",
+        # ...
+    ],
+    "code_generation": [
+        "用 Python 实现一个 LRU 缓存",
+        "写一个 React 组件，支持拖拽排序",
+        # ...
+    ]
+}
+
+```
+
+关键参数：
+
+每个类别 5~20 条样本即可冷启动，覆盖主要口语变体
+
+样本要覆盖不同表达方式（正式/口语/简短/详细），而非堆砌相似句
+
+样本质量 > 数量，一条坏样本可能污染整个类别的匹配
+
+
+第二步：向量化存储（离线阶段）
+用 Embedding 模型将所有样本转为向量，存入向量数据库（或直接用内存中的 NumPy 数组）。
+
+```bash
+
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI()
+
+class EmbeddingRouter:
+    def __init__(self, embedding_model="text-embedding-3-small"):
+        self.embedding_model = embedding_model
+        self.samples = {}       # {label: [text, ...]}
+        self.sample_vectors = {} # {label: np.array}
+    
+    def build_index(self, sample_library: dict):
+        """离线构建向量索引"""
+        for label, texts in sample_library.items():
+            # 批量调用 Embedding API
+            response = client.embeddings.create(
+                model=self.embedding_model,
+                input=texts
+            )
+            vectors = np.array([item.embedding for item in response.data])
+            self.samples[label] = texts
+            self.sample_vectors[label] = vectors
+        
+        print(f"索引构建完成: {len(self.samples)} 个类别, "
+              f"共 {sum(len(v) for v in self.samples.values())} 条样本")
+
+```
+
+
+
+第三步：实时路由决策（在线阶段）
+
+请求进来后，实时 Embedding → 计算相似度 → 决策。
+
+```bash
+
+def cosine_similarity(a, b):
+    """计算两个向量的余弦相似度"""
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+def route(self, user_query: str, threshold=0.72, top_k=5):
+    """
+    核心路由逻辑
+    - threshold: 相似度阈值，超过才采纳样本匹配结果
+    - top_k: 取最相似的 K 个样本参与投票
+    """
+    # 1. 将用户请求向量化
+    response = client.embeddings.create(
+        model=self.embedding_model,
+        input=[user_query]
+    )
+    query_vector = np.array(response.data[0].embedding)
+    
+    # 2. 与所有样本计算相似度，找 TopK
+    all_scores = []  # [(score, label), ...]
+    
+    for label, vectors in self.sample_vectors.items():
+        for vec in vectors:
+            score = cosine_similarity(query_vector, vec)
+            all_scores.append((score, label))
+    
+    # 按相似度降序排列，取 TopK
+    all_scores.sort(key=lambda x: x[0], reverse=True)
+    top_k_scores = all_scores[:top_k]
+    
+    # 3. 阈值判定
+    best_score, best_label = top_k_scores[0]
+    
+    if best_score >= threshold:
+        # 命中样本库，采用多数投票
+        label_votes = {}
+        for score, label in top_k_scores:
+            if score >= threshold:
+                label_votes[label] = label_votes.get(label, 0) + 1
+        
+        final_label = max(label_votes, key=label_votes.get)
+        return final_label, best_score, "sample_match"
+    else:
+        # 未命中，走规则兜底
+        return self._fallback_rules(user_query), best_score, "rule_fallback"
+
+```
+
+
+
+第四步：规则兜底（当 Embedding 不确定时）
+
+当所有样本相似度都低于阈值时，用轻量规则兜底，避免"强行匹配"导致误路由。
+
+
+```bash
+
+def _fallback_rules(self, query: str) -> str:
+    """规则兜底：基于长度、关键词等浅层特征"""
+    
+    # 规则1: 超长输入大概率是复杂任务
+    if len(query) > 500:
+        return "complex"
+    
+    # 规则2: 包含特定关键词
+    complex_keywords = ["架构", "重构", "优化", "性能", "设计模式", "微服务"]
+    if any(kw in query for kw in complex_keywords):
+        return "complex"
+    
+    # 规则3: 包含代码块
+    if "```" in query or "def " in query or "function " in query:
+        return "code_generation"
+    
+    # 默认走简单模型
+    return "simple"
+
+
+```
+
+关键参数调优指南
+
+
+| 参数 | 作用 | 调优建议 |
+|------|------|----------|
+| threshold（阈值） | 相似度超过此值才采纳样本匹配 | 通常 0.70~0.80；太高会导致大量走兜底，太低会误匹配 |
+| top_k | 参与投票的最相似样本数 | 通常 3~5；太小容易单样本误判，太大引入噪声 |
+| Embedding 模型选择 | 决定语义理解能力 | 轻量场景用 `text-embedding-3-small`（1536维）；中文场景可用 `Qwen3-Embedding-0.6B` 等 |
+| 样本数量 | 每类样本的覆盖度 | 冷启动 5~10 条，生产环境建议 20~50 条，覆盖主要变体 |
+
+
+
+生产环境要注意的坑
+
+	Embedding 延迟：每次路由都要调一次 Embedding API，通常 50~200ms。如果对延迟敏感，可以用本地 ONNX 模型（如 OpenSquilla 的做法，用本地 ONNX embedder 完全在设备端完成分类）
+	
+	样本漂移：用户使用模式会随时间变化，需要定期回标并更新样本库
+	
+	缓存亲和：同一对话中频繁切换模型会导致 prompt 缓存失效，路由决策要考虑缓存切换成本
+	
+	阈值不是万能的：边界模糊的请求（如"代码审查"既涉及编码也涉及安全）容易在类别间摇摆，建议设置信度阈值，低于阈值的走默认安全模型
+
+##### 基于BERT模型 的分类器实践  
 
 
 
