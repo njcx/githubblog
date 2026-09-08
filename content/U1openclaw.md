@@ -194,6 +194,9 @@ parameters:
 
 A. 整体架构
 
+
+```bash
+
 	pnpm monorepo，workspace = [".", "ui", "packages/*", "extensions/*", "examples/*"]。
 
 	apps/ — 桌面/CLI 前端
@@ -208,10 +211,12 @@ A. 整体架构
 	security/（顶层目录）— 只是 OpenGrep 静态扫描规则包，不是运行时安全引擎
 	设计哲学（VISION.md/AGENTS.md）：安全是第一优先级，但明确定位为"trusted operator"场景，不是多租户对抗性隔离；Code 插件本质可信、拥有完整 OS 权限；Bundle 插件安全边界更小；插件市场（ClawHub）的供应链审查被排除在本仓库范围外。
 	
-	
+```	
 	
 	
 B. 安全架构分层
+
+```bash
 
 	规范层 — SECURITY.md：明确威胁模型边界（哪些不算漏洞：prompt injection 本身、恶意插件装完后的行为、SSRF 打到未启用代理等）。
 	静态扫描层 — security/opengrep/：Semgrep 兼容规则包，CI 里跑 diff 扫描和全量扫描。另有 .github/codeql/ 大量按边界细分的 CodeQL 查询包（进程执行边界、SSRF 边界、插件信任边界、MCP 工具边界等）。
@@ -227,11 +232,15 @@ B. 安全架构分层
 	网络层 — src/infra/net/ssrf.ts + packages/net-policy/：私网/云元数据 IP 拦截、DNS pinning 防 rebinding
 	日志脱敏层 — src/logging/redact*.ts：18 个文件的脱敏子系统
 	
-	
+```	
 	
 	
 	
 C. 安全检查嵌入点（关键调用链）
+
+
+```bash
+
 
 	工具可见性：src/agents/tool-policy-pipeline.ts 在每次 agent 会话建立时按 profile→全局→provider→per-agent→group→sender 逐层过滤工具列表，每层都无条件写审计事件
 	命令执行：src/agents/bash-tools.exec-run.ts 的 execute() — 顺序是：参数校验 → elevated 权限门 → 安全等级判定（可直接 deny）→ 控制命令防护 → gateway 白名单/审批引擎（bash-tools.exec-host-gateway.ts 的 processGatewayAllowlist()）→ 脚本预检 → spawn 前二次校验（beforeSpawn，防批准和执行之间的状态漂移）
@@ -240,5 +249,5 @@ C. 安全检查嵌入点（关键调用链）
 	外部内容进入上下文：任何 email/webhook/browser/web_search 结果进入模型前，先经 wrapExternalContent() 包裹处理
 
 
-	
+```
 	
