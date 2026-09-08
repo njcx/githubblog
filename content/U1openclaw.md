@@ -226,3 +226,19 @@ B. 安全架构分层
 	exec 安全层 — src/infra/exec-safety.ts、exec-control-command-guard.ts：命令白名单、审批、TOCTOU 防护（把已批准的解析后 argv 重建为实际执行串，而不是用原始字符串）
 	网络层 — src/infra/net/ssrf.ts + packages/net-policy/：私网/云元数据 IP 拦截、DNS pinning 防 rebinding
 	日志脱敏层 — src/logging/redact*.ts：18 个文件的脱敏子系统
+	
+	
+	
+	
+	
+C. 安全检查嵌入点（关键调用链）
+
+	工具可见性：src/agents/tool-policy-pipeline.ts 在每次 agent 会话建立时按 profile→全局→provider→per-agent→group→sender 逐层过滤工具列表，每层都无条件写审计事件
+	命令执行：src/agents/bash-tools.exec-run.ts 的 execute() — 顺序是：参数校验 → elevated 权限门 → 安全等级判定（可直接 deny）→ 控制命令防护 → gateway 白名单/审批引擎（bash-tools.exec-host-gateway.ts 的 processGatewayAllowlist()）→ 脚本预检 → spawn 前二次校验（beforeSpawn，防批准和执行之间的状态漂移）
+	沙箱创建：validateSandboxSecurity(cfg) 在容器创建前同步校验，失败即抛错阻止创建
+	插件/skill 安装：src/plugins/install-security-scan.runtime.ts 并行调用两个钩子——外部 install-policy 可执行程序 + 进程内 before_install JS 钩子
+	外部内容进入上下文：任何 email/webhook/browser/web_search 结果进入模型前，先经 wrapExternalContent() 包裹处理
+
+
+	
+	
