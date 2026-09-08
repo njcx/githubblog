@@ -18,3 +18,5 @@ OpenClaw 是一个开源、自托管的 AI Agent 平台，支持 40+ 通信渠�
 在架构范式上，OpenClaw 采用以单个网关为中心的星型（hub-and-spoke）架构。Gateway 是一个常驻后台的 Node.js 进程，作为整个系统的单一控制平面（Single Control Plane），负责协调 LLM（“大脑”）、本地执行能力（“双手”）、持久化记忆以及外部消息渠道之间的通信。
 
 ![openclaw](../images/20260908_4e1654.png)
+
+![openclaw](../images/20260908_683881.png)
