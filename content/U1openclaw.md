@@ -173,21 +173,13 @@ parameters:
 一条消息的完整旅程如下：
 
 	消息入口 (Ingress)：用户通过任一渠道发送消息，该渠道的适配器将其标准化后传给网关。
-	
 	路由与分发 (Routing)：网关的路由器根据消息元数据，决定由哪个智能体处理。
-	
 	上下文组装 (Context Assembly)：编排器为此次请求组装上下文，包括系统指令、会话历史、相关记忆和可用工具列表等。
-	
 	LLM 推理 (Brain Inference)：将组装好的上下文发送给 “大脑” (LLM) 进行推理。LLM 可能直接生成回复，也可能要求调用工具。
-	
 	工具执行 (Hands Execution)：如需调用工具，“双手” 会执行相应操作：
-	
 	执行环境默认为 Docker 沙箱。
-	
 	高风险操作可能需要用户审批。
-	
 	结果返回与迭代 (Result Loop)：工具执行结果返回给编排器，再次送入 “大脑” 进行下一轮思考。此过程会循环，直到任务完成。
-	
 	消息出口 (Egress)：最终生成的回复由编排器通过路由器，经由原渠道返回给用户。
 
 
@@ -197,4 +189,21 @@ parameters:
 
 
 
-#### 安全部分的介入点
+#### OpenClaw 安全模块解读
+
+
+A. 整体架构
+
+	pnpm monorepo，workspace = [".", "ui", "packages/*", "extensions/*", "examples/*"]。
+
+	apps/ — 桌面/CLI 前端
+	packages/ — 共享库（如 packages/net-policy 处理 SSRF/URL 相关工具）
+	extensions/ — 可插拔"代码插件"（Code plugins，完全运行时扩展，属于可信计算基）
+	skills/ — 轻量级"Bundle 插件"（skill/MCP/config，安全边界更小，官方推荐方式）
+	src/agents/ — 核心 agent loop、工具策略、exec 执行管线
+	src/gateway/ — gateway 服务、鉴权、审批
+	src/security/ — 真正的运行时安全引擎
+	src/plugin-sdk/ — 插件对外公开的 API（含 security-runtime.ts）
+	src/infra/ — 底层安全原语（exec 安全、路径守卫、SSRF、fs-safe）
+	security/（顶层目录）— 只是 OpenGrep 静态扫描规则包，不是运行时安全引擎
+	设计哲学（VISION.md/AGENTS.md）：安全是第一优先级，但明确定位为"trusted operator"场景，不是多租户对抗性隔离；Code 插件本质可信、拥有完整 OS 权限；Bundle 插件安全边界更小；插件市场（ClawHub）的供应链审查被排除在本仓库范围外。
