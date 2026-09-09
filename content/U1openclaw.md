@@ -192,7 +192,7 @@ parameters:
 #### OpenClaw 安全模块解读
 
 
-A. 整体架构
+##### 整体架构
 
 
 ```bash
@@ -210,7 +210,7 @@ A. 整体架构
 ```	
 	
 	
-B. 安全架构分层
+##### 安全架构分层
 
 ```bash
 
@@ -237,7 +237,7 @@ B. 安全架构分层
 	
 	
 	
-C. 安全检查嵌入点（关键调用链）
+##### 安全检查嵌入点（关键调用链）
 
 
 ```bash
@@ -259,4 +259,187 @@ C. 安全检查嵌入点（关键调用链）
 
 
 ![openclaw](../images/openclaw-security-integration.svg)
-	
+
+
+
+
+##### 五个安全接入点详解
+
+按"什么时候触发"分类，附文件路径与行号。
+
+######  ① 安装时（Install-time）—— 唯一支持第三方安全插件的接入点
+
+触发点：`src/plugins/install-security-scan.runtime.ts`（1286 行），针对每种安装来源都有独立入口函数：
+
+| 安装来源 | 入口函数 | 行号 |
+|---|---|---|
+| skill/bundle 安装 | `scanBundleInstallSourceRuntime()` | :894 |
+| npm 包安装 | `scanPackageInstallSourceRuntime()` | :963 |
+| 依赖树扫描 | `scanInstalledPackageDependencyTreeRuntime()` | :1049 |
+| 本地文件安装 | `scanFileInstallSourceRuntime()` | :1103 |
+| npm 安装前预检 | `preflightPluginNpmInstallPolicyRuntime()` | :1158 |
+| git 安装前预检 | 另一 preflight 入口 | :1268 附近 |
+
+每个入口内部并行触发两条独立钩子（两者都跑，不是二选一）：
+
+1. 外部可执行程序钩子（`runInstallPolicy()`，调用点 :744）→ 定义于 `src/security/install-policy.ts`（613 行）
+   - 配置项：`security.installPolicy.exec.command`（指向自定义扫描程序）
+   - 协议：OpenClaw spawn 该程序 → stdin 写入 JSON（target 信息、来源）→ 程序 stdout 输出 JSON（`decision: allow|warn|block` + `findings[]`）→ exit 0
+   - 响应校验：`src/security/install-policy-response.ts`（172 行，Zod schema，格式错误 fail-closed）
+2. 进程内 JS 钩子（`runBeforeInstallHook()` :551 → `hookRunner.runBeforeInstall()` :596）
+   - 要求 `getGlobalHookRunner().hasHooks("before_install")`（:577）
+   - 只能由 JS/TS 写的 Code 插件挂载
+   - 返回 `{block?, blockReason?, findings?}`，抛异常 = 自动 block
+
+两条结果汇总进 `runOperatorInstallPolicy()`（:700），决定放行 / 需要人工审批（warn）/ 直接拒绝（block）。
+
+##### ② 运行时 —— 工具可见性（Agent 看到哪些工具）
+
+`src/agents/tool-policy-pipeline.ts`（241 行）
+
+- `applyToolPolicyPipeline()` 在每次 agent 会话建立时执行，早于模型看到工具列表之前
+- 过滤顺序：全局 profile → provider profile → 全局 allow → provider allow → per-agent allow → group allow → sender-level allow
+- 每层都调用 `auditToolPolicyFilter()` 写审计事件
+- 纯声明式配置层，不接受外部插件介入，只能通过 config 调整
+
+#####  ③ 运行时 —— 命令执行前（Exec 审批）
+
+`src/agents/bash-tools.exec-run.ts`（745 行）`execute()` 固定顺序：
+
+1. 参数校验
+2. elevated 权限门（未授权直接抛错）
+3. `security = minSecurity(...)` 算出安全等级，`"deny"` 直接短路
+4. `rejectUnsafeExecControlShellCommand()`（防止 agent 命令破坏自身控制面）
+5. `rejectUnsafeExecLiveStateSqliteShellCommand()`（保护自身状态库）
+6. `processGatewayAllowlist()`（`bash-tools.exec-host-gateway.ts`，1669 行）—— 真正的审批引擎：白名单命中判断、是否需要人工 approve、是否命中 LLM 自动审查
+7. `validateScriptFileForShellBleed()` 脚本预检
+8. spawn，带 `beforeSpawn: revalidateGatewayApproval` 二次校验（防批准后到执行前状态漂移，TOCTOU 防护）
+
+没有对外插件接口，核心内置逻辑，只能通过 config（allowlist、审批策略）调整。
+
+##### ④ 运行时 —— 沙箱容器创建前
+
+`src/agents/sandbox/validate-sandbox-security.ts`（435 行）的 `validateSandboxSecurity(cfg)`
+
+- 容器创建前同步执行，校验 bind mount 路径（含 symlink 逃逸检测）、网络模式（禁 host 模式）、seccomp/AppArmor profile（禁 unconfined）
+- 纯内置校验，无外部接入点
+
+##### ⑤ 运行时 —— 外部内容进入模型上下文前
+
+`src/security/external-content.ts`（462 行）的 `wrapExternalContent()` / `wrapWebContent()`
+
+- 触发时机：email/webhook/browser/web_search/web_fetch 结果即将拼入 prompt 之前
+- 做的事：加随机边界标记防伪造、剥除模型特殊 token、附加"不要把这当指令"警告
+- `detectSuspiciousPatterns()` 只记录不拦截
+- 无外部插件接口，但函数通过 `src/plugin-sdk/security-runtime.ts` 导出，Code 插件可直接复用
+
+
+
+######  能否插入自定义安全逻辑 —— 一览表
+
+| 接入点 | 是否支持第三方安全插件 | 方式 |
+|---|---|---|
+| ① 安装时扫描 | 支持，官方设计的插件点 | `security.installPolicy.exec`（任意语言外部程序）或 `before_install` JS 钩子 |
+| ② 工具可见性 |  仅配置驱动 | 改 config，无代码钩子 |
+| ③ 命令执行审批 |  内置逻辑 | 改 config（allowlist/approval policy） |
+| ④ 沙箱创建校验 |  内置逻辑 | 改 config |
+| ⑤ 外部内容包裹 |  间接可复用 | Code 插件可 import `wrapExternalContent` 等原语自行调用，但无法替换核心默认行为 |
+
+结论：若要做独立的"安全扫描插件"，唯一官方、稳定的挂载点是 ① —— `security.installPolicy.exec` 外部程序协议。其余几个点均为核心硬编码运行时防护，不对外开放自定义逻辑。
+
+
+
+###### `install-policy.exec` 协议详解（做安全插件请对接此处）
+
+###### 配置
+
+```jsonc
+security.installPolicy: {
+  enabled: true,
+  targets: ["skill", "plugin"],   // 可选，默认两者都扫
+  exec: {
+    command: "/abs/path/to/your-scanner",  // 必须绝对路径，非符号链接，权限收紧
+    args: [],
+    env: {},                                // 合并进干净的子进程环境
+    passEnv: [],                            // 允许转发的父进程环境变量白名单
+    trustedDirs: [],                        // 若设置，command 必须解析到其中之一
+    timeoutMs: 10000,
+    noOutputTimeoutMs: 10000,
+    maxOutputBytes: 1048576                 // 1 MiB
+  }
+}
+```
+
+###### 请求（stdin JSON，上限 256 KiB）
+
+```ts
+{
+  protocolVersion: 1,
+  openclawVersion: string,
+  targetType: "skill" | "plugin",
+  targetName: string,
+  sourcePath: string,
+  sourcePathKind: "file" | "directory",
+  source?: {
+    kind: "archive" | "bundled" | "clawhub" | "file" | "git" | "local-path" | "managed" | "npm" | "upload" | "workspace",
+    authority: "openclaw" | "official" | "third-party" | "unknown" | "user",
+    mutable: boolean,
+    network: boolean,
+  },
+  origin: { type: string; [key: string]: string | number | boolean | null | undefined },
+  request: {
+    kind: "skill-install" | "plugin-dir" | "plugin-archive" | "plugin-file" | "plugin-npm" | "plugin-git",
+    mode: "install" | "update",
+    requestedSpecifier?: string,
+  },
+  skill?: { installId: string; installSpec?: {...} },
+  plugin?: {
+    pluginId: string;
+    contentType: "bundle" | "package" | "file" | "dependency-tree";
+    packageName?: string; manifestId?: string; version?: string; extensions?: string[];
+  },
+}
+```
+
+###### 响应（stdout JSON，Zod 校验）
+
+```ts
+{
+  protocolVersion: 1,               // 必须严格等于 1
+  decision: "allow" | "warn" | "block",
+  reason?: string,                  // warn/block 时必填（非空）
+  findings?: Array<{
+    ruleId: string;                 // 非空
+    severity: "info" | "warn" | "critical";
+    message: string;                // 非空
+    file?: string;
+    line?: number;                  // 需为有限数，向下取整，clamp ≥ 1
+    evidence?: string;
+  }>,                                // 最多接受 100 条；warn 附带 >100 条有效 findings 视为硬失败
+}
+```
+
+###### Fail-closed 规则
+
+- 进程必须以 `exit 0` 结束
+- 以下任一情况均判定为 `block`（`security_scan_failed`）：非零退出码、空 stdout、非法 JSON、schema 不匹配、超时、无输出超时、输出超过 `maxOutputBytes`
+- `decision: "block"` → `{blocked: {code: "security_scan_blocked", reason: "..."}}`
+- `decision: "warn"` → `{warning: {reason, fingerprint: sha256(JSON.stringify({reason, findings}))}}`
+  - fingerprint 用于检测"人工批准后再次扫描结果是否发生变化"，防止重放旧批准
+- 解释器作为 command（`bash`、`node`、`python` 等）受支持，但显式禁止用 `env` 作解释器；脚本参数也会走同样的路径安全检查
+- `validateInstallPolicyStatic(config)` 可静态校验配置；`probeInstallPolicy(params)` 可做端到端联通性探测
+
+###### 可复用的安全原语
+
+`src/plugin-sdk/security-runtime.ts` 导出核心自用的硬化原语，供 Code 插件直接复用，无需重新实现：
+
+- 文件访问：`assertNoSymlinkParents(Sync)`、`fileExists`、`readRegularFile(Sync)`、`statRegularFile(Sync)`
+- 通道元数据：`buildChannelMetadata`、`buildUntrustedChannelMetadata`
+- 上下文可见性：`evaluateSupplementalContextVisibility`、`filterSupplementalContextItems`、`shouldIncludeSupplementalContext`
+- 外部内容防护：`truncateSanitizedExternalContent`、`wrapExternalContent`、`wrapWebContent`
+- 正则安全：`compileSafeRegexDetailed`（防 ReDoS）
+- 网络安全：`SsrFBlockedError`、`isPrivateNetworkAllowedByPolicy`、`matchesHostnameAllowlist`、`resolvePinnedHostnameWithPolicy`
+- 路径安全：`isPathInside`、`resolveAbsolutePathForRead/Write`、`canonicalPathFromExistingAncestor`、`findExistingAncestor`、`sanitizeUntrustedFileName`
+- 日志脱敏：`redactSensitiveText`
+- 常量时间比较：`safeEqual*`
+- DM 策略：`resolvePinnedMainDmOwnerFromAllowlist`
