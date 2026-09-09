@@ -197,10 +197,6 @@ A. 整体架构
 
 ```bash
 
-	pnpm monorepo，workspace = [".", "ui", "packages/*", "extensions/*", "examples/*"]。
-
-	apps/ — 桌面/CLI 前端
-	packages/ — 共享库（如 packages/net-policy 处理 SSRF/URL 相关工具）
 	extensions/ — 可插拔"代码插件"（Code plugins，完全运行时扩展，属于可信计算基）
 	skills/ — 轻量级"Bundle 插件"（skill/MCP/config，安全边界更小，官方推荐方式）
 	src/agents/ — 核心 agent loop、工具策略、exec 执行管线
@@ -208,7 +204,7 @@ A. 整体架构
 	src/security/ — 真正的运行时安全引擎
 	src/plugin-sdk/ — 插件对外公开的 API（含 security-runtime.ts）
 	src/infra/ — 底层安全原语（exec 安全、路径守卫、SSRF、fs-safe）
-	security/（顶层目录）— 只是 OpenGrep 静态扫描规则包，不是运行时安全引擎
+	
 	设计哲学（VISION.md/AGENTS.md）：安全是第一优先级，但明确定位为"trusted operator"场景，不是多租户对抗性隔离；Code 插件本质可信、拥有完整 OS 权限；Bundle 插件安全边界更小；插件市场（ClawHub）的供应链审查被排除在本仓库范围外。
 	
 ```	
@@ -219,7 +215,7 @@ B. 安全架构分层
 ```bash
 
 	规范层 — SECURITY.md：明确威胁模型边界（哪些不算漏洞：prompt injection 本身、恶意插件装完后的行为、SSRF 打到未启用代理等）。
-	静态扫描层 — security/opengrep/：Semgrep 兼容规则包，CI 里跑 diff 扫描和全量扫描。另有 .github/codeql/ 大量按边界细分的 CodeQL 查询包（进程执行边界、SSRF 边界、插件信任边界、MCP 工具边界等）。
+
 	运行时安全引擎 — src/security/：
 	external-content.ts — prompt injection 缓解：外部内容加随机边界标记、剥除伪造标记/CJK 同形字符、剥除模型特殊 token，只做"包裹+警告"不做拦截
 	install-policy.ts — 插件/skill 安装时调用外部可执行程序做安全扫描（重点，见下）
