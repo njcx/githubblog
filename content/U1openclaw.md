@@ -217,15 +217,20 @@ B. 安全架构分层
 	规范层 — SECURITY.md：明确威胁模型边界（哪些不算漏洞：prompt injection 本身、恶意插件装完后的行为、SSRF 打到未启用代理等）。
 
 	运行时安全引擎 — src/security/：
-	external-content.ts — prompt injection 缓解：外部内容加随机边界标记、剥除伪造标记/CJK 同形字符、剥除模型特殊 token，只做"包裹+警告"不做拦截
-	install-policy.ts — 插件/skill 安装时调用外部可执行程序做安全扫描（重点，见下）
-	dangerous-tools.ts — Gateway HTTP 接口默认拒绝的危险工具清单
-	context-visibility.ts — fail-closed 的上下文可见性策略
-	safe-regex.ts — 防 ReDoS
-	audit.ts — openclaw security audit 命令的汇总引擎
+	
+		external-content.ts — prompt injection 缓解：外部内容加随机边界标记、剥除伪造标记/CJK 同形字符、剥除模型特殊 token，只做"包裹+警告"不做拦截
+		install-policy.ts — 插件/skill 安装时调用外部可执行程序做安全扫描（重点，见下）
+		dangerous-tools.ts — Gateway HTTP 接口默认拒绝的危险工具清单
+		context-visibility.ts — fail-closed 的上下文可见性策略
+		safe-regex.ts — 防 ReDoS
+		audit.ts — openclaw security audit 命令的汇总引擎
+		
 	沙箱层 — src/agents/sandbox/validate-sandbox-security.ts：容器创建前校验 bind mount、网络模式、seccomp/AppArmor，防符号链接逃逸
+	
 	exec 安全层 — src/infra/exec-safety.ts、exec-control-command-guard.ts：命令白名单、审批、TOCTOU 防护（把已批准的解析后 argv 重建为实际执行串，而不是用原始字符串）
+	
 	网络层 — src/infra/net/ssrf.ts + packages/net-policy/：私网/云元数据 IP 拦截、DNS pinning 防 rebinding
+	
 	日志脱敏层 — src/logging/redact*.ts：18 个文件的脱敏子系统
 	
 ```	
@@ -239,11 +244,19 @@ C. 安全检查嵌入点（关键调用链）
 
 
 	工具可见性：src/agents/tool-policy-pipeline.ts 在每次 agent 会话建立时按 profile→全局→provider→per-agent→group→sender 逐层过滤工具列表，每层都无条件写审计事件
+	
 	命令执行：src/agents/bash-tools.exec-run.ts 的 execute() — 顺序是：参数校验 → elevated 权限门 → 安全等级判定（可直接 deny）→ 控制命令防护 → gateway 白名单/审批引擎（bash-tools.exec-host-gateway.ts 的 processGatewayAllowlist()）→ 脚本预检 → spawn 前二次校验（beforeSpawn，防批准和执行之间的状态漂移）
+	
 	沙箱创建：validateSandboxSecurity(cfg) 在容器创建前同步校验，失败即抛错阻止创建
+	
 	插件/skill 安装：src/plugins/install-security-scan.runtime.ts 并行调用两个钩子——外部 install-policy 可执行程序 + 进程内 before_install JS 钩子
+	
 	外部内容进入上下文：任何 email/webhook/browser/web_search 结果进入模型前，先经 wrapExternalContent() 包裹处理
 
 
 ```
+
+
+
+![openclaw](../images/openclaw-security-integration.svg)
 	
