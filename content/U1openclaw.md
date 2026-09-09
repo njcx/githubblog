@@ -443,3 +443,10 @@ security.installPolicy: {
 - 日志脱敏：`redactSensitiveText`
 - 常量时间比较：`safeEqual*`
 - DM 策略：`resolvePinnedMainDmOwnerFromAllowlist`
+
+
+
+
+
+
+基于以上梳理：OpenClaw 的安全设计核心思路是"信任边界前置、失败即拒绝"——把最大的风险点（三方 skill/plugin 安装）收口成一个标准化的 exec 协议，其余运行时防护（工具过滤、命令审批、沙箱、外部内容包裹）都是硬编码在核心里、不开放给外部插件的纵深防御层。
